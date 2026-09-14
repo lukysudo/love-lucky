@@ -8491,9 +8491,9 @@ transition:transform .15s ease, opacity .15s ease;
       </div>
     </div>
     <div class="splash-footcard">
-      <div class="splash-ver" id="splash-ver" data-build-ts="1789410160123">
+      <div class="splash-ver" id="splash-ver" data-build-ts="1789414643407">
         <span class="sv-app">love lucky <b>v3.26.0</b></span>
-        <span class="sv-deploy">部署于 2026-09-15 02:22<span id="splash-ver-live"></span></span>
+        <span class="sv-deploy">部署于 2026-09-15 03:37<span id="splash-ver-live"></span></span>
       </div>
       <div class="splash-loading" id="splash-loading">正在加载数据…</div>
       <div class="splash-enter-hint" id="splash-enter-hint" hidden>勾选后即可进入</div>
@@ -23665,7 +23665,8 @@ const DESK_PAGE_MAX = 5;
 const DESK_PAGE_MIN = 2;
 const deskPageCount = () => {
 const v = parseInt(store.get('desk-page-count'), 10);
-return isNaN(v) || v < DESK_PAGE_MIN ? DESK_PAGE_MIN : Math.min(v, DESK_PAGE_MAX);
+if (isNaN(v)) return 3;
+return Math.min(Math.max(v, DESK_PAGE_MIN), DESK_PAGE_MAX);
 };
 const applyPageBgs = () => {
 if (!pagesBox) return;
@@ -83628,4 +83629,4 @@ lastHeal: his
 <!-- __MOCHI_EOF__ -->
 </body>
 </html>
-<!-- __MOCHI_EOF__ mu1klw57 -->
+<!-- __MOCHI_EOF__ mu1n9zgv -->
