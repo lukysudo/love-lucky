@@ -1,0 +1,17 @@
+{
+  "name": "love lucky 字卡",
+  "short_name": "love lucky",
+  "description": "情侣专属的淡粉字卡聊天模拟器（love lucky）。改自 Mochi 字卡 · 原作者：小红书@言序（1842523578）。",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "display_override": ["standalone"],
+  "orientation": "portrait",
+  "background_color": "#fff8f9",
+  "theme_color": "#fdeef2",
+  "icons": [
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
