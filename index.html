@@ -8506,9 +8506,9 @@ transition:transform .15s ease, opacity .15s ease;
       </div>
     </div>
     <div class="splash-footcard">
-      <div class="splash-ver" id="splash-ver" data-build-ts="1789417294582">
+      <div class="splash-ver" id="splash-ver" data-build-ts="1789418503357">
         <span class="sv-app">love lucky <b>v3.26.0</b></span>
-        <span class="sv-deploy">部署于 2026-09-15 04:21<span id="splash-ver-live"></span></span>
+        <span class="sv-deploy">部署于 2026-09-15 04:41<span id="splash-ver-live"></span></span>
       </div>
       <div class="splash-loading" id="splash-loading">正在加载数据…</div>
       <div class="splash-enter-hint" id="splash-enter-hint" hidden>勾选后即可进入</div>
@@ -19740,6 +19740,11 @@ document.dispatchEvent(new Event('mochi-notice-rendered'));
 } catch (__e) { try { console.error("[JS] clock.js", __e && __e.message || __e); } catch (x) {} if (window.__jsErrors) window.__jsErrors.push(String(__e && __e.message || __e)); } })();
 (function () { try {
 (function () {
+try {
+const _ph = document.querySelector('.phone');
+const _tb = document.querySelector('.tabbar');
+if (_ph && _tb && _tb.parentElement !== _ph) _ph.appendChild(_tb);
+} catch (e) {}
 const tabs = document.querySelectorAll('.tab');
 const pages = document.querySelectorAll('.page');
 const sdLeaveSnap = () => { try { if (window.__mochiLeaveSnap) window.__mochiLeaveSnap('switch'); } catch (e) {} };
@@ -83675,4 +83680,4 @@ lastHeal: his
 <!-- __MOCHI_EOF__ -->
 </body>
 </html>
-<!-- __MOCHI_EOF__ mu1out4m -->
+<!-- __MOCHI_EOF__ mu1pkptp -->
