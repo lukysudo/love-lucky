@@ -24,6 +24,8 @@
      脚本只认 dark、系统深色的 auto 用户会先白闪再由 personalize.js 纠正（FOUC）。
      另：旧版本残留的 data-theme 属性在此强制清掉，保证「选浅色」真回浅色。 -->
 <script>try{var _tm=localStorage.getItem('xy-home-v2:theme-mode');if(_tm==='dark'||(_tm!=='light'&&window.matchMedia&&matchMedia('(prefers-color-scheme: dark)').matches))document.documentElement.setAttribute('data-theme','dark');else document.documentElement.removeAttribute('data-theme');}catch(e){}</script>
+<!-- v3.28.x：页面整体缩放（ui-page-zoom，50–120%）——head 先行应用防闪烁，设置页可调 -->
+<script>try{var _pz=parseInt(localStorage.getItem('ui-page-zoom'),10);if(_pz>=50&&_pz<=120)document.documentElement.style.zoom=(_pz/100).toFixed(2);}catch(e){}</script>
 <style>
 * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
 :root {
@@ -6851,6 +6853,19 @@ font-size:11.5px; line-height:1.7; color:#555;
 }
 .set-alert b { color:#111; }
 #page-setting { padding-bottom:20px; }
+@media (max-width: 520px) {
+#page-setting .set-row,
+#page-theme .set-row { flex-wrap: wrap; row-gap: 6px; }
+#page-setting .set-row > .txt,
+#page-theme .set-row > .txt { flex: 1 1 100%; }
+#page-setting .set-row > .val,
+#page-setting .set-row > .toggle,
+#page-setting .set-row > .stepper,
+#page-setting .set-row > .bg-notify-test,
+#page-theme .set-row > .val,
+#page-theme .set-row > .toggle,
+#page-theme .set-row > .stepper { margin-left: 34px; }
+}
 .gs-scroll { flex:1; overflow-y:auto; scrollbar-width:none; -ms-overflow-style:none;
 padding-bottom:20px; }
 .gs-scroll::-webkit-scrollbar { display:none; }
@@ -8491,9 +8506,9 @@ transition:transform .15s ease, opacity .15s ease;
       </div>
     </div>
     <div class="splash-footcard">
-      <div class="splash-ver" id="splash-ver" data-build-ts="1789414643407">
+      <div class="splash-ver" id="splash-ver" data-build-ts="1789417294582">
         <span class="sv-app">love lucky <b>v3.26.0</b></span>
-        <span class="sv-deploy">部署于 2026-09-15 03:37<span id="splash-ver-live"></span></span>
+        <span class="sv-deploy">部署于 2026-09-15 04:21<span id="splash-ver-live"></span></span>
       </div>
       <div class="splash-loading" id="splash-loading">正在加载数据…</div>
       <div class="splash-enter-hint" id="splash-enter-hint" hidden>勾选后即可进入</div>
@@ -9656,6 +9671,12 @@ transition:transform .15s ease, opacity .15s ease;
           <div class="txt">屏幕适配诊断<span class="sub">顶部空白 / 底部裁切 / 缩放异常一键定位</span></div>
           <div class="arrow"><svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg></div>
         </div>
+        <!-- v3.28.x：页面整体缩放——手机端按钮错位/显示不全时，把整个页面按百分比缩小（html zoom） -->
+        <div class="set-row" id="row-page-zoom">
+          <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="#111111" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/><path d="M8 11h6M11 8v6"/></svg></div>
+          <div class="txt">页面缩放<span class="sub">整个页面按百分比缩小，解决手机端按钮错位/显示不全</span></div>
+          <div class="val" id="page-zoom-val">100%</div>
+        </div>
         <!-- v3.26.x #177：功能诊断——逐个测试全部功能（入口/页面/图标/打开/关闭），
              device.js collectFuncDiag 顺序执行+自动判定，报告哪些正常哪些异常 -->
         <div class="set-row" id="row-func-diag">
@@ -9769,9 +9790,9 @@ transition:transform .15s ease, opacity .15s ease;
       <div class="theme-search-wrap" style="padding:8px 12px 0"><input class="theme-search" id="theme-search-input" placeholder="搜索美化项（如 圆角/壁纸/主题色）" style="width:100%;box-sizing:border-box;padding:8px 10px;font-size:13px;border:1px solid var(--card-border,#ddd);border-radius:9px;background:var(--bg-b,#fff);color:var(--ink,#111)"></div>
       <div class="them-tabs" id="them-tabs">
         <div class="them-tab active" data-tab="color">颜色</div>
-        <div class="them-tab" data-tab="size">尺寸</div>
         <div class="them-tab" data-tab="bg">背景</div>
         <div class="them-tab" data-tab="icon">图标</div>
+        <div class="them-tab" data-tab="size">尺寸</div>
         <div class="them-tab" data-tab="scheme">方案</div>
       </div>
       <div class="them-sec" data-sec="color">
@@ -9842,36 +9863,6 @@ transition:transform .15s ease, opacity .15s ease;
         </div>
       </div>
       </div>
-      <div class="them-sec" data-sec="size">
-      <div class="cg-title">尺寸与圆角</div>
-      <div class="set-group glass">
-        <div class="set-row" id="row-desk-cs-font">
-          <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="#111111" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M4 12h16M4 17h10"/></svg></div>
-          <div class="txt">全局字体<span class="sub">与聊天设置互通 · 上传字体或输入字体名</span></div>
-          <div class="val" id="desk-cs-font-val">默认</div>
-        </div>
-        <div class="set-row" id="row-desk-font-size">
-          <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="#111111" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7V4h16v3M9 20h6M12 4v16"/></svg></div>
-          <div class="txt">桌面字号<span class="sub">仅桌面/大屏生效 · 手机端为 iOS 性能保持默认</span></div>
-          <div class="val" id="desk-font-size-val">默认</div>
-        </div>
-        <div class="set-row" id="row-desk-card-scale">
-          <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="#111111" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="2"/><path d="M9 9h6v6H9z" fill="none" stroke-dasharray="2 2"/></svg></div>
-          <div class="txt">卡片大小<span class="sub">仅桌面/大屏生效 · 手机端为 iOS 性能保持默认</span></div>
-          <div class="val" id="desk-card-scale-val">默认</div>
-        </div>
-        <div class="set-row" id="row-desk-card-radius">
-          <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="#111111" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="7"/></svg></div>
-          <div class="txt">组件圆角</div>
-          <div class="val" id="desk-card-radius-val">默认</div>
-        </div>
-        <div class="set-row" id="row-ico-shape">
-          <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="#111111" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="6"/></svg></div>
-          <div class="txt">图标圆角</div>
-          <div class="val" id="ico-shape-val"></div>
-        </div>
-      </div>
-      </div>
       <div class="them-sec" data-sec="bg">
       <div class="cg-title">背景与壁纸</div>
       <div class="set-group glass">
@@ -9929,6 +9920,36 @@ transition:transform .15s ease, opacity .15s ease;
         <div class="set-row" id="row-desk-reset">
           <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="#111111" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21.5 2v6h-6M2.5 22v-6h6M2 12c0-5.5 3.5-10 10-10 3.7 0 7 2 8.8 5M22 12c0 5.5-3.5 10-10 10-3.7 0-7-2-8.8-5"/></svg></div>
           <div class="txt">恢复默认桌面<span class="sub">恢复默认布局与页数</span></div>
+        </div>
+      </div>
+      </div>
+      <div class="them-sec" data-sec="size">
+      <div class="cg-title">尺寸与圆角</div>
+      <div class="set-group glass">
+        <div class="set-row" id="row-desk-cs-font">
+          <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="#111111" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M4 12h16M4 17h10"/></svg></div>
+          <div class="txt">全局字体<span class="sub">与聊天设置互通 · 上传字体或输入字体名</span></div>
+          <div class="val" id="desk-cs-font-val">默认</div>
+        </div>
+        <div class="set-row" id="row-desk-font-size">
+          <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="#111111" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7V4h16v3M9 20h6M12 4v16"/></svg></div>
+          <div class="txt">桌面字号<span class="sub">仅桌面/大屏生效 · 手机端为 iOS 性能保持默认</span></div>
+          <div class="val" id="desk-font-size-val">默认</div>
+        </div>
+        <div class="set-row" id="row-desk-card-scale">
+          <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="#111111" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="2"/><path d="M9 9h6v6H9z" fill="none" stroke-dasharray="2 2"/></svg></div>
+          <div class="txt">卡片大小<span class="sub">仅桌面/大屏生效 · 手机端为 iOS 性能保持默认</span></div>
+          <div class="val" id="desk-card-scale-val">默认</div>
+        </div>
+        <div class="set-row" id="row-desk-card-radius">
+          <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="#111111" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="7"/></svg></div>
+          <div class="txt">组件圆角</div>
+          <div class="val" id="desk-card-radius-val">默认</div>
+        </div>
+        <div class="set-row" id="row-ico-shape">
+          <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="#111111" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="6"/></svg></div>
+          <div class="txt">图标圆角</div>
+          <div class="val" id="ico-shape-val"></div>
         </div>
       </div>
       </div>
@@ -22903,6 +22924,31 @@ tabs.forEach(t => { t.classList.toggle('active', t.dataset.tab === name); });
 }
 tabs.forEach(t => t.addEventListener('click', () => show(t.dataset.tab)));
 show(tabs[0] ? tabs[0].dataset.tab : 'color');
+})();
+(function initPageZoom() {
+const K = 'ui-page-zoom';
+const row = document.getElementById('row-page-zoom');
+const valEl = document.getElementById('page-zoom-val');
+const getZoom = () => { try { const v = parseInt(localStorage.getItem(K), 10); return (v >= 50 && v <= 120) ? v : 100; } catch (e) { return 100; } };
+const applyZoom = (p) => { try { document.documentElement.style.zoom = (p / 100).toFixed(2); } catch (e) {} };
+if (valEl) valEl.textContent = getZoom() + '%';
+if (!row || !window.openModal) return;
+row.addEventListener('click', function () {
+window.openModal('页面缩放', '', function (v) {
+const p = typeof v === 'number' ? v : (parseInt(v, 10) || 100);
+try { localStorage.setItem(K, String(p)); } catch (e) {}
+applyZoom(p);
+if (valEl) valEl.textContent = p + '%';
+}, {
+noInput: true,
+slider: {
+min: 50, max: 120, step: 5, value: getZoom(),
+label: '整体缩放（50%–120%）', unit: '%',
+onChange: (p) => { applyZoom(p); }
+},
+pills: [{ t: '恢复默认', v: 100 }]
+});
+});
 })();
 const THEME_KEY = 'xy-home-v2:theme-mode';
 const themeModeRow = document.getElementById('row-theme-mode');
@@ -83629,4 +83675,4 @@ lastHeal: his
 <!-- __MOCHI_EOF__ -->
 </body>
 </html>
-<!-- __MOCHI_EOF__ mu1n9zgv -->
+<!-- __MOCHI_EOF__ mu1out4m -->
