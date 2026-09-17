@@ -8414,6 +8414,35 @@ background:#fff; color:#8a4a63; font-size:13px; font-family:inherit; outline:non
 .avlib-nick-row input:focus { border-color:#f28bb0; box-shadow:0 0 0 3px rgba(242,139,176,.15); }
 .avlib-nick-actions { display:flex; gap:8px; margin-top:10px; }
 .avlib-nick-actions .div-draw { flex:1; min-width:0; font-size:13px; padding:10px 8px; }
+.avlib-nicklib {
+margin:10px 2px 4px; padding:12px 14px; border-radius:16px;
+background:linear-gradient(180deg,#fff0f5,#ffe4ec);
+border:1px solid rgba(240,150,185,.3);
+}
+.avlib-nicklib .avlib-toggle-txt { margin-bottom:6px; }
+.avlib-nicklib-cur { font-size:12px; color:#b5657e; margin-bottom:8px; }
+.avlib-nicklib-cur b { color:#d95a86; font-weight:800; }
+.avlib-nicklib-list {
+max-height:150px; overflow-y:auto; display:flex; flex-wrap:wrap; gap:6px;
+padding:2px; margin-bottom:8px;
+}
+.avlib-nicklib-list:empty::after { content:'还没有昵称，点「批量添加昵称」一行一个添加'; font-size:12px; color:#c988a2; }
+.avlib-nicklib-item {
+position:relative; display:inline-flex; align-items:center; gap:6px;
+padding:6px 22px 6px 12px; border-radius:99px;
+background:rgba(255,255,255,.9); border:1px solid rgba(240,150,185,.35);
+font-size:13px; font-weight:600; color:#8a4a63; cursor:pointer;
+transition:transform .12s ease;
+}
+.avlib-nicklib-item:active { transform:scale(.95); }
+.avlib-nicklib-item.on { background:#f28bb0; border-color:#f28bb0; color:#fff; }
+.avlib-nicklib-item em { font-style:normal; font-size:10px; opacity:.85; }
+.avlib-nicklib-del {
+position:absolute; right:6px; top:50%; transform:translateY(-50%);
+width:14px; height:14px; line-height:14px; text-align:center; font-size:10px;
+border-radius:50%; background:rgba(200,110,150,.15); color:#b5657e; font-style:normal;
+}
+.avlib-nicklib-del:active { background:#e06a90; color:#fff; }
 .sleep-mask {
 position:fixed; inset:0; z-index:96;
 display:flex; align-items:center; justify-content:center;
@@ -8559,30 +8588,32 @@ position:fixed; z-index:70; left:16px; bottom:74px;
 display:flex; align-items:center; gap:6px;
 max-width:44vw;
 padding:7px 13px; border-radius:99px;
-background:rgba(255,255,255,.92);
-border:1px solid rgba(43,182,115,.35);
-box-shadow:0 4px 16px rgba(0,0,0,.12);
-font-size:12px; font-weight:600; color:#2bb673;
-cursor:pointer; white-space:nowrap; overflow:hidden;
-text-overflow:ellipsis;
-transition:opacity .3s ease, transform .3s ease;
+background:rgba(255,255,255,.94);
+border:1px solid rgba(242,139,176,.4);
+box-shadow:0 4px 16px rgba(200,110,150,.22);
+font-size:12px; font-weight:600; color:#d95a86;
+cursor:grab; white-space:nowrap; overflow:hidden;
+text-overflow:ellipsis; letter-spacing:.3px;
+transition:opacity .3s ease, box-shadow .3s ease;
+touch-action:none; user-select:none; -webkit-user-select:none;
 }
-[data-theme="dark"] .presence-bubble { background:rgba(30,34,48,.92); border-color:rgba(43,182,115,.4); color:#7fe0ae; }
+.presence-bubble.dragging { cursor:grabbing; box-shadow:0 8px 22px rgba(200,110,150,.32); }
+[data-theme="dark"] .presence-bubble { background:rgba(45,32,42,.94); border-color:rgba(240,150,185,.45); color:#f2aec4; }
 .presence-bubble .pb-dot {
 width:8px; height:8px; border-radius:50%; flex-shrink:0;
-background:currentColor; box-shadow:0 0 0 0 rgba(43,182,115,.4);
+background:#f28bb0; box-shadow:0 0 0 0 rgba(242,139,176,.5);
 animation:pbPulse 2.2s ease-in-out infinite;
 }
 @keyframes pbPulse {
-0%,100% { box-shadow:0 0 0 0 rgba(43,182,115,.4); }
-50%     { box-shadow:0 0 0 5px rgba(43,182,115,0); }
+0%,100% { box-shadow:0 0 0 0 rgba(242,139,176,.5); }
+50%     { box-shadow:0 0 0 5px rgba(242,139,176,0); }
 }
 .presence-bubble .pb-txt { overflow:hidden; text-overflow:ellipsis; }
-.presence-bubble.p-away { color:#d18c13; border-color:rgba(209,140,19,.4); }
+.presence-bubble.p-away { color:#d98a2b; border-color:rgba(217,138,43,.45); }
 .presence-bubble.p-away .pb-dot { background:#f0a11c; animation:none; }
-.presence-bubble.p-offline { color:#9aa1ab; border-color:rgba(154,161,171,.35); opacity:.75; }
-.presence-bubble.p-offline .pb-dot { background:#b6bcc4; animation:none; }
-.presence-bubble:active { transform:scale(.95); }
+.presence-bubble.p-offline { color:#b38990; border-color:rgba(179,137,144,.4); opacity:.78; }
+.presence-bubble.p-offline .pb-dot { background:#cfb3ba; animation:none; }
+.presence-bubble:active { transform:scale(.96); }
 .chat-presence { max-width:52vw; overflow:hidden; text-overflow:ellipsis; }
 </style>
 </head>
@@ -8604,9 +8635,9 @@ animation:pbPulse 2.2s ease-in-out infinite;
       </div>
     </div>
     <div class="splash-footcard">
-      <div class="splash-ver" id="splash-ver" data-build-ts="1789650676670">
+      <div class="splash-ver" id="splash-ver" data-build-ts="1789656911083">
         <span class="sv-app">love lucky <b>v3.50.0</b></span>
-        <span class="sv-deploy">部署于 2026-09-17 21:11<span id="splash-ver-live"></span></span>
+        <span class="sv-deploy">部署于 2026-09-17 22:55<span id="splash-ver-live"></span></span>
       </div>
       <div class="splash-loading" id="splash-loading">正在加载数据…</div>
       <div class="splash-enter-hint" id="splash-enter-hint" hidden>勾选后即可进入</div>
@@ -12906,6 +12937,29 @@ animation:pbPulse 2.2s ease-in-out infinite;
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg>
               邀请 TA 换昵称
             </button>
+          </div>
+          <!-- v3.50.x+：昵称库（与头像库同模式；批量添加一行一个；仅改聊天显示名字，桌面昵称不变） -->
+          <div class="avlib-nicklib">
+            <div class="avlib-toggle-txt">
+              <div class="avlib-toggle-name">TA 的昵称库</div>
+              <div class="avlib-toggle-sub">批量添加，点击换上聊天名字；只改聊天显示，其他不变</div>
+            </div>
+            <div class="avlib-nicklib-cur">当前聊天称呼：<b id="avlib-nicklib-cur">TA</b></div>
+            <div class="avlib-nicklib-list" id="avlib-nicklib-list"></div>
+            <div class="avlib-nick-actions">
+              <button class="div-draw" id="avlib-nicklib-add">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>
+                批量添加昵称
+              </button>
+              <button class="div-draw" id="avlib-nicklib-random">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M16 3h5v5"/><path d="M4 20L21 3"/><path d="M21 16v5h-5"/><path d="M15 15l6 6"/><path d="M4 4l5 5"/></svg>
+                随机换一个
+              </button>
+              <button class="div-draw" id="avlib-nicklib-clear" style="background:rgba(0,0,0,.06);color:var(--ink)">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M8 6V4a1 1 0 011-1h6a1 1 0 011 1v2"/><path d="M6 6l1 14a2 2 0 002 2h6a2 2 0 002-2l1-14"/></svg>
+                清空
+              </button>
+            </div>
           </div>
         </div>
         <div id="avlib-pane-a">
@@ -17471,6 +17525,7 @@ document.addEventListener('contact-switched', refreshContactsVal);
 } catch (__e) { try { console.error("[JS] contacts.js", __e && __e.message || __e); } catch (x) {} if (window.__jsErrors) window.__jsErrors.push(String(__e && __e.message || __e)); } })();
 (function () { try {
 (function () {
+const store = window.activeStore(); // v3.50.x+：气泡拖动位置存储（此前漏定义，拖动位置无法保存）
 function cidOf() { try { return window.__activeCid || 'default'; } catch (e) { return 'default'; } }
 function hashStr(s) {
 let h = 2166136261 >>> 0;
@@ -17557,17 +17612,53 @@ b = document.createElement('div');
 b.id = 'presence-bubble';
 b.className = 'presence-bubble';
 b.innerHTML = '<span class="pb-dot"></span><span class="pb-txt">在线</span>';
-b.title = '点我看 TA 的状态';
-b.addEventListener('click', function () {
-try {
-const tp = document.getElementById('page-tongpin');
-if (tp && window.openFullPage) { window.openFullPage(tp); return; }
-} catch (e) {}
-try { toast('TA ' + fullText()); } catch (e2) {}
-});
+b.title = '按住可拖动 · 点击看 TA 的状态';
 const chatPage = document.getElementById('page-chat');
 if (chatPage) chatPage.appendChild(b);
 else document.body.appendChild(b);
+try {
+const p = JSON.parse(store.get('presence-bubble-pos') || 'null');
+if (p && typeof p.left === 'number' && typeof p.bottom === 'number') {
+b.style.left = p.left + 'px'; b.style.bottom = p.bottom + 'px';
+}
+} catch (e) {}
+let drag = null;
+const vw = () => window.innerWidth, vh = () => window.innerHeight;
+b.addEventListener('pointerdown', (e) => {
+if (e.pointerType === 'mouse' && e.button !== 0) return;
+const r = b.getBoundingClientRect();
+drag = { x: e.clientX, y: e.clientY, l: r.left, bot: vh() - r.bottom, moved: false };
+b.classList.add('dragging');
+try { b.setPointerCapture(e.pointerId); } catch (x) {}
+try { e.preventDefault(); e.stopPropagation(); } catch (x) {}
+});
+b.addEventListener('pointermove', (e) => {
+if (!drag) return;
+const dx = e.clientX - drag.x, dy = e.clientY - drag.y;
+if (!drag.moved && dx * dx + dy * dy < 36) return;
+drag.moved = true;
+const bw = b.offsetWidth || 120, bh = b.offsetHeight || 34;
+const left = Math.max(6, Math.min(vw() - bw - 6, drag.l + dx));
+const bot = Math.max(6, Math.min(vh() - bh - 6, drag.bot - dy));
+b.style.left = left + 'px'; b.style.bottom = bot + 'px';
+});
+const endDrag = (e) => {
+if (!drag) return;
+b.classList.remove('dragging');
+if (drag.moved) {
+const r = b.getBoundingClientRect();
+try { store.set('presence-bubble-pos', JSON.stringify({ left: Math.round(r.left), bottom: Math.round(vh() - r.bottom) })); } catch (x) {}
+} else {
+try {
+const tp = document.getElementById('page-tongpin');
+if (tp && window.openFullPage) { window.openFullPage(tp); drag = null; return; }
+} catch (x) {}
+try { toast('TA ' + fullText()); } catch (x2) {}
+}
+drag = null;
+};
+b.addEventListener('pointerup', endDrag);
+b.addEventListener('pointercancel', () => { if (drag) { b.classList.remove('dragging'); drag = null; } });
 return b;
 }
 function syncBubble(st, full) {
@@ -46091,6 +46182,7 @@ renderGrid();
 renderMeGrid();
 syncVal();
 try { nickRefresh(); } catch (e) {}
+try { nickLibRender(); } catch (e) {}
 avPage.hidden = false;
 }
 document.addEventListener('contact-switched', function () {
@@ -46478,6 +46570,89 @@ if (window.taSayRaw) window.taSayRaw('这个昵称我不太喜欢，再想想好
 });
 }
 nickRefresh();
+function nickLibLoad() { try { const a = JSON.parse(store.get('nick-lib') || '[]'); return Array.isArray(a) ? a : []; } catch (e) { return []; } }
+function nickLibSave(list) { try { store.set('nick-lib', JSON.stringify(list)); } catch (e) {} }
+function nickLibEsc(s) { return String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;'); }
+function nickLibApply(t) { store.set('cs-lbl-partner', t); nickApply(); }
+function nickLibRender() {
+const list = nickLibLoad();
+const el = document.getElementById('avlib-nicklib-list');
+const curEl = document.getElementById('avlib-nicklib-cur');
+const cur = store.get('cs-lbl-partner') || '';
+if (curEl) curEl.textContent = cur || 'TA';
+if (!el) return;
+if (!list.length) { el.innerHTML = ''; return; }
+el.innerHTML = list.map((n, i) => {
+const t = String(n && n.t || '');
+const isCur = t === cur;
+return '<span class="avlib-nicklib-item' + (isCur ? ' on' : '') + '" data-i="' + i + '" title="点击应用到聊天">' + nickLibEsc(t) + (isCur ? '<em>使用中</em>' : '') + '<i class="avlib-nicklib-del" data-i="' + i + '">✕</i></span>';
+}).join('');
+Array.prototype.forEach.call(el.querySelectorAll('.avlib-nicklib-item'), (item) => {
+item.addEventListener('click', (e) => {
+if (e.target && e.target.classList && e.target.classList.contains('avlib-nicklib-del')) return;
+const i = parseInt(item.dataset.i, 10);
+const n = nickLibLoad()[i];
+if (!n) return;
+nickLibApply(n.t);
+nickLibRender();
+toast('已把 TA 的聊天名字换成「' + n.t + '」');
+});
+});
+Array.prototype.forEach.call(el.querySelectorAll('.avlib-nicklib-del'), (d) => {
+d.addEventListener('click', (e) => {
+e.stopPropagation();
+const i = parseInt(d.dataset.i, 10);
+const l = nickLibLoad();
+if (i >= 0 && i < l.length) l.splice(i, 1);
+nickLibSave(l);
+nickLibRender();
+});
+});
+}
+const nickLibAddBtn = document.getElementById('avlib-nicklib-add');
+if (nickLibAddBtn) {
+nickLibAddBtn.addEventListener('click', () => {
+if (!window.openModal) return;
+window.openModal('批量添加昵称', '', (v) => {
+if (v == null) return;
+const raw = String(v || '');
+const lines = raw.split(/\r?\n/).map(s => s.trim()).filter(Boolean);
+if (!lines.length) { toast('至少写一个昵称（一行一个）'); return; }
+const list = nickLibLoad();
+const seen = {};
+list.forEach(n => { if (n && n.t) seen[n.t] = 1; });
+let added = 0;
+lines.forEach(t => { if (!seen[t]) { seen[t] = 1; list.push({ t: t }); added++; } });
+nickLibSave(list);
+nickLibRender();
+toast('新增 ' + added + ' 个昵称（共 ' + list.length + ' 个）');
+}, { textarea: true, textareaPlaceholder: '一行一个昵称，例如：\n宝宝\n老婆\n宝贝\n小猪猪', textareaRows: 5, lock: true });
+});
+}
+const nickLibRandBtn = document.getElementById('avlib-nicklib-random');
+if (nickLibRandBtn) {
+nickLibRandBtn.addEventListener('click', () => {
+const list = nickLibLoad();
+if (!list.length) { toast('昵称库是空的，先批量添加几个吧'); return; }
+const n = list[Math.floor(Math.random() * list.length)];
+nickLibApply(n.t);
+nickLibRender();
+toast('随机换上「' + n.t + '」');
+});
+}
+const nickLibClearBtn = document.getElementById('avlib-nicklib-clear');
+if (nickLibClearBtn) {
+nickLibClearBtn.addEventListener('click', () => {
+if (!window.openModal) return;
+window.openModal('清空昵称库', '', (v) => {
+if (v == null) return;
+nickLibSave([]);
+nickLibRender();
+toast('昵称库已清空');
+}, { noInput: true, staticText: '清空昵称库？（聊天当前称呼会保留，只是库里不再有候选）', lock: true });
+});
+}
+nickLibRender();
 })();
 } catch (__e) { try { console.error("[JS] avatar-lib.js", __e && __e.message || __e); } catch (x) {} if (window.__jsErrors) window.__jsErrors.push(String(__e && __e.message || __e)); } })();
 </script>
@@ -84123,4 +84298,4 @@ lastHeal: his
 <!-- __MOCHI_EOF__ -->
 </body>
 </html>
-<!-- __MOCHI_EOF__ mu5jszwe -->
+<!-- __MOCHI_EOF__ mu5nimej -->
