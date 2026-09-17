@@ -8395,18 +8395,61 @@ background:linear-gradient(transparent, rgba(0,0,0,.55));
 .call-panel-dial-video { background:#3b5bdb !important; color:#fff !important; }
 .call-panel-dial-video:active { opacity:.85; }
 [data-theme="dark"] .call-panel-dial-video { background:#4c6ef5 !important; color:#fff !important; }
+.avlib-nick {
+margin:12px 2px 4px; padding:12px 14px; border-radius:16px;
+background:linear-gradient(180deg,#fff5f8,#ffe9f0);
+border:1px solid rgba(240,150,185,.25);
+}
+.avlib-nick .avlib-toggle-txt { margin-bottom:8px; }
+.avlib-nick-row {
+display:flex; align-items:center; gap:8px; margin-top:8px;
+}
+.avlib-nick-lbl {
+flex-shrink:0; font-size:12px; font-weight:700; color:#b5657e; width:72px; text-align:left;
+}
+.avlib-nick-row input {
+flex:1; min-width:0; padding:9px 12px; border-radius:12px; border:1px solid rgba(240,150,185,.35);
+background:#fff; color:#8a4a63; font-size:13px; font-family:inherit; outline:none;
+}
+.avlib-nick-row input:focus { border-color:#f28bb0; box-shadow:0 0 0 3px rgba(242,139,176,.15); }
+.avlib-nick-actions { display:flex; gap:8px; margin-top:10px; }
+.avlib-nick-actions .div-draw { flex:1; min-width:0; font-size:13px; padding:10px 8px; }
 .sleep-mask {
 position:fixed; inset:0; z-index:96;
 display:flex; align-items:center; justify-content:center;
-background:linear-gradient(180deg,#0a1030 0%, #16204d 45%, #2a1b4e 78%, #3d2455 100%);
-color:#eef1ff; overflow:hidden;
+background:linear-gradient(180deg,#fff6f8 0%, #ffe9ef 55%, #ffdfe8 100%);
+color:#8a4a63; overflow:hidden;
 font-family:inherit;
+transition:all .35s ease;
 }
 .sleep-mask[hidden] { display:none; }
+.sleep-mask.mini {
+inset:auto; right:14px; bottom:88px;
+width:210px; height:264px; border-radius:20px;
+box-shadow:0 10px 30px rgba(180,80,120,.28);
+border:1.5px solid rgba(255,255,255,.9);
+transform-origin:bottom right;
+}
+.sleep-mask.mini .sleep-sky,
+.sleep-mask.mini .sleep-cloud,
+.sleep-mask.mini .sleep-glow,
+.sleep-mask.mini .sleep-timer,
+.sleep-mask.mini .sleep-msg,
+.sleep-mask.mini .sleep-btns,
+.sleep-mask.mini .sleep-note,
+.sleep-mask.mini .sleep-mini-btn,
+.sleep-mask.mini .sleep-extra { display:none; }
+.sleep-mask.mini .sleep-body { width:100%; padding:14px 10px 10px; gap:8px; }
+.sleep-mask.mini .sleep-av-face { width:52px; height:52px; font-size:26px; border-width:1.5px; }
+.sleep-mask.mini .sleep-av { width:64px; gap:4px; }
+.sleep-mask.mini .sleep-heart { font-size:16px; }
+.sleep-mask.mini .sleep-title { font-size:14px; margin-top:0; }
+.sleep-mask.mini .sleep-status { font-size:10px; }
+.sleep-mask.mini .sleep-expand-btn { display:flex; }
 .sleep-sky { position:absolute; inset:0; pointer-events:none; }
 .sleep-stars { position:absolute; inset:0; }
 .sleep-stars i {
-position:absolute; border-radius:50%; background:#fff;
+position:absolute; border-radius:50%; background:#f6a8c2;
 animation:twinkle 3s ease-in-out infinite;
 }
 @keyframes twinkle {
@@ -8414,10 +8457,10 @@ animation:twinkle 3s ease-in-out infinite;
 50%     { opacity:1;   transform:scale(1.15); }
 }
 .sleep-moon {
-position:absolute; top:9%; left:50%; margin-left:-40px;
-width:80px; height:80px; border-radius:50%;
-background:radial-gradient(circle at 38% 35%, #fffbe8, #ffe9a8 55%, #f3c95c 100%);
-box-shadow:0 0 40px 14px rgba(255,225,150,.35), 0 0 90px 30px rgba(255,215,130,.18);
+position:absolute; top:8%; left:50%; margin-left:-40px;
+width:82px; height:82px; border-radius:50%;
+background:radial-gradient(circle at 38% 35%, #fffdf0, #ffe9b0 60%, #ffd37a 100%);
+box-shadow:0 0 36px 12px rgba(255,205,120,.45), 0 0 80px 26px rgba(255,195,120,.2);
 animation:moonFloat 7s ease-in-out infinite;
 }
 @keyframes moonFloat {
@@ -8425,8 +8468,9 @@ animation:moonFloat 7s ease-in-out infinite;
 50%     { transform:translateY(-8px); }
 }
 .sleep-cloud {
-position:absolute; top:24%; left:8%; width:150px; height:34px; border-radius:99px;
-background:rgba(255,255,255,.07); filter:blur(6px);
+position:absolute; top:22%; left:8%; width:150px; height:34px; border-radius:99px;
+background:rgba(255,255,255,.75); filter:blur(5px);
+box-shadow:0 4px 14px rgba(240,150,180,.18);
 animation:cloudDrift 26s linear infinite;
 }
 @keyframes cloudDrift {
@@ -8443,35 +8487,35 @@ width:88px; display:flex; flex-direction:column; align-items:center; gap:8px;
 }
 .sleep-av-face {
 width:84px; height:84px; border-radius:50%;
-background:rgba(255,255,255,.1); border:1.5px solid rgba(255,255,255,.22);
+background:#fff; border:2px solid rgba(240,150,185,.55);
 display:flex; align-items:center; justify-content:center;
-font-size:40px; box-shadow:0 6px 22px rgba(0,0,0,.28);
-backdrop-filter:blur(2px);
+font-size:40px; box-shadow:0 6px 20px rgba(200,110,150,.18);
 }
-.sleep-av-name { font-size:13px; font-weight:600; color:#dfe4ff; letter-spacing:.5px; }
+.sleep-av-name { font-size:13px; font-weight:600; color:#b5657e; letter-spacing:.5px; }
 .sleep-heart { font-size:22px; animation:heartBeat 2s ease-in-out infinite; }
 @keyframes heartBeat {
 0%,100% { transform:scale(1); } 30% { transform:scale(1.22); } 60% { transform:scale(.96); }
 }
 .sleep-glow {
-width:210px; height:210px; border-radius:50%;
-background:radial-gradient(circle, rgba(255,205,120,.32), rgba(120,140,255,.1) 60%, transparent 72%);
-animation:glowBreathe 4s ease-in-out infinite;
-margin-top:-118px;
+width:230px; height:230px; border-radius:50%;
+background:radial-gradient(circle, rgba(255,160,190,.38), rgba(255,190,210,.16) 58%, transparent 72%);
+animation:glowBreathe 3.6s ease-in-out infinite;
+margin-top:-124px;
 }
 @keyframes glowBreathe {
-0%,100% { transform:scale(.92); opacity:.75; }
-50%     { transform:scale(1.1);  opacity:1; }
+0%,100% { transform:scale(.9); opacity:.65; }
+50%     { transform:scale(1.12); opacity:1; }
 }
-.sleep-title { font-size:20px; font-weight:800; letter-spacing:1px; margin-top:-6px; }
-.sleep-status { font-size:13px; color:#aeb6e8; }
+.sleep-title { font-size:20px; font-weight:800; letter-spacing:1px; margin-top:-6px; color:#8a4a63; }
+.sleep-status { font-size:13px; color:#c988a2; }
 .sleep-timer {
 font-size:26px; font-weight:300; font-variant-numeric:tabular-nums;
-color:#fff; letter-spacing:2px; margin-top:2px;
+color:#a95e7c; letter-spacing:2px; margin-top:2px;
 }
 .sleep-msg {
-font-size:12px; color:#8f97c9; min-height:16px;
-background:rgba(255,255,255,.05); padding:6px 14px; border-radius:99px;
+font-size:12px; color:#c07f9c; min-height:16px;
+background:rgba(255,255,255,.75); padding:6px 14px; border-radius:99px;
+box-shadow:0 2px 8px rgba(220,140,170,.12);
 }
 .sleep-btns { display:flex; gap:14px; margin-top:6px; flex-wrap:wrap; justify-content:center; }
 .sleep-btn {
@@ -8481,11 +8525,65 @@ transition:transform .15s ease, opacity .15s ease;
 }
 .sleep-btn:active { transform:scale(.95); }
 .sleep-btn[hidden] { display:none; }
-.sleep-btn-ok { background:#2bb673; color:#fff; box-shadow:0 6px 18px rgba(43,182,115,.35); }
-.sleep-btn-no { background:rgba(255,255,255,.14); color:#dfe4ff; }
-.sleep-btn-end { background:#e5484d; color:#fff; box-shadow:0 6px 18px rgba(229,72,77,.3); }
+.sleep-btn-ok { background:#f28bb0; color:#fff; box-shadow:0 6px 18px rgba(242,139,176,.4); }
+.sleep-btn-no { background:rgba(255,255,255,.85); color:#b5657e; box-shadow:0 3px 10px rgba(220,140,170,.15); }
+.sleep-btn-end { background:#f06a7d; color:#fff; box-shadow:0 6px 18px rgba(240,106,125,.32); }
+.sleep-extra { position:absolute; top:12px; right:14px; display:flex; gap:8px; z-index:3; }
+.sleep-ico-btn {
+width:34px; height:34px; border-radius:50%; border:none; cursor:pointer;
+background:rgba(255,255,255,.85); color:#b5657e; font-size:16px;
+display:flex; align-items:center; justify-content:center;
+box-shadow:0 3px 10px rgba(220,140,170,.18);
+}
+.sleep-ico-btn:active { transform:scale(.92); }
+.sleep-expand-btn { display:none; }
+.sleep-note {
+width:min(380px, 86vw); display:flex; gap:8px; margin-top:4px;
+align-items:center;
+}
+.sleep-note input {
+flex:1; min-width:0; padding:9px 14px; border-radius:99px; border:none;
+background:rgba(255,255,255,.9); color:#8a4a63; font-size:13px; font-family:inherit;
+box-shadow:0 2px 8px rgba(220,140,170,.14);
+}
+.sleep-note input::placeholder { color:#d3a0b6; }
+.sleep-note button {
+flex-shrink:0; padding:9px 16px; border:none; border-radius:99px;
+background:#f28bb0; color:#fff; font-size:13px; font-weight:700; cursor:pointer; font-family:inherit;
+}
+.sleep-note button:active { transform:scale(.95); }
 #more-sleep svg, #more-baobei svg { color:#5b7cfa; }
 #ti-baobei-now svg { color:#2bb673; }
+.presence-bubble {
+position:fixed; z-index:70; left:16px; bottom:74px;
+display:flex; align-items:center; gap:6px;
+max-width:44vw;
+padding:7px 13px; border-radius:99px;
+background:rgba(255,255,255,.92);
+border:1px solid rgba(43,182,115,.35);
+box-shadow:0 4px 16px rgba(0,0,0,.12);
+font-size:12px; font-weight:600; color:#2bb673;
+cursor:pointer; white-space:nowrap; overflow:hidden;
+text-overflow:ellipsis;
+transition:opacity .3s ease, transform .3s ease;
+}
+[data-theme="dark"] .presence-bubble { background:rgba(30,34,48,.92); border-color:rgba(43,182,115,.4); color:#7fe0ae; }
+.presence-bubble .pb-dot {
+width:8px; height:8px; border-radius:50%; flex-shrink:0;
+background:currentColor; box-shadow:0 0 0 0 rgba(43,182,115,.4);
+animation:pbPulse 2.2s ease-in-out infinite;
+}
+@keyframes pbPulse {
+0%,100% { box-shadow:0 0 0 0 rgba(43,182,115,.4); }
+50%     { box-shadow:0 0 0 5px rgba(43,182,115,0); }
+}
+.presence-bubble .pb-txt { overflow:hidden; text-overflow:ellipsis; }
+.presence-bubble.p-away { color:#d18c13; border-color:rgba(209,140,19,.4); }
+.presence-bubble.p-away .pb-dot { background:#f0a11c; animation:none; }
+.presence-bubble.p-offline { color:#9aa1ab; border-color:rgba(154,161,171,.35); opacity:.75; }
+.presence-bubble.p-offline .pb-dot { background:#b6bcc4; animation:none; }
+.presence-bubble:active { transform:scale(.95); }
+.chat-presence { max-width:52vw; overflow:hidden; text-overflow:ellipsis; }
 </style>
 </head>
 <body>
@@ -8506,9 +8604,9 @@ transition:transform .15s ease, opacity .15s ease;
       </div>
     </div>
     <div class="splash-footcard">
-      <div class="splash-ver" id="splash-ver" data-build-ts="1789418503357">
-        <span class="sv-app">love lucky <b>v3.26.0</b></span>
-        <span class="sv-deploy">部署于 2026-09-15 04:41<span id="splash-ver-live"></span></span>
+      <div class="splash-ver" id="splash-ver" data-build-ts="1789650676670">
+        <span class="sv-app">love lucky <b>v3.50.0</b></span>
+        <span class="sv-deploy">部署于 2026-09-17 21:11<span id="splash-ver-live"></span></span>
       </div>
       <div class="splash-loading" id="splash-loading">正在加载数据…</div>
       <div class="splash-enter-hint" id="splash-enter-hint" hidden>勾选后即可进入</div>
@@ -9458,6 +9556,11 @@ transition:transform .15s ease, opacity .15s ease;
 
 <!-- 睡眠陪伴（双方均可发起；夜间全屏陪伴界面，见 src/js/sleep-companion.js） -->
 <div class="sleep-mask" id="sleep-mask" hidden>
+  <div class="sleep-extra">
+    <button class="sleep-ico-btn" id="sleep-say-btn" type="button" title="换一句晚安语（字卡可调配）">🌙</button>
+    <button class="sleep-ico-btn" id="sleep-mini-btn" type="button" title="缩小为小窗">▁</button>
+    <button class="sleep-ico-btn sleep-expand-btn" id="sleep-expand-btn" type="button" title="恢复全屏">⤢</button>
+  </div>
   <div class="sleep-sky">
     <div class="sleep-stars" id="sleep-stars"></div>
     <div class="sleep-moon" id="sleep-moon"></div>
@@ -9474,6 +9577,10 @@ transition:transform .15s ease, opacity .15s ease;
     <div class="sleep-status" id="sleep-status">正在等你入眠…</div>
     <div class="sleep-timer" id="sleep-timer" hidden>已陪伴 00:00</div>
     <div class="sleep-msg" id="sleep-msg"></div>
+    <div class="sleep-note">
+      <input type="text" id="sleep-note-input" maxlength="30" placeholder="留一句睡前话给 TA…" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+      <button type="button" id="sleep-note-send">留言</button>
+    </div>
     <div class="sleep-btns">
       <button class="sleep-btn sleep-btn-ok" id="sleep-accept-btn" hidden>接受，一起睡</button>
       <button class="sleep-btn sleep-btn-no" id="sleep-decline-btn" hidden>婉拒</button>
@@ -9705,7 +9812,7 @@ transition:transform .15s ease, opacity .15s ease;
           <div class="txt">清除本地数据</div>
         </div>
       </div>
-      <div class="ver">love lucky 字卡传讯 v3.26.0</div>
+      <div class="ver">love lucky 字卡传讯 v3.50.0</div>
       <div class="ver-credit">原版小红书@言序（1842523578）</div>
       <!-- v3.27.x：设置页底部防骗声明 -->
       <div class="set-alert">
@@ -10005,7 +10112,7 @@ transition:transform .15s ease, opacity .15s ease;
             <div class="lic-hero-top">
               <div class="lic-title">love lucky 字卡传讯</div>
               <span class="lic-badge">原版</span>
-              <span class="lic-ver">v3.26.0</span>
+              <span class="lic-ver">v3.50.0</span>
             </div>
             <div class="lic-p">原创极简风情侣聊天模拟器：黑白灰简约设计，数据全部保存在本地、无需联网；所有内容均为代码触发、按概率运行，联系方可主动发送聊天消息。代码从零编写并完全开源——本作即原版。</div>
             <div class="lic-pills">
@@ -11474,6 +11581,8 @@ transition:transform .15s ease, opacity .15s ease;
         <button class="fav-tab" data-htab="care">TA的关心</button>
         <!-- v3.26.x：占卜记录（占卜页抽牌选了对象，牌面与解读存入该联系人桌面 records-divine） -->
         <button class="fav-tab" data-htab="divine">占卜记录</button>
+        <!-- v3.50.x：报备记录（双方互报近况的流水，records-care kind=baobei） -->
+        <button class="fav-tab" data-htab="baobei">报备记录</button>
       </div>
       <div class="cal-scroll">
         <!-- v3.26.x：游乐室入口卡（小游戏战绩/徽章/幸运游戏/摆件图鉴，点击进独立全屏页；src/js/arcade.js）；data-hpanel="*"＝所有主页 tab 常显，records.js 切 tab 只按该通配保留 -->
@@ -11527,6 +11636,11 @@ transition:transform .15s ease, opacity .15s ease;
         <div class="cal-card glass" data-hpanel="divine" hidden>
           <div class="cal-card-title">占卜记录</div>
           <div id="home-divine"></div>
+        </div>
+        <!-- v3.50.x：报备记录（双方互报近况流水；写入方 sleep-companion.js，读 records-care kind=baobei） -->
+        <div class="cal-card glass" data-hpanel="baobei" hidden>
+          <div class="cal-card-title">报备记录</div>
+          <div id="home-baobei"></div>
         </div>
       </div>
     </div>
@@ -12769,6 +12883,31 @@ transition:transform .15s ease, opacity .15s ease;
           <div class="avlib-tab active" id="avlib-tab-a"><span id="avlib-pool-name">TA 的头像库</span><span class="avlib-tab-cnt">（<span id="avlib-count">0</span>）</span></div>
           <div class="avlib-tab" id="avlib-tab-b"><span id="avlib-me-tab-name">我的头像库</span><span class="avlib-tab-cnt">（<span id="avlib-me-count">0</span>）</span></div>
         </div>
+        <!-- v3.50.x：昵称互动（双方自主更换 / 邀请更换） -->
+        <div class="avlib-nick">
+          <div class="avlib-toggle-txt">
+            <div class="avlib-toggle-name">昵称互动</div>
+            <div class="avlib-toggle-sub">自定义双方昵称，或邀请 TA 换一个昵称</div>
+          </div>
+          <div class="avlib-nick-row">
+            <span class="avlib-nick-lbl">我的昵称</span>
+            <input type="text" id="avlib-nick-me" maxlength="12" placeholder="未设置（默认 我）" autocomplete="off">
+          </div>
+          <div class="avlib-nick-row">
+            <span class="avlib-nick-lbl">对 TA 的称呼</span>
+            <input type="text" id="avlib-nick-ta" maxlength="12" placeholder="未设置（默认 TA）" autocomplete="off">
+          </div>
+          <div class="avlib-nick-actions">
+            <button class="div-draw" id="avlib-nick-save">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/><path d="M17 21v-8H7v8"/><path d="M7 3v5h8"/></svg>
+              保存昵称
+            </button>
+            <button class="div-draw" id="avlib-nick-invite">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg>
+              邀请 TA 换昵称
+            </button>
+          </div>
+        </div>
         <div id="avlib-pane-a">
           <div class="avlib-toggle">
             <div class="avlib-toggle-txt">
@@ -12961,7 +13100,6 @@ transition:transform .15s ease, opacity .15s ease;
         <div class="more-tabs" id="more-tabs">
           <button class="more-tab sel" type="button" data-mcat="chat">互动</button>
           <button class="more-tab" type="button" data-mcat="tool">工具</button>
-          <button class="more-tab" type="button" data-mcat="game">小游戏</button>
           <button class="more-tab" type="button" data-mcat="ask">TA的提问</button>
         </div>
         <div class="more-grid" id="more-grid-fun">
@@ -12990,7 +13128,7 @@ transition:transform .15s ease, opacity .15s ease;
             <span class="mi-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 14.5V7.2a1.5 1.5 0 0 1 3 0v7.3"/><path d="M11 14.5V6.5a1.5 1.5 0 0 1 3 0v8"/><path d="M14 14.5V7.8a1.5 1.5 0 0 1 3 0v6.7"/><path d="M6.5 14.5h12c0 3.5-2.7 6-6 6s-6-2.5-6-6"/><path d="M6 5a8.5 8.5 0 0 1 12 0"/></svg></span>
             <span>拍一拍</span>
           </button>
-          <button class="more-item" id="more-rps" data-mcat="game" title="猜拳">
+          <button class="more-item" id="more-rps" data-mcat="hidden" title="猜拳">
             <span class="mi-ico"><svg viewBox="0 0 256 256"><path fill="currentColor" d="M200 80h-16V64a32 32 0 0 0-56-21.13a32 32 0 0 0-55.79 17.55A32 32 0 0 0 24 88v40a104 104 0 0 0 208 0v-16a32 32 0 0 0-32-32m-48-32a16 16 0 0 1 16 16v16h-32V64a16 16 0 0 1 16-16M88 64a16 16 0 0 1 32 0v40a16 16 0 0 1-32 0ZM40 88a16 16 0 0 1 32 0v16a16 16 0 0 1-32 0Zm176 40a88 88 0 0 1-175.92 3.75A31.93 31.93 0 0 0 80 125.13a31.93 31.93 0 0 0 44.58 3.35a32.2 32.2 0 0 0 11.8 11.44A47.88 47.88 0 0 0 120 176a8 8 0 0 0 16 0a32 32 0 0 1 32-32a8 8 0 0 0 0-16h-16a16 16 0 0 1-16-16V96h64a16 16 0 0 1 16 16Z"/></svg></span>
             <span>猜拳</span>
           </button>
@@ -13002,11 +13140,11 @@ transition:transform .15s ease, opacity .15s ease;
             <span class="mi-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 00-4-4H6a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M19 8v6M22 11h-6"/></svg></span>
             <span>邀请TA</span>
           </button>
-          <button class="more-item" id="more-gift" data-mcat="chat" title="心意集市">
+          <button class="more-item" id="more-gift" data-mcat="tool" title="心意集市">
             <span class="mi-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="8" width="18" height="4" rx="1"/><path d="M5 12v8a1 1 0 001 1h12a1 1 0 001-1v-8"/><path d="M12 8v13"/>            <path d="M12 8S10.5 4 8 4 5 6 5 8"/><path d="M12 8s1.5-4 4-4 3 2 3 4"/></svg></span>
             <span>心意集市</span>
           </button>
-          <button class="more-item" id="more-giftbox" data-mcat="chat" title="心意柜">
+          <button class="more-item" id="more-giftbox" data-mcat="tool" title="心意柜">
             <span class="mi-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="8" width="18" height="13" rx="2"/><path d="M3 12h18"/><path d="M12 8V5"/><path d="M9 5h6"/></svg></span>
             <span>心意柜</span>
           </button>
@@ -13022,7 +13160,7 @@ transition:transform .15s ease, opacity .15s ease;
             <span class="mi-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h16"/><path d="M6 20V9l6-5 6 5v11"/><path d="M10 20v-6h4v6"/></svg></span>
             <span>报备</span>
           </button>
-          <button class="more-item" id="more-drift" data-mcat="chat" title="漂流瓶（两个世界之间的海）">
+          <button class="more-item" id="more-drift" data-mcat="hidden" title="漂流瓶（两个世界之间的海）">
             <span class="mi-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M10 2.5h4v3.2l1.5 2A7.2 7.2 0 0117 11.6V19a2 2 0 01-2 2H9a2 2 0 01-2-2v-7.4c0-1.4.46-2.77 1.5-3.9L10 5.7z"/><path d="M10.4 12.6h3.2"/><path d="M2.5 18.6c1.5 1.1 3 1.1 4.5 0s3-1.1 4.5 0 3 1.1 4.5 0 3-1.1 4.5 0"/></svg></span>
             <span>漂流瓶</span>
           </button>
@@ -13030,47 +13168,47 @@ transition:transform .15s ease, opacity .15s ease;
             <span class="mi-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="18" rx="1.5"/><path d="M12 8.5l1.15 2.4 2.4 1.15-2.4 1.15L12 15.6l-1.15-2.4-2.4-1.15 2.4-1.15z"/></svg></span>
             <span>占卜</span>
           </button>
-          <button class="more-item" id="more-pong" data-mcat="game" title="双人Pong">
+          <button class="more-item" id="more-pong" data-mcat="hidden" title="双人Pong">
             <span class="mi-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="18" rx="2"/><rect x="4" y="8" width="2" height="8" rx="1" fill="currentColor"/><rect x="18" y="8" width="2" height="8" rx="1" fill="currentColor"/><circle cx="12" cy="12" r="1.6" fill="currentColor"/></svg></span>
             <span>Pong</span>
           </button>
-          <button class="more-item" id="more-snake" data-mcat="game" title="双人贪吃蛇">
+          <button class="more-item" id="more-snake" data-mcat="hidden" title="双人贪吃蛇">
             <span class="mi-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M7 7h3v3H7zM14 14h3v3h-3z"/></svg></span>
             <span>贪吃蛇</span>
           </button>
-          <button class="more-item" id="more-brick" data-mcat="game" title="双人打砖块（合作）">
+          <button class="more-item" id="more-brick" data-mcat="hidden" title="双人打砖块（合作）">
             <span class="mi-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="1.5"/><path d="M3 9.3h18M3 14.6h18"/><path d="M12 4v5.3M7.5 9.3v5.3M16.5 9.3v5.3M12 14.6V20"/></svg></span>
             <span>打砖块</span>
           </button>
-          <button class="more-item" id="more-fish" data-mcat="game" title="双人钓鱼">
+          <button class="more-item" id="more-fish" data-mcat="hidden" title="双人钓鱼">
             <span class="mi-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M17.8 8.8l4.2-3.3"/><path d="M17.8 16.2l4.2 3.3"/><ellipse cx="10.6" cy="12.5" rx="7.2" ry="4.3"/><circle cx="7.2" cy="11.3" r=".6" fill="currentColor" stroke="none"/><path d="M3 5.2q1.7-1.1 3.4 0q1.7-1.1 3.4 0q1.7-1.1 3.4 0"/></svg></span>
             <span>钓鱼</span>
           </button>
-          <button class="more-item" id="more-c4" data-mcat="game" title="四子棋">
+          <button class="more-item" id="more-c4" data-mcat="hidden" title="四子棋">
             <span class="mi-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="8" r="3.2"/><circle cx="16" cy="8" r="3.2"/><circle cx="8" cy="16" r="3.2"/><circle cx="16" cy="16" r="3.2"/></svg></span>
             <span>四子棋</span>
           </button>
-          <button class="more-item" id="more-ms" data-mcat="game" title="合作扫雷（和TA一起探索雷区）">
+          <button class="more-item" id="more-ms" data-mcat="hidden" title="合作扫雷（和TA一起探索雷区）">
             <span class="mi-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 3v18M15 3v18M3 9h18M3 15h18"/><circle cx="12" cy="12" r="2.3"/></svg></span>
             <span>扫雷</span>
           </button>
-          <button class="more-item" id="more-memory" data-mcat="game" title="记忆翻牌（和TA合作）">
+          <button class="more-item" id="more-memory" data-mcat="hidden" title="记忆翻牌（和TA合作）">
             <span class="mi-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8.6 3.4l8.8-2 3.4 3.2-8.8 2z"/><rect x="3.4" y="7" width="15.6" height="13.4" rx="1.8"/><path d="M11.2 11.8l.9 1.9 1.9.9-1.9.9-.9 1.9-.9-1.9-1.9-.9 1.9-.9z"/></svg></span>
             <span>记忆翻牌</span>
           </button>
-          <button class="more-item" id="more-gomoku" data-mcat="game" title="五子棋">
+          <button class="more-item" id="more-gomoku" data-mcat="hidden" title="五子棋">
             <span class="mi-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="3.5" width="17" height="17" rx="2"/><path d="M3.5 9.2h17M3.5 14.8h17M9.2 3.5v17M14.8 3.5v17"/><circle cx="9.2" cy="9.2" r="1.5" fill="currentColor" stroke="none"/><circle cx="14.8" cy="12" r="1.5" fill="currentColor" stroke="none"/><circle cx="9.2" cy="14.8" r="1.5" fill="currentColor" stroke="none"/></svg></span>
             <span>五子棋</span>
           </button>
-          <button class="more-item" id="more-linkup" data-mcat="game" title="连连看（和TA合作）">
+          <button class="more-item" id="more-linkup" data-mcat="hidden" title="连连看（和TA合作）">
             <span class="mi-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="6.5" width="8" height="8" rx="1.8"/><rect x="13" y="10.5" width="8" height="8" rx="1.8"/><path d="M11 12.5h2" stroke-dasharray="1.4 1.8"/></svg></span>
             <span>连连看</span>
           </button>
-          <button class="more-item" id="more-match3" data-mcat="game" title="消消乐（和TA轮流消除）">
+          <button class="more-item" id="more-match3" data-mcat="hidden" title="消消乐（和TA轮流消除）">
             <span class="mi-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="7.2" cy="15" r="2.7"/><circle cx="12" cy="8.2" r="2.7"/><circle cx="16.8" cy="15" r="2.7"/></svg></span>
             <span>消消乐</span>
           </button>
-          <button class="more-item" id="more-auction" data-mcat="game" title="心意币拍卖会（和TA竞拍）">
+          <button class="more-item" id="more-auction" data-mcat="hidden" title="心意币拍卖会（和TA竞拍）">
             <span class="mi-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12.4 5.4l6.2 6.2M14.6 3.2l6.2 6.2-2.2 2.2-6.2-6.2z"/><path d="M13.6 9.8l-8.4 8.4"/><path d="M4.2 21h7"/></svg></span>
             <span>拍卖会</span>
           </button>
@@ -13081,6 +13219,18 @@ transition:transform .15s ease, opacity .15s ease;
           <button class="more-item" id="more-cjian" data-mcat="tool" title="此间（梦角世界时间与在场感知）">
             <span class="mi-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 3a9 9 0 010 18"/><circle cx="12" cy="12" r="2.2"/></svg></span>
             <span>此间</span>
+          </button>
+          <button class="more-item" id="more-water" data-mcat="tool" title="喝水（今日杯数进度环，TA 定时催喝水）">
+            <span class="mi-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.5C8 7 5.5 11 5.5 14.5a6.5 6.5 0 0013 0C18.5 11 16 7 12 2.5z"/></svg></span>
+            <span>喝水</span>
+          </button>
+          <button class="more-item" id="more-eat" data-mcat="tool" title="吃什么（随机抽菜/转盘，问 TA 征求意见）">
+            <span class="mi-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 2.5v7c0 1.1.9 2 2 2h4c1.1 0 2-.9 2-2v-7"/><path d="M5.7 2.5v8.3"/><path d="M8.3 2.5v8.3"/><path d="M7 11.5v10"/><path d="M21 15V2.5a5 5 0 00-5 5v5.5c0 1.1.9 2 2 2h3z"/><path d="M21 15v6.5"/></svg></span>
+            <span>吃什么</span>
+          </button>
+          <button class="more-item" id="more-piggy" data-mcat="tool" title="存钱罐（存取+小心愿目标，TA 当监督人）">
+            <span class="mi-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 7h6"/><path d="M5 13.5C5 10.4 8.1 8 12 8s7 2.4 7 5.5c0 1.6-.9 3.1-2.3 4.1V20h-2.4l-.4-1.2a9.3 9.3 0 01-3.8 0L9.7 20H7.3v-2.4C5.9 16.6 5 15.1 5 13.5z"/><circle cx="9.3" cy="12.7" r=".55" fill="currentColor" stroke="none"/><path d="M18.8 12.3l1.7-.9"/></svg></span>
+            <span>存钱罐</span>
           </button>
         </div>
         <div class="more-grid" id="more-grid-ask" hidden>
@@ -17357,6 +17507,23 @@ function dateStr(d) {
 const p = n => (n < 10 ? '0' : '') + n;
 return '' + d.getFullYear() + p(d.getMonth() + 1) + p(d.getDate());
 }
+const ONLINE_MOODS = ['在学习', '在忙工作', '在摸鱼', '在散步', '在听歌', '在发呆', '在想你', '在刷手机', '在做饭', '在追剧', '在写东西', '在路上', '在看书', '在运动'];
+const AWAY_REASONS = ['出门办点事', '在开会', '在午休', '在忙', '暂时离开一下', '在赶路', '在办正事'];
+function pickPool(cid, dateStr, hour, salt, pool) {
+const r = rng(hashStr(cid + '|' + dateStr + '|' + hour + '|' + salt));
+return pool[Math.floor(r() * pool.length)];
+}
+function moodText(cid, dateStr, hour) { return pickPool(cid, dateStr, hour, 'mood', ONLINE_MOODS); }
+function awayText(cid, dateStr, hour) { return pickPool(cid, dateStr, hour, 'away', AWAY_REASONS); }
+function fullText(cid) {
+try {
+const now = new Date(), ds = dateStr(now), h = now.getHours();
+const st = hourStatus(cid || cidOf(), ds, h);
+if (st === 'online') return '在线 · ' + moodText(cid || cidOf(), ds, h);
+if (st === 'away') return '离开 · ' + awayText(cid || cidOf(), ds, h);
+return '离线';
+} catch (e) { return '在线'; }
+}
 function status(cid) {
 try {
 const now = new Date();
@@ -17368,24 +17535,54 @@ const DOTS = { online: '', away: '', offline: '' };
 function render() {
 try {
 const st = status();
+const full = fullText();
 const dot = document.getElementById('desk-presence-dot');
 if (dot) {
 dot.className = 'presence-dot desk p-' + st;
-dot.title = 'TA ' + LABELS[st];
+dot.title = 'TA ' + full;
 }
 const cp = document.getElementById('chat-presence');
 if (cp) {
 cp.className = 'chat-presence p-' + st;
-cp.textContent = st === 'online' ? '在线' : (st === 'away' ? '离开一下' : '离线');
-cp.title = st === 'offline' ? 'TA 现在不在线，消息会保留，TA 上线后会看到' : 'TA ' + LABELS[st];
+cp.textContent = full;
+cp.title = st === 'offline' ? 'TA 现在不在线，消息会保留，TA 上线后会看到' : 'TA ' + full;
 }
+syncBubble(st, full);
 } catch (e) {}
+}
+function ensureBubble() {
+let b = document.getElementById('presence-bubble');
+if (b) return b;
+b = document.createElement('div');
+b.id = 'presence-bubble';
+b.className = 'presence-bubble';
+b.innerHTML = '<span class="pb-dot"></span><span class="pb-txt">在线</span>';
+b.title = '点我看 TA 的状态';
+b.addEventListener('click', function () {
+try {
+const tp = document.getElementById('page-tongpin');
+if (tp && window.openFullPage) { window.openFullPage(tp); return; }
+} catch (e) {}
+try { toast('TA ' + fullText()); } catch (e2) {}
+});
+const chatPage = document.getElementById('page-chat');
+if (chatPage) chatPage.appendChild(b);
+else document.body.appendChild(b);
+return b;
+}
+function syncBubble(st, full) {
+const b = ensureBubble();
+if (!b) return;
+b.className = 'presence-bubble p-' + st + (st === 'offline' ? ' off' : '');
+const txt = b.querySelector('.pb-txt');
+if (txt) txt.textContent = full;
 }
 function isOnline(cid) { return status(cid) !== 'offline'; }
 function isAvailable(cid) { return status(cid) === 'online'; } // 只有「在线」才接受主动行为
 const api = {
 status: status,
 label: (cid) => LABELS[status(cid)] || '在线',
+fullText: fullText,
 isOnline: isOnline,
 isAvailable: isAvailable,
 refresh: render
@@ -17396,9 +17593,29 @@ document.addEventListener('contact-switched', render);
 document.addEventListener('mochi-restore-done', render);
 document.addEventListener('mochi-wrj-heal', render);
 let lastHour = -1;
+let lastSt = '', lastFull = '';
+function hourTick() {
+const st = status();
+const full = fullText();
+const prevSt = lastSt, prevFull = lastFull;
+lastSt = st; lastFull = full;
+render();
+if (prevSt === 'offline' && st !== 'offline') {
+try {
+if (window.taSayRaw && Math.random() < 0.8) {
+window.taSayRaw('（TA 上线了 · ' + full + '）', { special: 'poke', initiative: true });
+} else if (window.taSayRaw) {
+window.taSayRaw('（TA 上线了，快来找 TA 吧）', { special: 'poke', initiative: true });
+}
+} catch (e) {}
+} else if (st === 'online' && prevSt === 'online' && full !== prevFull) {
+try { if (window.taSayRaw && Math.random() < 0.18) window.taSayRaw('（' + full + '）', { special: 'poke', initiative: true }); } catch (e) {}
+}
+}
+hourTick();
 setInterval(function () {
 const h = new Date().getHours();
-if (h !== lastHour) { lastHour = h; render(); }
+if (h !== lastHour) { lastHour = h; hourTick(); }
 }, 20000);
 })();
 } catch (__e) { try { console.error("[JS] presence.js", __e && __e.message || __e); } catch (x) {} if (window.__jsErrors) window.__jsErrors.push(String(__e && __e.message || __e)); } })();
@@ -29571,6 +29788,16 @@ pokeTapGuard = Date.now() + 800;
 openPokeCard();
 });
 av.addEventListener('pointercancel', () => { pokeTapP = null; });
+av.addEventListener('dblclick', (e) => {
+e.stopPropagation();
+try {
+let full = '';
+try { if (window.MochiPresence && window.MochiPresence.fullText) full = window.MochiPresence.fullText() || ''; } catch (x) {}
+addIn('戳了戳' + chatPartnerName() + '（想念戳戳' + (full ? ' · ' + full : '') + '）', { special: 'poke' });
+} catch (err) {
+try { addIn('戳了戳' + chatPartnerName() + '（想念戳戳）', { special: 'poke' }); } catch (e2) {}
+}
+});
 av.addEventListener('click', (e) => {
 if (Date.now() < pokeTapGuard) { e.preventDefault(); e.stopPropagation(); return; }
 e.stopPropagation();
@@ -30806,6 +31033,10 @@ auction: { title: '游戏邀请' },
 cuddle: { title: '贴贴邀请' }
 };
 function sendTaInvite(inv, name) {
+try {
+const _mb = document.querySelector('.modal');
+if (_mb && !_mb.hidden) return false;
+} catch (e) {}
 const meta = INVITE_KIND_META[inv && inv.kind] || INVITE_KIND_META.rps;
 addIn(name + ' ' + (inv.text || ''), { special: 'poke', initiative: true, gInv: inv.kind });
 showTyping();
@@ -31635,7 +31866,12 @@ const RP_LEGACY_WALLET_KEY = 'rp-wallet';
 const RP_WALLET_DEFAULT_FEN = 52000;
 const RP_DAILY_PREFIX = 'ml2_rp_daily_';
 function rpWalletGet() {
-if (typeof window.giftWalletGet === 'function') return window.giftWalletGet();
+try {
+if (typeof window.giftWalletGet === 'function') {
+const gw = window.giftWalletGet();
+if (gw && typeof gw.myBalance === 'number' && typeof gw.systemBalance === 'number') return gw;
+}
+} catch (e) {}
 try {
 const w = JSON.parse(store.get(RP_WALLET_KEY) || '');
 if (typeof w.myBalance === 'number' && typeof w.systemBalance === 'number') {
@@ -32023,6 +32259,7 @@ toast('已恢复默认封面');
 });
 }
 function sendRedpacket() {
+try {
 let amt = rpPickedAmt;
 if (rpCustomInput && rpCustomInput.value) {
 const cv = parseFloat(rpCustomInput.value);
@@ -32032,6 +32269,10 @@ if (amt == null || isNaN(amt) || amt < 0) { toast('先选择或输入红包金�
 const wish = (rpWishInput && rpWishInput.value || '').trim() || (isQixiToday() ? '七夕快乐' : '心意');
 const amtFen = Math.round(amt * 100);
 const wallet = rpWalletGet();
+if (!wallet || typeof wallet.myBalance !== 'number' || typeof wallet.systemBalance !== 'number') {
+toast('心意币账本异常，请重试');
+return;
+}
 if (rpSide === 'out') {
 wallet.myBalance -= amtFen;
 } else {
@@ -32046,6 +32287,9 @@ if (rpSide === 'out') {
 setTimeout(() => handleSendResponse(rec), randInt(3000, 8000));
 }
 closeRpPanel();
+} catch (err) {
+try { toast('红包发送失败，请重试'); } catch (e) {}
+}
 }
 if (rpSendBtn) rpSendBtn.addEventListener('click', (e) => { e.stopPropagation(); sendRedpacket(); });
 if (rpCloseBtn) rpCloseBtn.addEventListener('click', (e) => { e.stopPropagation(); closeRpPanel(); });
@@ -32559,7 +32803,12 @@ if (isSingle && askOpts && askOpts.length) {
 const o = askOpts[Math.floor(Math.random() * askOpts.length)];
 text = o.t;
 } else {
+if (Math.random() < 0.18) {
+const skipPool = ['这个问题，我先不回答啦', '现在不想说这个，晚点好不好', '这个嘛……暂时不告诉你', '我先不回答，你猜？', '这个问题跳过，换个别的问我吧'];
+text = skipPool[Math.floor(Math.random() * skipPool.length)];
+} else {
 text = (window.pickAskCardReply ? window.pickAskCardReply(defs) : defs[Math.floor(Math.random() * defs.length)]);
+}
 }
 const rec = msgs[askIdx];
 if (rec && rec.special === 'ask') {
@@ -32575,7 +32824,7 @@ addIn(text);
 try {
 const list = JSON.parse(store.get('invite-ask-history') || '[]');
 list.unshift({ type: 'ask', q: content, a: text, ts: recTs });
-if (list.length > 200) list.length = 200;
+if (list.length > 1000) list.length = 1000; // v3.50.x：解除上限 200 → 1000
 store.set('invite-ask-history', JSON.stringify(list));
 } catch (err) {}
 if (window.renderAskRecords) window.renderAskRecords();
@@ -32631,7 +32880,7 @@ el.innerHTML = '<div class="msg-ask-card answered"><div class="msg-ask-q">' + (w
 try {
 const list = JSON.parse(store.get(histKey) || '[]');
 list.unshift({ type: 'invite', q: content, a: reply || status, ts: recTs });
-if (list.length > 200) list.length = 200;
+if (list.length > 1000) list.length = 1000; // v3.50.x：解除上限 200 → 1000
 store.set(histKey, JSON.stringify(list));
 } catch (err) {}
 if (window.renderAskRecords) window.renderAskRecords();
@@ -45841,6 +46090,7 @@ if (ep) ep.hidden = true;
 renderGrid();
 renderMeGrid();
 syncVal();
+try { nickRefresh(); } catch (e) {}
 avPage.hidden = false;
 }
 document.addEventListener('contact-switched', function () {
@@ -46180,6 +46430,54 @@ tryOnce();
 }
 try { restoreLib('avatar-lib'); } catch (e) {}
 try { restoreLib('avatar-me-lib'); } catch (e) {}
+const nickMe = document.getElementById('avlib-nick-me');
+const nickTa = document.getElementById('avlib-nick-ta');
+const nickSave = document.getElementById('avlib-nick-save');
+const nickInvite = document.getElementById('avlib-nick-invite');
+function nickRefresh() {
+if (nickMe) nickMe.value = store.get('cs-lbl-user') || '';
+if (nickTa) nickTa.value = store.get('cs-lbl-partner') || '';
+}
+function nickApply() {
+try { if (window.renderChatHeader) window.renderChatHeader(); } catch (e) {}
+try { if (window.chatSysNickChanged) window.chatSysNickChanged(); } catch (e) {}
+}
+if (nickSave) {
+nickSave.addEventListener('click', () => {
+const mv = nickMe ? String(nickMe.value || '').trim() : '';
+const tv = nickTa ? String(nickTa.value || '').trim() : '';
+if (mv) store.set('cs-lbl-user', mv); else store.remove('cs-lbl-user');
+if (tv) store.set('cs-lbl-partner', tv); else store.remove('cs-lbl-partner');
+nickApply();
+toast('昵称已保存');
+});
+}
+if (nickInvite) {
+nickInvite.addEventListener('click', () => {
+if (!window.openModal) return;
+const cur = store.get('cs-lbl-partner') || '';
+window.openModal('邀请 TA 换昵称', '', (v) => {
+if (v == null) return;
+const val = String(v || '').trim();
+if (!val) { toast('写一个新昵称再邀请吧'); return; }
+closeAvlib();
+try { if (window.chatSendMsg) window.chatSendMsg('想给你换个昵称，叫「' + val + '」好不好？'); } catch (e) {}
+setTimeout(() => {
+try {
+const agree = Math.random() < 0.8;
+if (agree) {
+store.set('cs-lbl-partner', val);
+nickApply();
+if (window.taSayRaw) window.taSayRaw('好呀，以后就叫我「' + val + '」吧', { special: 'nick', initiative: true });
+} else {
+if (window.taSayRaw) window.taSayRaw('这个昵称我不太喜欢，再想想好不好？', { initiative: true });
+}
+} catch (e) {}
+}, 1200 + Math.random() * 800);
+}, { placeholder: cur || '想给 TA 的新昵称', maxlength: 12, lock: true });
+});
+}
+nickRefresh();
 })();
 } catch (__e) { try { console.error("[JS] avatar-lib.js", __e && __e.message || __e); } catch (x) {} if (window.__jsErrors) window.__jsErrors.push(String(__e && __e.message || __e)); } })();
 </script>
@@ -50855,7 +51153,17 @@ const DEFAULT_QUESTIONS = [
 { id: 'iv_b3', cat: 'baobei', kind: 'baobei', text: '报备：我到家啦，今天一切顺利，勿念。', enabled: true },
 { id: 'iv_b4', cat: 'baobei', kind: 'baobei', text: '报备一下：下午要出趟门，大概两小时，回来马上找你。', enabled: true },
 { id: 'iv_b5', cat: 'baobei', kind: 'baobei', text: '报备：午饭吃好了，你也记得按时吃饭哦。', enabled: true },
-{ id: 'iv_b6', cat: 'baobei', kind: 'baobei', text: '报备：最近在忙一个项目，可能回消息慢一点，但我都在。', enabled: true }
+{ id: 'iv_b6', cat: 'baobei', kind: 'baobei', text: '报备：最近在忙一个项目，可能回消息慢一点，但我都在。', enabled: true },
+{ id: 'iv_b7', cat: 'baobei', kind: 'baobei', text: '报备：到家啦，路上有好好听你的话，没有乱跑。', enabled: true },
+{ id: 'iv_b8', cat: 'baobei', kind: 'baobei', text: '报备：今天的饭也好好吃了，你说过要乖的。', enabled: true },
+{ id: 'iv_b9', cat: 'baobei', kind: 'baobei', text: '报备：忙完啦，这就乖乖回来找你，哪儿也不去。', enabled: true },
+{ id: 'iv_b10', cat: 'baobei', kind: 'baobei', text: '报备：有点困了，但是还没和你说晚安，不想睡。', enabled: true },
+{ id: 'iv_b11', cat: 'baobei', kind: 'baobei', text: '报备：今天有点累，但一想到你就不累了。', enabled: true },
+{ id: 'iv_b12', cat: 'baobei', kind: 'baobei', text: '报备：下班啦，想马上回家跟你说话。', enabled: true },
+{ id: 'iv_b13', cat: 'baobei', kind: 'baobei', text: '报备：晚上和同事吃了饭，心里惦记着你，就早点回来了。', enabled: true },
+{ id: 'iv_b14', cat: 'baobei', kind: 'baobei', text: '汇报：今日行程已收尾，现归队待命。', enabled: true },
+{ id: 'iv_b15', cat: 'baobei', kind: 'baobei', text: '汇报：会议开完了，接下来所有时间都听你安排。', enabled: true },
+{ id: 'iv_b16', cat: 'baobei', kind: 'baobei', text: '报备：出差回来了，先回家报个到，随时等你查岗。', enabled: true }
 ];
 const CATS_TI = [['rps', '猜拳邀请'], ['pong', 'Pong 邀请'], ['snake', '贪吃蛇邀请'], ['cuddle', '贴贴邀请'], ['baobei', '报备']];
 const KIND_OF = {};
@@ -52732,7 +53040,7 @@ return store.get('cs-lbl-partner')
 function avatarsLoad() {
 try { return JSON.parse(store.get('records-avatar') || '[]'); } catch (e) { return []; }
 }
-function avatarsSave(list) { store.set('records-avatar', JSON.stringify(list.slice(0, 30))); }
+function avatarsSave(list) { store.set('records-avatar', JSON.stringify(list.slice(0, 300))); }
 window.addAvatarRecord = function (img, text) {
 const list = avatarsLoad();
 list.unshift({ img: img, text: text || '', ts: Date.now() });
@@ -52810,13 +53118,14 @@ else if (htab === 'coinask') renderCoinPanel('ask');
 function caresLoad() {
 try { return JSON.parse(store.get('records-care') || '[]'); } catch (e) { return []; }
 }
-function caresSave(list) { store.set('records-care', JSON.stringify(list.slice(0, 100))); }
-window.addCareRecord = function (kind, text, ts) {
+function caresSave(list) { store.set('records-care', JSON.stringify(list.slice(0, 500))); } // v3.50.x：解除上限 100 → 500
+window.addCareRecord = function (kind, text, ts, side) {
 const list = caresLoad();
-list.unshift({ kind: kind, text: text || '', ts: ts || Date.now() });
+list.unshift({ kind: kind, text: text || '', ts: ts || Date.now(), side: side || '' });
 caresSave(list);
 const hp = document.getElementById('page-home');
 if (hp && !hp.hidden && htab === 'care') renderCarePanel();
+if (hp && !hp.hidden && htab === 'baobei') renderBaobeiPanel();
 };
 window.addCareRecordFor = function (cid, kind, text, ts) {
 try {
@@ -52825,7 +53134,7 @@ let list = [];
 try { list = JSON.parse(s.get('records-care') || '[]'); } catch (e) { list = []; }
 if (!Array.isArray(list)) list = [];
 list.unshift({ kind: kind, text: text || '', ts: ts || Date.now() });
-s.set('records-care', JSON.stringify(list.slice(0, 100)));
+s.set('records-care', JSON.stringify(list.slice(0, 500))); // v3.50.x：解除上限 100 → 500
 } catch (e) {}
 };
 function renderCarePanel() {
@@ -52920,6 +53229,18 @@ if (dp) dp.hidden = false;
 try { window.divineRenderResult(h.cards, h.mode, h.question || '', h.summary || ''); } catch (e) {}
 }));
 }
+function renderBaobeiPanel() {
+const el = document.getElementById('home-baobei');
+if (!el) return;
+const esc = (s) => String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+const list = (caresLoad() || []).filter(r => r && r.kind === 'baobei');
+if (!list.length) { el.innerHTML = '<div class="ta-empty">暂无报备记录（聊天更多功能 → 报备，或让 TA 主动报备，流水都会记在这里）</div>'; return; }
+el.innerHTML = list.map(r => {
+const text = String(r.text || '').replace(/^报备[:：]?\s*/, '');
+return '<div class="tc-listitem"><div class="tc-li-top"><span class="tc-li-q">📮 ' + (r.side === 'in' ? (dispName() + ' 报备') : '我报备') + '</span><span class="tc-li-time">' + fmtDT(r.ts || 0) + '</span></div>' +
+'<div class="tc-li-line">' + (window.taFit ? window.taFit(esc(text)) : esc(text)) + '</div></div>';
+}).join('');
+}
 function histList(key) { try { return JSON.parse(store.get(key) || '[]'); } catch (e) { return []; } }
 let htab = 'av';
 window.renderFishHistory = function () {
@@ -52987,6 +53308,9 @@ renderCarePanel();
 }
 if (showOnly === 'divine') {
 renderDivinePanel();
+}
+if (showOnly === 'baobei') {
+renderBaobeiPanel();
 }
 if (showOnly === 'av') {
 const avEl = document.getElementById('home-av');
@@ -53500,6 +53824,7 @@ const cur = window.__activeCid || 'default';
 if (cid === cur) {
 if (window.chatAddSystem) window.chatAddSystem(sysHtml);
 if (window.addCallRecord) window.addCallRecord(recType, recText);
+if (recType === 'in' && recText === '未接听') chagangTrigger(cid, true);
 return;
 }
 if (window.chatAppendToDeskMsg) { window.chatAppendToDeskMsg(cid, sysHtml); }
@@ -53509,7 +53834,60 @@ let list = [];
 try { list = JSON.parse(s.get('records-call') || '[]'); } catch (e) { list = []; }
 if (!Array.isArray(list)) list = [];
 list.unshift({ type: recType, text: recText, ts: Date.now() });
-s.set('records-call', JSON.stringify(list.slice(0, 50)));
+s.set('records-call', JSON.stringify(list.slice(0, 300))); // v3.50.x：解除上限 50 → 300
+} catch (e) {}
+if (recType === 'in' && recText === '未接听') chagangTrigger(cid, false);
+}
+const CK_MISS_KEY = 'ck-miss-count-';
+const CK_ACT_KEY = 'ck-act-seen-';
+function ckStoreOf(cid) { try { return (cid && window.storeFor) ? window.storeFor(cid) : store; } catch (e) { return store; } }
+function ckToday() { return new Date().toISOString().slice(0, 10); }
+function ckMissCount(cid) {
+try { return parseInt(ckStoreOf(cid).get(CK_MISS_KEY + ckToday()) || '0', 10) || 0; } catch (e) { return 0; }
+}
+function ckActionSummary(cid) {
+try {
+const s = ckStoreOf(cid);
+let msgs = [];
+try { msgs = JSON.parse(s.get('chat-msgs') || '[]'); } catch (e) { msgs = []; }
+if (!Array.isArray(msgs)) msgs = [];
+const today = ckToday();
+const mine = msgs.filter(m => m && m.side === 'out' && m.ts && new Date(m.ts).toISOString().slice(0, 10) === today);
+const last = mine.length ? new Date(mine[mine.length - 1].ts) : null;
+const mood = (function () { try { const m = JSON.parse(s.get('today-mood') || 'null'); return m && m.text ? m.text : ''; } catch (e) { return ''; } })();
+const memo = (function () { try { const t = (s.get('memo-text') || '').trim(); return t; } catch (e) { return ''; } })();
+let parts = [];
+parts.push('今日聊了 ' + mine.length + ' 句');
+if (last) { const h = last.getHours(), mi = last.getMinutes(); parts.push('最后活跃 ' + h + ':' + (mi < 10 ? '0' : '') + mi); }
+if (mood) parts.push('心情：' + mood);
+if (memo) parts.push('备忘：' + memo);
+return parts.join(' · ') || '今天还没说话呢';
+} catch (e) { return '暂无行动记录'; }
+}
+function ckSayTo(cid, html, isCur) {
+try {
+if (isCur && window.chatAddSystem) window.chatAddSystem(html);
+else if (window.chatAppendToDeskMsg) window.chatAppendToDeskMsg(cid, html);
+} catch (e) {}
+}
+function chagangTrigger(cid, isCur) {
+try {
+const s = ckStoreOf(cid);
+let n = ckMissCount(cid);
+n += 1;
+s.set(CK_MISS_KEY + ckToday(), String(n));
+const name = (function () { try { if (window.contactNameOf) return window.contactNameOf(cid); } catch (e) {} return 'TA'; })();
+const action = ckActionSummary(cid);
+if (n >= 3) {
+ckSayTo(cid, '📋 <b>' + name + ' 查岗了</b>：第三次没接电话了，快报备一下在干嘛！', isCur);
+ckSayTo(cid, '📱 <b>行动报告</b>：' + action, isCur);
+ckSayTo(cid, '（查岗升级 · 已自动记录，等 TA 报备）', isCur);
+try { s.set(CK_MISS_KEY + ckToday(), '0'); } catch (e) {} // 报备后清零重计
+} else {
+const ques = ['没接电话，在干嘛呢？', '电话没接上，忙什么呢？', '未接来电，看到快回我！'][(n - 1) % 3];
+ckSayTo(cid, '📋 <b>' + name + ' 查岗</b>：' + ques, isCur);
+ckSayTo(cid, '📱 <b>TA 的行动</b>：' + action + '（点击 TA 头像可查看）', isCur);
+}
 } catch (e) {}
 }
 function endCall(text, holdSilent) {
@@ -53876,8 +54254,8 @@ let list = [];
 try { list = JSON.parse(s.get('records-call') || '[]'); } catch (e) { list = []; }
 if (!Array.isArray(list)) list = [];
 list.unshift({ type: dir, text: recText, ts: Date.now(), ended: 'interrupt' });
-s.set('records-call', JSON.stringify(list.slice(0, 50)));
-if (window.idbSet) { try { window.idbSet('xy-home-v2:' + cid + ':records-call', list.slice(0, 50)); } catch (e) {} }
+s.set('records-call', JSON.stringify(list.slice(0, 300))); // v3.50.x：解除上限 50 → 300
+if (window.idbSet) { try { window.idbSet('xy-home-v2:' + cid + ':records-call', list.slice(0, 300)); } catch (e) {} }
 } catch (e) {}
 try {
 const cur = window.__activeCid || 'default';
@@ -54118,6 +54496,23 @@ const BAOBEI_ACK = [
 '报备收到，记得照顾好自己。',
 '嗯嗯，知道啦，别太累。'
 ];
+const BAOBEI_GROUPS = [
+{ k: ['加班', '忙', '项目', '会议', '开会', '出差', '工作'], r: ['辛苦了，忙完记得歇一会儿，我在这儿等你。', '收到，工作重要，但你更重要，别太累。', '好，等你忙完，我一直都在。', '知道了，忙完记得喝水，回来找我。'] },
+{ k: ['到家', '回家', '到了'], r: ['到家就好，路上辛苦啦，先歇会儿。', '欢迎回家，门给你留着呢。', '到家了呀，那我也放心了。', '好，到家先喝口水，歇一歇。'] },
+{ k: ['出门', '出去', '离开'], r: ['出门注意安全，到地方跟我说一声。', '好，路上小心，有事随时找我。', '收到，快去快回，我等你。', '嗯，注意安全，别着急。'] },
+{ k: ['饭', '吃', '宵夜'], r: ['好好吃饭才有力气想我。', '吃好了就好，下次一起。', '嗯，按时吃饭很棒，奖励一个抱抱。', '知道了，你也是，别饿着自己。'] },
+{ k: ['累', '困', '睡'], r: ['累了就早点休息，别硬撑。', '困了就去睡，我在这儿陪着你。', '好，辛苦啦，好好休息，晚安。', '收到，照顾好自己，别太累。'] }
+];
+function baobeiReply(text) {
+const t = String(text || '');
+for (let i = 0; i < BAOBEI_GROUPS.length; i++) {
+const g = BAOBEI_GROUPS[i];
+let hit = false;
+for (let j = 0; j < g.k.length; j++) { if (t.indexOf(g.k[j]) >= 0) { hit = true; break; } }
+if (hit) return g.r[Math.floor(Math.random() * g.r.length)];
+}
+return BAOBEI_ACK[Math.floor(Math.random() * BAOBEI_ACK.length)];
+}
 function userBaobei() {
 closeMorePanel();
 if (!window.openModal) return;
@@ -54126,8 +54521,9 @@ if (v == null) return;
 const t = String(v || '').trim();
 if (!t) { toast('写点内容再报备吧'); return; }
 userSay('报备：' + t);
+try { if (window.addCareRecord) window.addCareRecord('baobei', '报备：' + t, Date.now(), 'out'); } catch (e) {}
 setTimeout(function () {
-taSay(BAOBEI_ACK[Math.floor(Math.random() * BAOBEI_ACK.length)]);
+taSay(baobeiReply(t));
 }, 1200 + Math.random() * 800);
 }, { textarea: true, textareaPlaceholder: '报备内容，比如：今晚加班晚点回 / 到家了 / 下午出门两小时…', textareaRows: 3, lock: true });
 try { if (ctl && ctl.okText) ctl.okText('报备'); } catch (e) {}
@@ -54137,6 +54533,7 @@ try {
 const q = window.taInvitePickCat ? window.taInvitePickCat('baobei') : null;
 if (!q || !q.text) { toast('报备题库没有可用内容'); return false; }
 if (window.MochiPresence && !window.MochiPresence.isAvailable(cid())) { toast('TA 现在不在线，等 TA 上线再报备吧'); return false; }
+try { if (window.addCareRecord) window.addCareRecord('baobei', q.text, Date.now(), 'in'); } catch (e) {}
 taSay(q.text, 500);
 toast('TA 报备了一条近况');
 return true;
@@ -54170,6 +54567,49 @@ if (n) n.addEventListener('click', function (e) { try { e.stopPropagation(); } c
 bind('sleep-accept-btn', acceptTa);
 bind('sleep-decline-btn', declineTa);
 bind('sleep-end-btn', function () { endSession(false); });
+function sleepMini() {
+const m = el('sleep-mask');
+if (m) m.classList.add('mini');
+}
+function sleepExpand() {
+const m = el('sleep-mask');
+if (m) m.classList.remove('mini');
+}
+bind('sleep-mini-btn', function () { sleepMini(); });
+bind('sleep-expand-btn', function () { sleepExpand(); });
+bind('sleep-note-send', function () {
+const inp = el('sleep-note-input');
+if (!inp) return;
+const v = String(inp.value || '').trim();
+if (!v) { toast('写一句再留言吧'); return; }
+inp.value = '';
+userSay('（睡前留言）' + v);
+taSay('收到你的睡前话了，' + (Math.random() < 0.5 ? '我记在心里了。' : '安心睡吧，我在。'), 1400);
+toast('留言已发出');
+});
+const SLEEP_SAYS = [
+'晚安，一起睡吧', '枕着星星入睡', '月光温柔，你也温柔', '闭上眼，我在你身边',
+'做一个有我的梦', '把今天交给月亮', '睡得香一点，梦里有我', '盖好被子，晚安'
+];
+function sleepSays() {
+try {
+const s = window.activeStore ? window.activeStore() : null;
+if (s && s.get) {
+const a = JSON.parse(s.get('sleep-say') || '[]');
+if (Array.isArray(a) && a.length) return a.slice();
+}
+} catch (e) {}
+return SLEEP_SAYS.slice();
+}
+let sleepSayIdx = -1;
+bind('sleep-say-btn', function () {
+const pool = sleepSays();
+if (!pool.length) return;
+sleepSayIdx = (sleepSayIdx + 1) % pool.length;
+setTitle(pool[sleepSayIdx]);
+if (S.state === 'companion') setStatus('双方已入眠 · 呼吸同步中 · 「' + pool[sleepSayIdx] + '」');
+else if (S.state === 'inviting') setStatus('正在等 TA 回应…');
+});
 document.addEventListener('contact-switched', function () {
 if (S.state === 'companion' && S.cid !== cid()) {
 const tn = el('sleep-av-ta-name'); if (tn) tn.textContent = taName();
@@ -57962,7 +58402,7 @@ function pushHist(key, text) {
 try {
 const list = JSON.parse(store.get(key) || '[]');
 list.unshift({ text: text, ts: Date.now() });
-if (list.length > 200) list.length = 200;
+if (list.length > 1000) list.length = 1000; // v3.50.x：解除上限 200 → 1000
 store.set(key, JSON.stringify(list));
 try { if (window.idbSet) window.idbSet(window.activePrefix() + ':' + key, JSON.stringify(list)); } catch (e) {}
 } catch (e) {}
@@ -59817,6 +60257,7 @@ if (phone) phone.classList.add('no-statusbar');
 pg.classList.add('full');
 });
 }
+try { window.openFullPage = openPage; } catch (e) {}
 function backHome(pg) {
 if (pg) pg.classList.remove('full');
 document.querySelectorAll('.page').forEach(p => p.hidden = true);
@@ -59880,8 +60321,6 @@ const p2Grid = document.querySelector('.app-grid.p2-grid');
 const p3g = document.querySelector('.app-grid.p3-grid');
 if (p3g) { p3g.appendChild(tpApp); p3g.appendChild(ssApp); }
 else if (p2Grid) { p2Grid.appendChild(tpApp); p2Grid.appendChild(ssApp); }
-if (p3g) { p3g.appendChild(waterApp); p3g.appendChild(eatApp); p3g.appendChild(piggyApp); }
-else if (p2Grid) { p2Grid.appendChild(waterApp); p2Grid.appendChild(eatApp); p2Grid.appendChild(piggyApp); }
 try { if (window.applyDeskLayout) window.applyDeskLayout(); } catch (e) {}
 }
 const DEF_STATUS = ['在听雨', '在看你写东西', '没睡，在发呆', '刚路过你身边', '在想你', '在发呆', '在看你', '在等你看我'];
@@ -60184,6 +60623,7 @@ try { s.set('water-ta-mark:' + waterDayStr(0), '1'); } catch (e) {}
 }
 window.waterDayHas = function (ds) { try { const h = waterHistory(); return (h[ds] || 0) > 0; } catch (e) { return false; } };
 if (waterApp) waterApp.addEventListener('click', () => { if (editingNow()) return; openPage(waterPage); waterRender(); waterMaybeRemind(); });
+(function () { const b = document.getElementById('more-water'); if (b) b.addEventListener('click', (e) => { try { e.stopPropagation(); } catch (x) {} var _mp=document.getElementById("chat-more-panel"); if(_mp)_mp.hidden=true; if (editingNow()) return; openPage(waterPage); waterRender(); waterMaybeRemind(); }); })();
 document.getElementById('water-back').addEventListener('click', () => backHome(waterPage));
 document.getElementById('water-plus').addEventListener('click', () => {
 if (editingNow()) return;
@@ -60437,6 +60877,7 @@ return dish + ' · ' + comment;
 }
 let eatLastPick = '';
 if (eatApp) eatApp.addEventListener('click', () => { if (editingNow()) return; eatClearSpin(); eatInitCanvas(); openPage(eatPage); eatRenderCurName(); eatLastPick = eatPick(); eatRenderHistory(); eatDrawWheel(eatDishes()); eatRenderRemind(); });
+(function () { const b = document.getElementById('more-eat'); if (b) b.addEventListener('click', (e) => { try { e.stopPropagation(); } catch (x) {} var _mp=document.getElementById("chat-more-panel"); if(_mp)_mp.hidden=true; if (editingNow()) return; eatClearSpin(); eatInitCanvas(); openPage(eatPage); eatRenderCurName(); eatLastPick = eatPick(); eatRenderHistory(); eatDrawWheel(eatDishes()); eatRenderRemind(); }); })();
 document.getElementById('eat-back').addEventListener('click', () => { eatClearSpin(); backHome(eatPage); });
 (function () {
 var de = document.getElementById('eat-dish'); if (!de) return;
@@ -60758,7 +61199,8 @@ pomoIdleAt('focus');
 pomoShowMsg('休息好了，来下一个番茄吧');
 }
 }
-if (pomoApp) pomoApp.addEventListener('click', () => { if (editingNow()) return; openPage(pomoPage); pomoRender(); });
+const pomoBtn0 = document.getElementById('more-pomo');
+if (pomoBtn0) pomoBtn0.addEventListener('click', () => { if (editingNow()) return; openPage(pomoPage); pomoRender(); });
 document.getElementById('pomo-back').addEventListener('click', () => backHome(pomoPage));
 document.getElementById('pomo-start').addEventListener('click', () => {
 if (editingNow()) return;
@@ -61034,6 +61476,7 @@ vibrate([20, 60, 20]);
 setTimeout(() => { piggyShowMsg(window.taFit ? window.taFit(note + ' ¥' + piggyFmt(amt) + ' · 替TA存进去？') : (note + ' ¥' + piggyFmt(amt) + ' · 替TA存进去？')); }, 400);
 }
 if (piggyApp) piggyApp.addEventListener('click', () => { if (editingNow()) return; openPage(piggyPage); piggyMaybeTa(); piggyRender(); });
+(function () { const b = document.getElementById('more-piggy'); if (b) b.addEventListener('click', (e) => { try { e.stopPropagation(); } catch (x) {} var _mp=document.getElementById("chat-more-panel"); if(_mp)_mp.hidden=true; if (editingNow()) return; openPage(piggyPage); piggyMaybeTa(); piggyRender(); }); })();
 document.getElementById('piggy-back').addEventListener('click', () => backHome(piggyPage));
 const piggyCoinSetBtn = document.getElementById('piggy-coin-set');
 if (piggyCoinSetBtn) piggyCoinSetBtn.addEventListener('click', function () {
@@ -83680,4 +84123,4 @@ lastHeal: his
 <!-- __MOCHI_EOF__ -->
 </body>
 </html>
-<!-- __MOCHI_EOF__ mu1pkptp -->
+<!-- __MOCHI_EOF__ mu5jszwe -->
