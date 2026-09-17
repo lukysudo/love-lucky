@@ -8419,7 +8419,14 @@ margin:10px 2px 4px; padding:12px 14px; border-radius:16px;
 background:linear-gradient(180deg,#fff0f5,#ffe4ec);
 border:1px solid rgba(240,150,185,.3);
 }
-.avlib-nicklib .avlib-toggle-txt { margin-bottom:6px; }
+.avlib-nicklib .avlib-toggle {
+padding:8px 0; margin:2px 0 8px;
+border-top:1px dashed rgba(240,150,185,.28);
+border-bottom:1px dashed rgba(240,150,185,.28);
+}
+.avlib-nicklib .avlib-toggle-txt { margin-bottom:0; }
+.avlib-nicklib-me { margin-top:14px; background:linear-gradient(180deg,#fff5f0,#ffece4); border-color:rgba(240,160,140,.32); }
+.avlib-nicklib-me .avlib-nicklib-cur b { color:#e07a5a; }
 .avlib-nicklib-cur { font-size:12px; color:#b5657e; margin-bottom:8px; }
 .avlib-nicklib-cur b { color:#d95a86; font-weight:800; }
 .avlib-nicklib-list {
@@ -8635,9 +8642,9 @@ animation:pbPulse 2.2s ease-in-out infinite;
       </div>
     </div>
     <div class="splash-footcard">
-      <div class="splash-ver" id="splash-ver" data-build-ts="1789656911083">
+      <div class="splash-ver" id="splash-ver" data-build-ts="1789659218740">
         <span class="sv-app">love lucky <b>v3.50.0</b></span>
-        <span class="sv-deploy">部署于 2026-09-17 22:55<span id="splash-ver-live"></span></span>
+        <span class="sv-deploy">部署于 2026-09-17 23:33<span id="splash-ver-live"></span></span>
       </div>
       <div class="splash-loading" id="splash-loading">正在加载数据…</div>
       <div class="splash-enter-hint" id="splash-enter-hint" hidden>勾选后即可进入</div>
@@ -12938,11 +12945,19 @@ animation:pbPulse 2.2s ease-in-out infinite;
               邀请 TA 换昵称
             </button>
           </div>
-          <!-- v3.50.x+：昵称库（与头像库同模式；批量添加一行一个；仅改聊天显示名字，桌面昵称不变） -->
+          <!-- v3.50.x+：昵称库（与头像库同模式；批量添加一行一个；仅改聊天显示名字，桌面昵称不变）
+               v3.50.x+：支持对方联系人给双方进行昵称更换——TA 自己的昵称库可开启随机更换；新增「我的昵称库」，TA 会从里面给你换昵称 -->
           <div class="avlib-nicklib">
             <div class="avlib-toggle-txt">
               <div class="avlib-toggle-name">TA 的昵称库</div>
               <div class="avlib-toggle-sub">批量添加，点击换上聊天名字；只改聊天显示，其他不变</div>
+            </div>
+            <div class="avlib-toggle">
+              <div class="avlib-toggle-txt">
+                <div class="avlib-toggle-name">TA 随机换昵称</div>
+                <div class="avlib-toggle-sub">TA 会每隔 1-8 小时从库里随机换一次自己的昵称</div>
+              </div>
+              <label class="toggle"><input type="checkbox" id="avlib-nick-auto"><span class="tk"></span></label>
             </div>
             <div class="avlib-nicklib-cur">当前聊天称呼：<b id="avlib-nicklib-cur">TA</b></div>
             <div class="avlib-nicklib-list" id="avlib-nicklib-list"></div>
@@ -12956,6 +12971,36 @@ animation:pbPulse 2.2s ease-in-out infinite;
                 随机换一个
               </button>
               <button class="div-draw" id="avlib-nicklib-clear" style="background:rgba(0,0,0,.06);color:var(--ink)">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M8 6V4a1 1 0 011-1h6a1 1 0 011 1v2"/><path d="M6 6l1 14a2 2 0 002 2h6a2 2 0 002-2l1-14"/></svg>
+                清空
+              </button>
+            </div>
+          </div>
+          <!-- v3.50.x+：我的昵称库——与头像库「我的头像池」同模式，TA 会从这里面给你换昵称 -->
+          <div class="avlib-nicklib avlib-nicklib-me">
+            <div class="avlib-toggle-txt">
+              <div class="avlib-toggle-name">我的昵称库</div>
+              <div class="avlib-toggle-sub">点一下立即换上；TA 也会从这里给你换昵称，只改聊天显示</div>
+            </div>
+            <div class="avlib-toggle">
+              <div class="avlib-toggle-txt">
+                <div class="avlib-toggle-name">TA 主动给我换昵称</div>
+                <div class="avlib-toggle-sub">TA 每隔 1-8 小时从库里给我换，直接换或弹窗征求我同意</div>
+              </div>
+              <label class="toggle"><input type="checkbox" id="avlib-me-nick-auto"><span class="tk"></span></label>
+            </div>
+            <div class="avlib-nicklib-cur">当前聊天里我的名字：<b id="avlib-nicklib-me-cur">我</b></div>
+            <div class="avlib-nicklib-list" id="avlib-nicklib-me-list"></div>
+            <div class="avlib-nick-actions">
+              <button class="div-draw" id="avlib-nicklib-me-add">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>
+                批量添加昵称
+              </button>
+              <button class="div-draw" id="avlib-nicklib-me-random">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M16 3h5v5"/><path d="M4 20L21 3"/><path d="M21 16v5h-5"/><path d="M15 15l6 6"/><path d="M4 4l5 5"/></svg>
+                随机换一个
+              </button>
+              <button class="div-draw" id="avlib-nicklib-me-clear" style="background:rgba(0,0,0,.06);color:var(--ink)">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M8 6V4a1 1 0 011-1h6a1 1 0 011 1v2"/><path d="M6 6l1 14a2 2 0 002 2h6a2 2 0 002-2l1-14"/></svg>
                 清空
               </button>
@@ -46183,6 +46228,8 @@ renderMeGrid();
 syncVal();
 try { nickRefresh(); } catch (e) {}
 try { nickLibRender(); } catch (e) {}
+try { meNickLibRender(); } catch (e) {}
+try { syncNickToggles(); } catch (e) {}
 avPage.hidden = false;
 }
 document.addEventListener('contact-switched', function () {
@@ -46653,6 +46700,194 @@ toast('昵称库已清空');
 });
 }
 nickLibRender();
+function meNickLibLoad() { try { const a = JSON.parse(store.get('me-nick-lib') || '[]'); return Array.isArray(a) ? a : []; } catch (e) { return []; } }
+function meNickLibSave(list) { try { store.set('me-nick-lib', JSON.stringify(list)); } catch (e) {} }
+function meNickLibApply(t) { store.set('cs-lbl-user', t); nickApply(); }
+function meNickLibRender() {
+const list = meNickLibLoad();
+const el = document.getElementById('avlib-nicklib-me-list');
+const curEl = document.getElementById('avlib-nicklib-me-cur');
+const cur = store.get('cs-lbl-user') || '';
+if (curEl) curEl.textContent = cur || '我';
+if (!el) return;
+if (!list.length) { el.innerHTML = ''; return; }
+el.innerHTML = list.map((n, i) => {
+const t = String(n && n.t || '');
+const isCur = t === cur;
+return '<span class="avlib-nicklib-item' + (isCur ? ' on' : '') + '" data-i="' + i + '" title="点击应用到聊天">' + nickLibEsc(t) + (isCur ? '<em>使用中</em>' : '') + '<i class="avlib-nicklib-del" data-i="' + i + '">✕</i></span>';
+}).join('');
+Array.prototype.forEach.call(el.querySelectorAll('.avlib-nicklib-item'), (item) => {
+item.addEventListener('click', (e) => {
+if (e.target && e.target.classList && e.target.classList.contains('avlib-nicklib-del')) return;
+const i = parseInt(item.dataset.i, 10);
+const n = meNickLibLoad()[i];
+if (!n) return;
+meNickLibApply(n.t);
+meNickLibRender();
+try { store.set('me-nick-lib-last', String(Date.now())); store.set('me-nick-lib-next', String(1 + Math.random() * 7)); } catch (x) {}
+toast('已把聊天里我的名字换成「' + n.t + '」');
+});
+});
+Array.prototype.forEach.call(el.querySelectorAll('.avlib-nicklib-del'), (d) => {
+d.addEventListener('click', (e) => {
+e.stopPropagation();
+const i = parseInt(d.dataset.i, 10);
+const l = meNickLibLoad();
+if (i >= 0 && i < l.length) l.splice(i, 1);
+meNickLibSave(l);
+meNickLibRender();
+});
+});
+}
+const meNickLibAddBtn = document.getElementById('avlib-nicklib-me-add');
+if (meNickLibAddBtn) {
+meNickLibAddBtn.addEventListener('click', () => {
+if (!window.openModal) return;
+window.openModal('批量添加我的昵称', '', (v) => {
+if (v == null) return;
+const raw = String(v || '');
+const lines = raw.split(/\r?\n/).map(s => s.trim()).filter(Boolean);
+if (!lines.length) { toast('至少写一个昵称（一行一个）'); return; }
+const list = meNickLibLoad();
+const seen = {};
+list.forEach(n => { if (n && n.t) seen[n.t] = 1; });
+let added = 0;
+lines.forEach(t => { if (!seen[t]) { seen[t] = 1; list.push({ t: t }); added++; } });
+meNickLibSave(list);
+meNickLibRender();
+toast('新增 ' + added + ' 个昵称（共 ' + list.length + ' 个）');
+}, { textarea: true, textareaPlaceholder: '一行一个昵称，例如：\n小可爱\n宝贝\n甜甜\n老婆大人', textareaRows: 5, lock: true });
+});
+}
+const meNickLibRandBtn = document.getElementById('avlib-nicklib-me-random');
+if (meNickLibRandBtn) {
+meNickLibRandBtn.addEventListener('click', () => {
+const list = meNickLibLoad();
+if (!list.length) { toast('我的昵称库是空的，先批量添加几个吧'); return; }
+const n = list[Math.floor(Math.random() * list.length)];
+meNickLibApply(n.t);
+meNickLibRender();
+try { store.set('me-nick-lib-last', String(Date.now())); store.set('me-nick-lib-next', String(1 + Math.random() * 7)); } catch (x) {}
+toast('随机换上「' + n.t + '」');
+});
+}
+const meNickLibClearBtn = document.getElementById('avlib-nicklib-me-clear');
+if (meNickLibClearBtn) {
+meNickLibClearBtn.addEventListener('click', () => {
+if (!window.openModal) return;
+window.openModal('清空我的昵称库', '', (v) => {
+if (v == null) return;
+meNickLibSave([]);
+meNickLibRender();
+toast('我的昵称库已清空');
+}, { noInput: true, staticText: '清空我的昵称库？（聊天当前名字会保留，只是库里不再有候选）', lock: true });
+});
+}
+meNickLibRender();
+function syncNickToggles() {
+const nk = document.getElementById('avlib-nick-auto');
+const mk = document.getElementById('avlib-me-nick-auto');
+if (nk) nk.checked = store.get('nick-auto') === '1';
+if (mk) mk.checked = store.get('me-nick-auto') === '1';
+}
+const nickAutoEl = document.getElementById('avlib-nick-auto');
+if (nickAutoEl) {
+nickAutoEl.addEventListener('change', () => {
+store.set('nick-auto', nickAutoEl.checked ? '1' : '0');
+if (nickAutoEl.checked) { store.set('nick-lib-last', '0'); store.set('nick-lib-next', '0'); }
+});
+}
+const meNickAutoEl = document.getElementById('avlib-me-nick-auto');
+if (meNickAutoEl) {
+meNickAutoEl.addEventListener('change', () => {
+store.set('me-nick-auto', meNickAutoEl.checked ? '1' : '0');
+if (meNickAutoEl.checked) { store.set('me-nick-lib-last', '0'); store.set('me-nick-lib-next', '0'); }
+});
+}
+function showMeNickInvite(t) {
+if (!window.openModal) return;
+const pname = cPartnerName();
+window.openModal(pname + ' 想给你换昵称', '', (v) => {
+if (v == null) return;
+if (String(v) === '1') {
+store.set('cs-lbl-user', t);
+nickApply();
+chatSystem(pname + ' 给我换了个昵称，现在叫「' + t + '」');
+toast('TA 给我换了个昵称「' + t + '」');
+} else {
+chatSystem(pname + ' 想给我换昵称，我拒绝了');
+toast('已拒绝');
+}
+}, { noInput: true, lock: true, pills: [{ label: '同意', value: '1' }, { label: '拒绝', value: '0' }], pill: '1', staticText: pname + ' 想给你换昵称「' + t + '」，同意吗？' });
+}
+function checkNickAutoRefresh() {
+try {
+if (store.get('nick-auto') !== '1') return;
+const now = Date.now();
+let last = parseInt(store.get('nick-lib-last'), 10); if (isNaN(last)) last = 0;
+let next = parseFloat(store.get('nick-lib-next')); if (isNaN(next)) next = 0;
+if (last > now || last < 0 || isNaN(last)) { last = 0; next = 0; }
+if ((now - last) / 36e5 < next) return;
+const lib = nickLibLoad();
+if (!lib.length) return;
+const idx = Math.floor(Math.random() * lib.length);
+const t = lib[idx] && lib[idx].t;
+if (!t) return;
+if (t === (store.get('cs-lbl-partner') || '')) return; // 随机到当前名字：跳过不换、不推进计时
+store.set('nick-lib-last', String(now));
+store.set('nick-lib-next', String(1 + Math.random() * 7));
+const oldName = cPartnerName();
+store.set('cs-lbl-partner', t);
+nickApply();
+chatSystem(oldName + ' 换了个新昵称，现在叫「' + t + '」');
+toast(oldName + ' 换了个新昵称「' + t + '」');
+try {
+if (window.bgNotifyCheck) window.bgNotifyCheck((store.get('lbl-partner') || 'TA') + ' 换了个新昵称', Date.now(), { name: store.get('lbl-partner') || 'TA' });
+} catch (e) {}
+} catch (e) {}
+}
+function checkMeNickAutoRefresh() {
+try {
+if (store.get('me-nick-auto') !== '1') return;
+const now = Date.now();
+let last = parseInt(store.get('me-nick-lib-last'), 10); if (isNaN(last)) last = 0;
+let next = parseFloat(store.get('me-nick-lib-next')); if (isNaN(next)) next = 0;
+if (last > now || last < 0 || isNaN(last)) { last = 0; next = 0; }
+if ((now - last) / 36e5 < next) return;
+const lib = meNickLibLoad();
+if (!lib.length) return;
+const idx = Math.floor(Math.random() * lib.length);
+const t = lib[idx] && lib[idx].t;
+if (!t) return;
+if (t === (store.get('cs-lbl-user') || '')) return;
+const invite = Math.random() * 100 < INVITE_PROB;
+if (invite) {
+const mask = document.getElementById('modal-mask');
+if (mask && !mask.hidden) return; // 已有弹窗：本次跳过，不推进计时
+}
+store.set('me-nick-lib-last', String(now));
+store.set('me-nick-lib-next', String(1 + Math.random() * 7));
+if (invite) {
+showMeNickInvite(t);
+try {
+if (document.visibilityState === 'hidden' && window.bgNotifyCheck) {
+window.bgNotifyCheck((store.get('lbl-partner') || 'TA') + ' 想给你换昵称', Date.now(), { name: store.get('lbl-partner') || 'TA' });
+}
+} catch (e) {}
+} else {
+const pname = cPartnerName();
+store.set('cs-lbl-user', t);
+nickApply();
+chatSystem(pname + ' 给我换了个昵称，现在叫「' + t + '」');
+toast(pname + ' 给我换了个昵称「' + t + '」');
+}
+} catch (e) {}
+}
+try { setInterval(checkNickAutoRefresh, 60000); } catch (e) {}
+checkNickAutoRefresh();
+try { setInterval(checkMeNickAutoRefresh, 60000); } catch (e) {}
+checkMeNickAutoRefresh();
+syncNickToggles();
 })();
 } catch (__e) { try { console.error("[JS] avatar-lib.js", __e && __e.message || __e); } catch (x) {} if (window.__jsErrors) window.__jsErrors.push(String(__e && __e.message || __e)); } })();
 </script>
@@ -84298,4 +84533,4 @@ lastHeal: his
 <!-- __MOCHI_EOF__ -->
 </body>
 </html>
-<!-- __MOCHI_EOF__ mu5nimej -->
+<!-- __MOCHI_EOF__ mu5ow304 -->
