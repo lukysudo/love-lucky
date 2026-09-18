@@ -8341,15 +8341,29 @@ border:2px solid #fff; box-shadow:0 1px 3px rgba(0,0,0,.25); z-index:2;
 }
 .chat-presence {
 flex-shrink:0; font-size:11px; font-weight:600; letter-spacing:.3px;
-display:inline-flex; align-items:center; gap:4px;
-padding:2px 8px; border-radius:99px;
-background:rgba(0,0,0,.045); white-space:nowrap;
+display:inline-flex; align-items:center; gap:5px;
+padding:4px 10px; border-radius:99px;
+background:rgba(255,255,255,.94);
+border:1px solid rgba(242,139,176,.4);
+box-shadow:0 2px 8px rgba(200,110,150,.18);
+color:#d95a86; white-space:nowrap; cursor:pointer;
+transition:transform .15s ease;
+user-select:none; -webkit-user-select:none;
 }
-.chat-presence::before { content:''; width:6px; height:6px; border-radius:50%; background:currentColor; }
-.chat-presence.p-online { color:#2bb673; }
-.chat-presence.p-away   { color:#d18c13; }
-.chat-presence.p-offline{ color:#9aa1ab; }
-[data-theme="dark"] .chat-presence { background:rgba(255,255,255,.08); }
+.chat-presence::before {
+content:''; width:8px; height:8px; border-radius:50%; flex-shrink:0;
+background:#f28bb0; box-shadow:0 0 0 0 rgba(242,139,176,.5);
+animation:pbPulse 2.2s ease-in-out infinite;
+}
+.chat-presence:active { transform:scale(.95); }
+.chat-presence.p-online { color:#d95a86; border-color:rgba(242,139,176,.4); }
+.chat-presence.p-away   { color:#d98a2b; border-color:rgba(217,138,43,.45); }
+.chat-presence.p-away::before { background:#f0a11c; box-shadow:none; animation:none; }
+.chat-presence.p-offline{ color:#b38990; border-color:rgba(179,137,144,.4); opacity:.78; }
+.chat-presence.p-offline::before { background:#cfb3ba; box-shadow:none; animation:none; }
+[data-theme="dark"] .chat-presence { background:rgba(45,32,42,.94); border-color:rgba(240,150,185,.45); color:#f2aec4; }
+[data-theme="dark"] .chat-presence.p-away { color:#e2a15a; border-color:rgba(226,161,90,.5); }
+[data-theme="dark"] .chat-presence.p-offline { color:#b38990; border-color:rgba(179,137,144,.4); }
 .call-video-box {
 position:relative; width:100%; margin:6px 0 12px;
 border-radius:16px; overflow:hidden;
@@ -8465,7 +8479,9 @@ width:210px; height:264px; border-radius:20px;
 box-shadow:0 10px 30px rgba(180,80,120,.28);
 border:1.5px solid rgba(255,255,255,.9);
 transform-origin:bottom right;
+touch-action:none; cursor:grab;
 }
+.sleep-mask.dragging { cursor:grabbing; box-shadow:0 14px 36px rgba(180,80,120,.34); }
 .sleep-mask.mini .sleep-sky,
 .sleep-mask.mini .sleep-cloud,
 .sleep-mask.mini .sleep-glow,
@@ -8473,8 +8489,15 @@ transform-origin:bottom right;
 .sleep-mask.mini .sleep-msg,
 .sleep-mask.mini .sleep-btns,
 .sleep-mask.mini .sleep-note,
-.sleep-mask.mini .sleep-mini-btn,
-.sleep-mask.mini .sleep-extra { display:none; }
+.sleep-mask.mini #sleep-say-btn,
+.sleep-mask.mini #sleep-mini-btn { display:none; }
+.sleep-mask.mini .sleep-extra { display:flex; top:8px; right:8px; gap:6px; z-index:4; }
+.sleep-scale-btn { display:none; }
+.sleep-end-ico { display:none; }
+.sleep-mask.mini .sleep-scale-btn,
+.sleep-mask.mini .sleep-end-ico { display:flex; }
+.sleep-mask:not(.mini) .sleep-scale-btn,
+.sleep-mask:not(.mini) .sleep-end-ico { display:none; }
 .sleep-mask.mini .sleep-body { width:100%; padding:14px 10px 10px; gap:8px; }
 .sleep-mask.mini .sleep-av-face { width:52px; height:52px; font-size:26px; border-width:1.5px; }
 .sleep-mask.mini .sleep-av { width:64px; gap:4px; }
@@ -8590,37 +8613,10 @@ background:#f28bb0; color:#fff; font-size:13px; font-weight:700; cursor:pointer;
 .sleep-note button:active { transform:scale(.95); }
 #more-sleep svg, #more-baobei svg { color:#5b7cfa; }
 #ti-baobei-now svg { color:#2bb673; }
-.presence-bubble {
-position:fixed; z-index:70; left:16px; bottom:74px;
-display:flex; align-items:center; gap:6px;
-max-width:44vw;
-padding:7px 13px; border-radius:99px;
-background:rgba(255,255,255,.94);
-border:1px solid rgba(242,139,176,.4);
-box-shadow:0 4px 16px rgba(200,110,150,.22);
-font-size:12px; font-weight:600; color:#d95a86;
-cursor:grab; white-space:nowrap; overflow:hidden;
-text-overflow:ellipsis; letter-spacing:.3px;
-transition:opacity .3s ease, box-shadow .3s ease;
-touch-action:none; user-select:none; -webkit-user-select:none;
-}
-.presence-bubble.dragging { cursor:grabbing; box-shadow:0 8px 22px rgba(200,110,150,.32); }
-[data-theme="dark"] .presence-bubble { background:rgba(45,32,42,.94); border-color:rgba(240,150,185,.45); color:#f2aec4; }
-.presence-bubble .pb-dot {
-width:8px; height:8px; border-radius:50%; flex-shrink:0;
-background:#f28bb0; box-shadow:0 0 0 0 rgba(242,139,176,.5);
-animation:pbPulse 2.2s ease-in-out infinite;
-}
 @keyframes pbPulse {
 0%,100% { box-shadow:0 0 0 0 rgba(242,139,176,.5); }
 50%     { box-shadow:0 0 0 5px rgba(242,139,176,0); }
 }
-.presence-bubble .pb-txt { overflow:hidden; text-overflow:ellipsis; }
-.presence-bubble.p-away { color:#d98a2b; border-color:rgba(217,138,43,.45); }
-.presence-bubble.p-away .pb-dot { background:#f0a11c; animation:none; }
-.presence-bubble.p-offline { color:#b38990; border-color:rgba(179,137,144,.4); opacity:.78; }
-.presence-bubble.p-offline .pb-dot { background:#cfb3ba; animation:none; }
-.presence-bubble:active { transform:scale(.96); }
 .chat-presence { max-width:52vw; overflow:hidden; text-overflow:ellipsis; }
 </style>
 </head>
@@ -8642,9 +8638,9 @@ animation:pbPulse 2.2s ease-in-out infinite;
       </div>
     </div>
     <div class="splash-footcard">
-      <div class="splash-ver" id="splash-ver" data-build-ts="1789659218740">
+      <div class="splash-ver" id="splash-ver" data-build-ts="1789746768996">
         <span class="sv-app">love lucky <b>v3.50.0</b></span>
-        <span class="sv-deploy">部署于 2026-09-17 23:33<span id="splash-ver-live"></span></span>
+        <span class="sv-deploy">部署于 2026-09-18 23:52<span id="splash-ver-live"></span></span>
       </div>
       <div class="splash-loading" id="splash-loading">正在加载数据…</div>
       <div class="splash-enter-hint" id="splash-enter-hint" hidden>勾选后即可进入</div>
@@ -8950,6 +8946,18 @@ animation:pbPulse 2.2s ease-in-out infinite;
         <div class="ci"><div class="n">TA的邀请·我的添加</div><div class="m">你添加的邀请话术</div></div>
         <div class="t" id="cc-ta-invite-count-mine">0</div>
       </div>
+      <!-- v3.50.x+：报备字卡·我的添加——自主添加报备话术（并入 TA 的邀请管理页「报备」分类） -->
+      <div class="chat-item glass" id="li-baobei-mine">
+        <div class="av"><svg viewBox="0 0 24 24" fill="none" stroke="#111111" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h16"/><path d="M6 20V9l6-5 6 5v11"/><path d="M10 20v-6h4v6"/></svg></div>
+        <div class="ci"><div class="n">报备字卡·我的添加</div><div class="m">你添加的报备话术</div></div>
+        <div class="t" id="cc-baobei-count-mine">0</div>
+      </div>
+      <!-- v3.50.x+：梦角收藏库——TA 联系人自建库：自由造句 + 收藏喜爱字卡 -->
+      <div class="chat-item glass" id="li-ta-collect-mine">
+        <div class="av"><svg viewBox="0 0 24 24" fill="none" stroke="#111111" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7.5-4.7-9.3-9A5.3 5.3 0 0112 6.4 5.3 5.3 0 0121.3 12c-1.8 4.3-9.3 9-9.3 9z"/></svg></div>
+        <div class="ci"><div class="n">梦角收藏库</div><div class="m">TA 自建库 · 自由造句并收藏喜爱字卡</div></div>
+        <div class="t" id="cc-ta-collect-count">0</div>
+      </div>
       <!-- v3.34.x：自定义字卡全量导入导出——覆盖下方全部自定义库（聊天字卡双作用域/功能卡/寻踪/情话/TA六类） -->
       <div class="chat-item glass" id="li-cc-full-export">
         <div class="av"><svg viewBox="0 0 24 24" fill="none" stroke="#111111" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="M7 10l5 5 5-5"/><path d="M4 19h16"/></svg></div>
@@ -9044,6 +9052,12 @@ animation:pbPulse 2.2s ease-in-out infinite;
         <div class="av"><svg viewBox="0 0 24 24" fill="none" stroke="#111111" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="11" rx="5"/><path d="M7 10.5v3M5.5 12h3"/><path d="M15.5 11h.01M18.5 13h.01"/></svg></div>
         <div class="ci"><div class="n">TA的邀请</div><div class="m">TA 主动约你玩 · 猜拳/Pong/贪吃蛇邀请话术</div><div class="note">开关/概率在 回复设置 → 其他</div></div>
         <div class="t" id="cc-ta-invite-count">10</div>
+      </div>
+      <!-- v3.50.x+：报备字卡——TA 主动报备近况的话术（系统预设 16 句，逐句开关） -->
+      <div class="chat-item glass" id="li-baobei">
+        <div class="av"><svg viewBox="0 0 24 24" fill="none" stroke="#111111" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h16"/><path d="M6 20V9l6-5 6 5v11"/><path d="M10 20v-6h4v6"/></svg></div>
+        <div class="ci"><div class="n">报备字卡</div><div class="m">TA 主动报备 · 系统预设话术（可逐句开关）</div><div class="note">报备记录已并入 控制面主页 · 报备</div></div>
+        <div class="t" id="cc-baobei-count">16</div>
       </div>
       </div>
     </div>
@@ -9395,6 +9409,7 @@ animation:pbPulse 2.2s ease-in-out infinite;
             <option value="pong">导入到 · Pong 邀请</option>
             <option value="snake">导入到 · 贪吃蛇邀请</option>
             <option value="cuddle">导入到 · 贴贴邀请</option>
+            <option value="baobei">导入到 · 报备</option>
           </select>
           <textarea id="ti-batch" class="tc-input" rows="5" placeholder="每行一条邀请话术，如：&#10;来猜拳呀，输的人答应一件事！&#10;敢不敢来一局 Pong？"></textarea>
           <button class="ta-add-btn" style="width:100%" id="ti-batch-add">批量导入</button>
@@ -9402,6 +9417,38 @@ animation:pbPulse 2.2s ease-in-out infinite;
       </div>
       <div id="ti-mine-cats"></div>
     </div>
+  </div>
+</div>
+
+<!-- 梦角收藏库（TA 联系人自建库：自由造句 + 收藏喜爱字卡） -->
+<div class="page" id="page-ta-collect" hidden>
+  <div class="chat-head">
+    <span class="ch-back" id="tc-back">
+      <svg viewBox="0 0 24 24" fill="none" stroke="#111111" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+    </span>
+    <span class="ch-name">梦角收藏库</span>
+  </div>
+  <div class="gs-scroll">
+    <button class="div-draw" id="tc-make">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7.5-4.7-9.3-9A5.3 5.3 0 0112 6.4 5.3 5.3 0 0121.3 12c-1.8 4.3-9.3 9-9.3 9z"/><path d="M9 12l2 2 4-4"/></svg>
+      让 TA 造一句并收藏
+    </button>
+    <div class="set-group glass">
+      <div class="cal-card-title" style="padding:14px 14px 0">TA 的收藏 <span style="font-size:11px;color:var(--muted);font-weight:400">(<em id="tc-lib-count">0</em>)</span></div>
+      <div class="ta-empty" id="tc-lib-empty" style="padding:14px">TA 还没有收藏，点上方按钮让 TA 造一句，或手动添加</div>
+      <div id="tc-lib-list" style="padding:8px 14px 14px"></div>
+    </div>
+    <div class="set-group glass" style="margin-top:10px">
+      <div class="cal-card-title" style="padding:14px 14px 0">帮 TA 收藏 / 自由造句</div>
+      <div class="tc-addform">
+        <input id="tc-new" type="text" class="tc-input" placeholder="写一句 TA 会收藏的话…">
+        <button class="ta-add-btn" id="tc-add">收藏</button>
+      </div>
+    </div>
+    <button class="div-draw" id="tc-clear" style="margin-top:8px;background:rgba(0,0,0,.06);color:var(--ink)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M8 6V4a1 1 0 011-1h6a1 1 0 011 1v2"/><path d="M6 6l1 14a2 2 0 002 2h6a2 2 0 002-2l1-14"/></svg>
+      清空收藏库
+    </button>
   </div>
 </div>
 
@@ -9598,6 +9645,9 @@ animation:pbPulse 2.2s ease-in-out infinite;
     <button class="sleep-ico-btn" id="sleep-say-btn" type="button" title="换一句晚安语（字卡可调配）">🌙</button>
     <button class="sleep-ico-btn" id="sleep-mini-btn" type="button" title="缩小为小窗">▁</button>
     <button class="sleep-ico-btn sleep-expand-btn" id="sleep-expand-btn" type="button" title="恢复全屏">⤢</button>
+    <button class="sleep-ico-btn sleep-scale-btn" id="sleep-scale-minus" type="button" title="小窗缩小">－</button>
+    <button class="sleep-ico-btn sleep-scale-btn" id="sleep-scale-plus" type="button" title="小窗放大">＋</button>
+    <button class="sleep-ico-btn sleep-end-ico" id="sleep-end-ico" type="button" title="挂断并结束陪伴">✕</button>
   </div>
   <div class="sleep-sky">
     <div class="sleep-stars" id="sleep-stars"></div>
@@ -12946,8 +12996,13 @@ animation:pbPulse 2.2s ease-in-out infinite;
             </button>
           </div>
           <!-- v3.50.x+：昵称库（与头像库同模式；批量添加一行一个；仅改聊天显示名字，桌面昵称不变）
-               v3.50.x+：支持对方联系人给双方进行昵称更换——TA 自己的昵称库可开启随机更换；新增「我的昵称库」，TA 会从里面给你换昵称 -->
-          <div class="avlib-nicklib">
+               v3.50.x+：支持对方联系人给双方进行昵称更换——TA 自己的昵称库可开启随机更换；新增「我的昵称库」，TA 会从里面给你换昵称
+               v3.50.x+：昵称库按头像库 tab 分割（TA 的 / 我的 分列显示） -->
+          <div class="avlib-tabs avlib-nicktabs">
+            <div class="avlib-tab active" id="avlib-nicktab-a">TA 的昵称库</div>
+            <div class="avlib-tab" id="avlib-nicktab-b">我的昵称库</div>
+          </div>
+          <div class="avlib-nicklib" id="avlib-nicklib-pane-a">
             <div class="avlib-toggle-txt">
               <div class="avlib-toggle-name">TA 的昵称库</div>
               <div class="avlib-toggle-sub">批量添加，点击换上聊天名字；只改聊天显示，其他不变</div>
@@ -12977,7 +13032,7 @@ animation:pbPulse 2.2s ease-in-out infinite;
             </div>
           </div>
           <!-- v3.50.x+：我的昵称库——与头像库「我的头像池」同模式，TA 会从这里面给你换昵称 -->
-          <div class="avlib-nicklib avlib-nicklib-me">
+          <div class="avlib-nicklib avlib-nicklib-me" id="avlib-nicklib-pane-b" hidden>
             <div class="avlib-toggle-txt">
               <div class="avlib-toggle-name">我的昵称库</div>
               <div class="avlib-toggle-sub">点一下立即换上；TA 也会从这里给你换昵称，只改聊天显示</div>
@@ -17587,21 +17642,11 @@ return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
 };
 }
 function hourStatus(cid, dateStr, hour) {
-if (hour >= 23 || hour < 7) {
-const nt = rng(hashStr(cid + '|night-tend'))();
-const pNight = 0.10 + 0.30 * nt; // 该联系人夜间在线概率：10%–40%（离线 60%–90%）
-const rr = rng(hashStr(cid + '|' + dateStr + '|' + hour + '|night'));
-return rr() < pNight ? 'online' : 'offline';
-}
-const r = rng(hashStr(cid + '|' + dateStr));
-const nGap = 1 + Math.floor(r() * 3);
-const gapHours = {};
-for (let i = 0; i < nGap; i++) {
-const gh = 9 + Math.floor(r() * 13); // 9..21
-gapHours[gh] = true;
-}
-if (gapHours[hour]) return 'away';
-return 'online';
+const r = rng(hashStr(cid + '|' + dateStr + '|' + hour + '|full-random'));
+const v = r();
+if (v < 0.34) return 'online';
+if (v < 0.67) return 'away';
+return 'offline';
 }
 function dateStr(d) {
 const p = n => (n < 10 ? '0' : '') + n;
@@ -17646,72 +17691,19 @@ if (cp) {
 cp.className = 'chat-presence p-' + st;
 cp.textContent = full;
 cp.title = st === 'offline' ? 'TA 现在不在线，消息会保留，TA 上线后会看到' : 'TA ' + full;
-}
-syncBubble(st, full);
-} catch (e) {}
-}
-function ensureBubble() {
-let b = document.getElementById('presence-bubble');
-if (b) return b;
-b = document.createElement('div');
-b.id = 'presence-bubble';
-b.className = 'presence-bubble';
-b.innerHTML = '<span class="pb-dot"></span><span class="pb-txt">在线</span>';
-b.title = '按住可拖动 · 点击看 TA 的状态';
-const chatPage = document.getElementById('page-chat');
-if (chatPage) chatPage.appendChild(b);
-else document.body.appendChild(b);
-try {
-const p = JSON.parse(store.get('presence-bubble-pos') || 'null');
-if (p && typeof p.left === 'number' && typeof p.bottom === 'number') {
-b.style.left = p.left + 'px'; b.style.bottom = p.bottom + 'px';
-}
-} catch (e) {}
-let drag = null;
-const vw = () => window.innerWidth, vh = () => window.innerHeight;
-b.addEventListener('pointerdown', (e) => {
-if (e.pointerType === 'mouse' && e.button !== 0) return;
-const r = b.getBoundingClientRect();
-drag = { x: e.clientX, y: e.clientY, l: r.left, bot: vh() - r.bottom, moved: false };
-b.classList.add('dragging');
-try { b.setPointerCapture(e.pointerId); } catch (x) {}
-try { e.preventDefault(); e.stopPropagation(); } catch (x) {}
-});
-b.addEventListener('pointermove', (e) => {
-if (!drag) return;
-const dx = e.clientX - drag.x, dy = e.clientY - drag.y;
-if (!drag.moved && dx * dx + dy * dy < 36) return;
-drag.moved = true;
-const bw = b.offsetWidth || 120, bh = b.offsetHeight || 34;
-const left = Math.max(6, Math.min(vw() - bw - 6, drag.l + dx));
-const bot = Math.max(6, Math.min(vh() - bh - 6, drag.bot - dy));
-b.style.left = left + 'px'; b.style.bottom = bot + 'px';
-});
-const endDrag = (e) => {
-if (!drag) return;
-b.classList.remove('dragging');
-if (drag.moved) {
-const r = b.getBoundingClientRect();
-try { store.set('presence-bubble-pos', JSON.stringify({ left: Math.round(r.left), bottom: Math.round(vh() - r.bottom) })); } catch (x) {}
-} else {
+if (!cp.dataset.bound) {
+cp.dataset.bound = '1';
+cp.addEventListener('click', (e) => {
+e.stopPropagation();
 try {
 const tp = document.getElementById('page-tongpin');
-if (tp && window.openFullPage) { window.openFullPage(tp); drag = null; return; }
+if (tp && window.openFullPage) { window.openFullPage(tp); return; }
 } catch (x) {}
 try { toast('TA ' + fullText()); } catch (x2) {}
+});
 }
-drag = null;
-};
-b.addEventListener('pointerup', endDrag);
-b.addEventListener('pointercancel', () => { if (drag) { b.classList.remove('dragging'); drag = null; } });
-return b;
 }
-function syncBubble(st, full) {
-const b = ensureBubble();
-if (!b) return;
-b.className = 'presence-bubble p-' + st + (st === 'offline' ? ' off' : '');
-const txt = b.querySelector('.pb-txt');
-if (txt) txt.textContent = full;
+} catch (e) {}
 }
 function isOnline(cid) { return status(cid) !== 'offline'; }
 function isAvailable(cid) { return status(cid) === 'online'; } // 只有「在线」才接受主动行为
@@ -29891,14 +29883,47 @@ av.title = T('对 TA 拍一拍');
 let pokeTapT = null;    // touch 路布点
 let pokeTapP = null;    // pointer 路布点
 let pokeTapGuard = 0;   // 三路共用防重入
+let pokeLongT = null, pokeLongP = null, pokeLongTimer = 0;
+function pokeLongStart(rec) {
+clearTimeout(pokeLongTimer);
+pokeLongTimer = setTimeout(() => {
+if (!rec || rec.cancelled || rec.fired) return;
+rec.fired = true;
+pokeTapGuard = Date.now() + 900; // 长按后抑制随后的短按开面板 / click 兜底
+try {
+let full = '';
+try { if (window.MochiPresence && window.MochiPresence.fullText) full = window.MochiPresence.fullText() || ''; } catch (x) {}
+addIn('戳了戳' + chatPartnerName() + '（想念戳戳' + (full ? ' · ' + full : '') + '）', { special: 'poke' });
+} catch (err) {
+try { addIn('戳了戳' + chatPartnerName() + '（想念戳戳）', { special: 'poke' }); } catch (e2) {}
+}
+try { if (navigator.vibrate) navigator.vibrate(35); } catch (x) {}
+}, 650);
+}
+function pokeLongCancel() { clearTimeout(pokeLongTimer); }
 av.addEventListener('touchstart', (e) => {
 if (Date.now() < pokeTapGuard) return; // 已由其他路开过，让位
 const t = e.changedTouches && e.changedTouches[0];
 if (!t) return;
 pokeTapT = { x: t.clientX, y: t.clientY, t: Date.now(), id: t.identifier };
+pokeLongT = { x: t.clientX, y: t.clientY, id: t.identifier, fired: false, cancelled: false };
+pokeLongStart(pokeLongT);
+}, { passive: true });
+av.addEventListener('touchmove', (e) => {
+if (!pokeLongT) return;
+const t = e.changedTouches && e.changedTouches[0];
+if (!t || t.identifier !== pokeLongT.id) return;
+const dx = t.clientX - pokeLongT.x, dy = t.clientY - pokeLongT.y;
+if (dx * dx + dy * dy > 144) { pokeLongT.cancelled = true; pokeLongCancel(); }
 }, { passive: true });
 av.addEventListener('touchend', (e) => {
 const t = e.changedTouches && e.changedTouches[0];
+pokeLongCancel();
+if (pokeLongT && t && t.identifier === pokeLongT.id) {
+const fired = pokeLongT.fired;
+pokeLongT = null;
+if (fired) { pokeTapT = null; return; } // 长按已发戳戳：松手不再开拍一拍
+}
 if (!pokeTapT || !t || t.identifier !== pokeTapT.id || Date.now() < pokeTapGuard) return;
 const dt = Date.now() - pokeTapT.t;
 const dx = t.clientX - pokeTapT.x;
@@ -29908,12 +29933,26 @@ if (dx * dx + dy * dy > 144 || dt > 450) return; // 滑动/按住不算点（与
 pokeTapGuard = Date.now() + 800;
 openPokeCard();
 }, { passive: true });
-av.addEventListener('touchcancel', () => { pokeTapT = null; }, { passive: true });
+av.addEventListener('touchcancel', () => { pokeTapT = null; if (pokeLongT) { pokeLongT.cancelled = true; pokeLongCancel(); pokeLongT = null; } }, { passive: true });
 av.addEventListener('pointerdown', (e) => {
-if (e.pointerType === 'mouse' || Date.now() < pokeTapGuard) return;
-pokeTapP = { x: e.clientX, y: e.clientY, t: Date.now(), id: e.pointerId };
+if (Date.now() < pokeTapGuard) return;
+const rec = { x: e.clientX, y: e.clientY, t: Date.now(), id: e.pointerId, fired: false, cancelled: false };
+pokeLongP = rec;
+pokeLongStart(rec);
+if (e.pointerType !== 'mouse') pokeTapP = rec; // mouse 短按交给 click 兜底
+});
+av.addEventListener('pointermove', (e) => {
+if (!pokeLongP || e.pointerId !== pokeLongP.id) return;
+const dx = e.clientX - pokeLongP.x, dy = e.clientY - pokeLongP.y;
+if (dx * dx + dy * dy > 144) { pokeLongP.cancelled = true; pokeLongCancel(); }
 });
 av.addEventListener('pointerup', (e) => {
+pokeLongCancel();
+if (pokeLongP && e.pointerId === pokeLongP.id) {
+const fired = pokeLongP.fired;
+pokeLongP = null;
+if (fired) { pokeTapP = null; return; } // 长按已发戳戳：松手不再开拍一拍
+}
 if (!pokeTapP || e.pointerId !== pokeTapP.id || e.pointerType === 'mouse' || Date.now() < pokeTapGuard) return;
 const dx = e.clientX - pokeTapP.x;
 const dy = e.clientY - pokeTapP.y;
@@ -29923,17 +29962,7 @@ if (dt > 450 || dx * dx + dy * dy > 144) return; // 滑动/按住不算点，滚
 pokeTapGuard = Date.now() + 800;
 openPokeCard();
 });
-av.addEventListener('pointercancel', () => { pokeTapP = null; });
-av.addEventListener('dblclick', (e) => {
-e.stopPropagation();
-try {
-let full = '';
-try { if (window.MochiPresence && window.MochiPresence.fullText) full = window.MochiPresence.fullText() || ''; } catch (x) {}
-addIn('戳了戳' + chatPartnerName() + '（想念戳戳' + (full ? ' · ' + full : '') + '）', { special: 'poke' });
-} catch (err) {
-try { addIn('戳了戳' + chatPartnerName() + '（想念戳戳）', { special: 'poke' }); } catch (e2) {}
-}
-});
+av.addEventListener('pointercancel', () => { pokeTapP = null; if (pokeLongP) { pokeLongP.cancelled = true; pokeLongCancel(); pokeLongP = null; } });
 av.addEventListener('click', (e) => {
 if (Date.now() < pokeTapGuard) { e.preventDefault(); e.stopPropagation(); return; }
 e.stopPropagation();
@@ -46790,6 +46819,20 @@ const mk = document.getElementById('avlib-me-nick-auto');
 if (nk) nk.checked = store.get('nick-auto') === '1';
 if (mk) mk.checked = store.get('me-nick-auto') === '1';
 }
+function nickTabSwitch(which) {
+const pa = document.getElementById('avlib-nicklib-pane-a');
+const pb = document.getElementById('avlib-nicklib-pane-b');
+const ta = document.getElementById('avlib-nicktab-a');
+const tb = document.getElementById('avlib-nicktab-b');
+if (pa) pa.hidden = which !== 'a';
+if (pb) pb.hidden = which !== 'b';
+if (ta) ta.classList.toggle('active', which === 'a');
+if (tb) tb.classList.toggle('active', which === 'b');
+}
+const nickTabA = document.getElementById('avlib-nicktab-a');
+const nickTabB = document.getElementById('avlib-nicktab-b');
+if (nickTabA) nickTabA.addEventListener('click', () => nickTabSwitch('a'));
+if (nickTabB) nickTabB.addEventListener('click', () => nickTabSwitch('b'));
 const nickAutoEl = document.getElementById('avlib-nick-auto');
 if (nickAutoEl) {
 nickAutoEl.addEventListener('change', () => {
@@ -51756,6 +51799,7 @@ return '<div class="ta-add">' +
 '<option value="pong">Pong 邀请</option>' +
 '<option value="snake">贪吃蛇邀请</option>' +
 '<option value="cuddle">贴贴邀请</option>' +
+'<option value="baobei">报备</option>' +
 '</select>' +
 '<input id="ti-new-' + blockKey + '" type="text" placeholder="添加邀请话术…（发送时自动带昵称）">' +
 '<button class="ta-add-btn" data-key="' + blockKey + '" data-cat="' + (kind || 'rps') + '" data-grp="' + (grp || '') + '">添加</button>' +
@@ -52123,6 +52167,10 @@ const li = document.getElementById('li-ta-invite');
 if (li) li.addEventListener('click', () => showPage('sys'));
 const liMine = document.getElementById('li-ta-invite-mine');
 if (liMine) liMine.addEventListener('click', () => showPage('mine'));
+const liBb = document.getElementById('li-baobei');
+if (liBb) liBb.addEventListener('click', () => { tiSysCat = 'baobei'; showPage('sys'); });
+const liBbMine = document.getElementById('li-baobei-mine');
+if (liBbMine) liBbMine.addEventListener('click', () => showPage('mine'));
 const backBtn = document.getElementById('ti-back');
 if (backBtn) backBtn.addEventListener('click', () => {
 document.querySelectorAll('.page').forEach(p => p.hidden = true);
@@ -52138,6 +52186,10 @@ const elSys = document.querySelector('#li-ta-invite > .t');
 if (elSys) elSys.textContent = qs.filter(q => q && q.isPreset === true).length;
 const elMine = document.querySelector('#li-ta-invite-mine > .t');
 if (elMine) elMine.textContent = qs.filter(q => q && q.isPreset !== true).length;
+const elBb = document.querySelector('#li-baobei > .t');
+if (elBb) elBb.textContent = qs.filter(q => q && q.isPreset === true && q.kind === 'baobei').length;
+const elBbMine = document.querySelector('#li-baobei-mine > .t');
+if (elBbMine) elBbMine.textContent = qs.filter(q => q && q.isPreset !== true && q.kind === 'baobei').length;
 } catch (e) {}
 };
 const ccPageEl = document.getElementById('page-chatcard');
@@ -52187,6 +52239,112 @@ try { window.refreshTiCardCounts(); } catch (e) {}
 } catch (e) {}
 });
 })();
+const TC_KEY = 'ta-collect-lib';
+function tcLoad() { try { const a = JSON.parse(store.get(TC_KEY) || '[]'); return Array.isArray(a) ? a : []; } catch (e) { return []; } }
+function tcSave(list) { try { store.set(TC_KEY, JSON.stringify(list)); } catch (e) {} }
+function tcToast(m) { if (typeof window.toast === 'function') window.toast(m); }
+function tcChatSys(m) { try { if (window.chatAddSystem) window.chatAddSystem(m); } catch (e) {} }
+function tcPartnerName() { return store.get('cs-lbl-partner') || store.get('lbl-partner') || 'TA'; }
+function tcMakeSentence() {
+let pool = [];
+try {
+const dc = window.DEFAULT_CARD_DATA;
+if (dc && Array.isArray(dc.main)) {
+dc.main.forEach(function (cat) { if (cat && Array.isArray(cat) && cat.length > 1 && Array.isArray(cat[1])) pool = pool.concat(cat[1]); });
+}
+} catch (e) {}
+if (!pool.length) return null;
+return pool[Math.floor(Math.random() * pool.length)];
+}
+function tcAdd(t) {
+const v = String(t == null ? '' : t).trim();
+if (!v) return;
+const list = tcLoad();
+list.push({ t: v, at: Date.now() });
+tcSave(list);
+renderTcLib();
+refreshTcCount();
+return list.length;
+}
+function renderTcLib() {
+const el = document.getElementById('tc-lib-list');
+if (!el) return;
+const list = tcLoad();
+const cnt = document.getElementById('tc-lib-count');
+if (cnt) cnt.textContent = list.length;
+const empty = document.getElementById('tc-lib-empty');
+if (empty) empty.hidden = list.length > 0;
+el.innerHTML = '';
+list.forEach((it, i) => {
+const row = document.createElement('div');
+row.className = 'ta-row';
+row.innerHTML = '<span class="ta-txt">' + esc(it && it.t ? it.t : '') + ' <span class="tc-known">TA 的收藏</span></span><button class="ta-del" data-idx="' + i + '">✕</button>';
+el.appendChild(row);
+});
+Array.prototype.forEach.call(el.querySelectorAll('.ta-del'), (b) => {
+b.addEventListener('click', () => {
+const d = tcLoad();
+d.splice(Number(b.dataset.idx), 1);
+tcSave(d);
+renderTcLib();
+refreshTcCount();
+});
+});
+}
+function refreshTcCount() {
+const el = document.querySelector('#li-ta-collect-mine > .t');
+if (el) el.textContent = tcLoad().length;
+}
+const pageTc = document.getElementById('page-ta-collect');
+if (pageTc) {
+const liTc = document.getElementById('li-ta-collect-mine');
+if (liTc) liTc.addEventListener('click', () => {
+document.querySelectorAll('.page').forEach(p => p.hidden = true);
+pageTc.hidden = false;
+renderTcLib();
+});
+const back = document.getElementById('tc-back');
+if (back) back.addEventListener('click', () => {
+document.querySelectorAll('.page').forEach(p => p.hidden = true);
+const home = document.getElementById('page-chatcard');
+if (home) home.hidden = false;
+});
+const makeBtn = document.getElementById('tc-make');
+if (makeBtn) makeBtn.addEventListener('click', () => {
+const t = tcMakeSentence();
+if (!t) { tcToast('系统字卡池暂不可用，先用下方手动添加吧'); return; }
+tcAdd(t);
+const pname = tcPartnerName();
+tcChatSys(pname + ' 收藏了一句：「' + t + '」');
+tcToast(pname + ' 收藏了一句');
+});
+const addBtn = document.getElementById('tc-add');
+const addInput = document.getElementById('tc-new');
+if (addBtn && addInput) {
+addBtn.addEventListener('click', () => {
+const v = (addInput.value || '').trim();
+if (!v) { tcToast('写一句想收藏的话吧'); return; }
+tcAdd(v);
+addInput.value = '';
+tcToast('已收藏');
+});
+addInput.addEventListener('keydown', (e) => {
+if (e.key === 'Enter') { e.preventDefault(); addBtn.click(); }
+});
+}
+const clearBtn = document.getElementById('tc-clear');
+if (clearBtn) clearBtn.addEventListener('click', () => {
+if (!window.openModal) { tcToast('弹窗组件未就绪'); return; }
+window.openModal('清空梦角收藏库', '', () => {
+tcSave([]);
+renderTcLib();
+refreshTcCount();
+tcToast('收藏库已清空');
+}, { noInput: true, staticText: '清空梦角收藏库？（TA 收藏的句子都会被删掉）', lock: true });
+});
+renderTcLib();
+}
+refreshTcCount();
 })();
 } catch (__e) { try { console.error("[JS] ta-invite.js", __e && __e.message || __e); } catch (x) {} if (window.__jsErrors) window.__jsErrors.push(String(__e && __e.message || __e)); } })();
 (function () { try {
@@ -54833,6 +54991,7 @@ try { if (ctl && ctl.okText) ctl.okText('一起睡'); } catch (e) {}
 }
 function doUserInvite() {
 const c = cid();
+autoHangupCall(); // v3.50.x+：进入睡眠陪伴自动挂断电话/语音
 closeMorePanel();
 S.state = 'inviting';
 S.cid = c;
@@ -54871,6 +55030,7 @@ setTimer(false);
 function acceptTa() {
 if (S.state !== 'ta-inviting') return;
 const c = S.cid;
+autoHangupCall(); // v3.50.x+：接受睡眠陪伴自动挂断电话/语音
 userSay('好呀，一起睡吧，晚安。');
 showMask();
 beginCompanion(false);
@@ -54977,16 +55137,86 @@ if (n) n.addEventListener('click', function (e) { try { e.stopPropagation(); } c
 bind('sleep-accept-btn', acceptTa);
 bind('sleep-decline-btn', declineTa);
 bind('sleep-end-btn', function () { endSession(false); });
+function autoHangupCall() {
+try { if (window.hangupCall) window.hangupCall(); } catch (e) {}
+}
 function sleepMini() {
 const m = el('sleep-mask');
-if (m) m.classList.add('mini');
+if (!m) return;
+m.classList.add('mini');
+try {
+const s = window.activeStore ? window.activeStore() : null;
+if (s && s.get) {
+const pos = JSON.parse(s.get('sleep-mini-pos') || 'null');
+if (pos && typeof pos.l === 'number') {
+m.style.left = pos.l + 'px'; m.style.top = pos.t + 'px';
+m.style.right = 'auto'; m.style.bottom = 'auto';
+}
+const sz = JSON.parse(s.get('sleep-mini-size') || 'null');
+if (sz && typeof sz.w === 'number') { m.style.width = sz.w + 'px'; m.style.height = sz.h + 'px'; }
+}
+} catch (e) {}
 }
 function sleepExpand() {
 const m = el('sleep-mask');
-if (m) m.classList.remove('mini');
+if (!m) return;
+m.classList.remove('mini');
+m.style.left = ''; m.style.top = ''; m.style.right = ''; m.style.bottom = '';
+m.style.width = ''; m.style.height = '';
+}
+function sleepScale(delta) {
+const m = el('sleep-mask');
+if (!m || !m.classList.contains('mini')) return;
+const nw = Math.round(Math.min(Math.max(140, m.offsetWidth + delta * 30), 420));
+const nh = Math.round(nw * 264 / 210);
+m.style.width = nw + 'px'; m.style.height = nh + 'px';
+try {
+const s = window.activeStore ? window.activeStore() : null;
+if (s && s.set) s.set('sleep-mini-size', JSON.stringify({ w: nw, h: nh }));
+} catch (e) {}
 }
 bind('sleep-mini-btn', function () { sleepMini(); });
 bind('sleep-expand-btn', function () { sleepExpand(); });
+bind('sleep-scale-plus', function () { sleepScale(1); });
+bind('sleep-scale-minus', function () { sleepScale(-1); });
+bind('sleep-end-ico', function () { endSession(false); });
+const sleepMaskEl = el('sleep-mask');
+if (sleepMaskEl) {
+let sleepDrag = null;
+sleepMaskEl.addEventListener('pointerdown', function (e) {
+if (!sleepMaskEl.classList.contains('mini')) return;
+if (e.target && e.target.closest && e.target.closest('button')) return;
+sleepDrag = {
+x: e.clientX, y: e.clientY,
+l: sleepMaskEl.offsetLeft, t: sleepMaskEl.offsetTop,
+w: sleepMaskEl.offsetWidth, h: sleepMaskEl.offsetHeight, moved: false
+};
+});
+sleepMaskEl.addEventListener('pointermove', function (e) {
+if (!sleepDrag) return;
+const dx = e.clientX - sleepDrag.x, dy = e.clientY - sleepDrag.y;
+if (Math.abs(dx) + Math.abs(dy) > 4) sleepDrag.moved = true;
+sleepMaskEl.classList.add('dragging');
+const nl = Math.min(Math.max(4, sleepDrag.l + dx), window.innerWidth - sleepDrag.w - 4);
+const nt = Math.min(Math.max(4, sleepDrag.t + dy), window.innerHeight - sleepDrag.h - 4);
+sleepMaskEl.style.left = nl + 'px'; sleepMaskEl.style.top = nt + 'px';
+sleepMaskEl.style.right = 'auto'; sleepMaskEl.style.bottom = 'auto';
+});
+const endSleepDrag = function () {
+if (!sleepDrag) return;
+const moved = sleepDrag.moved;
+sleepDrag = null;
+sleepMaskEl.classList.remove('dragging');
+if (moved) {
+try {
+const s = window.activeStore ? window.activeStore() : null;
+if (s && s.set) s.set('sleep-mini-pos', JSON.stringify({ l: sleepMaskEl.offsetLeft, t: sleepMaskEl.offsetTop }));
+} catch (e) {}
+}
+};
+sleepMaskEl.addEventListener('pointerup', endSleepDrag);
+sleepMaskEl.addEventListener('pointercancel', endSleepDrag);
+}
 bind('sleep-note-send', function () {
 const inp = el('sleep-note-input');
 if (!inp) return;
@@ -84533,4 +84763,4 @@ lastHeal: his
 <!-- __MOCHI_EOF__ -->
 </body>
 </html>
-<!-- __MOCHI_EOF__ mu5ow304 -->
+<!-- __MOCHI_EOF__ mu750l7o -->
