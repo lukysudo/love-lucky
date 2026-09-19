@@ -8617,6 +8617,86 @@ background:#f28bb0; color:#fff; font-size:13px; font-weight:700; cursor:pointer;
 0%,100% { box-shadow:0 0 0 0 rgba(242,139,176,.5); }
 50%     { box-shadow:0 0 0 5px rgba(242,139,176,0); }
 }
+.phone-check-panel {
+position: fixed; inset: 0; z-index: 980;
+display: flex; flex-direction: column;
+background: linear-gradient(160deg, #1a1024 0%, #241127 46%, #150b1c 100%);
+color: #e8d9ec;
+font-family: inherit;
+}
+.phone-check-panel::before {
+content: ''; position: absolute; inset: 0; pointer-events: none;
+background:
+radial-gradient(120px 90px at 82% 8%, rgba(190,120,255,.14), transparent 70%),
+radial-gradient(160px 120px at 12% 92%, rgba(90,30,60,.30), transparent 70%);
+}
+.pc-head {
+position: relative; display: flex; align-items: center; justify-content: space-between;
+padding: 12px 14px; border-bottom: 1px solid rgba(255,255,255,.08);
+}
+.pc-back {
+width: 34px; height: 34px; border-radius: 50%; border: 1px solid rgba(255,255,255,.14);
+background: rgba(255,255,255,.06); color: #e8d9ec; font-size: 18px; cursor: pointer;
+}
+.pc-title { font-size: 14px; font-weight: 600; letter-spacing: .5px; color: #f2c9e4; }
+.pc-lock { font-size: 16px; opacity: .85; }
+.pc-tape {
+position: relative; padding: 8px 14px; font-size: 11px; letter-spacing: 1.5px;
+color: rgba(232,217,236,.55); border-bottom: 1px dashed rgba(255,255,255,.07);
+white-space: nowrap; overflow: hidden;
+}
+.pc-tape::after {
+content: ' · · · 正在一条一条看 · · · ';
+position: absolute; right: 0; top: 8px; color: rgba(200,120,180,.5);
+}
+.pc-screen {
+position: relative; margin: 14px 16px 10px; padding: 14px;
+background: rgba(20,12,26,.82); border: 1px solid rgba(255,255,255,.10);
+border-radius: 20px; box-shadow: 0 12px 40px rgba(0,0,0,.45);
+flex: 1; min-height: 0; overflow: hidden;
+}
+.pc-screen-top {
+display: flex; justify-content: space-between; align-items: center;
+font-size: 11px; color: rgba(232,217,236,.5); margin-bottom: 12px;
+}
+.pc-row { margin-bottom: 12px; }
+.pc-row-label { font-size: 11px; color: rgba(220,150,200,.8); margin-bottom: 6px; letter-spacing: 1px; }
+.pc-row-body { display: flex; flex-wrap: wrap; gap: 6px; }
+.pc-chip {
+padding: 5px 10px; border-radius: 12px; font-size: 12px;
+background: rgba(255,255,255,.07); border: 1px solid rgba(255,255,255,.10); color: #e8d9ec;
+}
+.pc-chat-line { width: 100%; font-size: 12px; color: rgba(232,217,236,.85); line-height: 1.7; }
+.pc-ghost {
+position: relative; margin: 6px 18px 10px; min-height: 22px;
+font-size: 13px; font-style: italic; text-align: center;
+color: #d9a4c8; letter-spacing: .5px; transition: opacity .5s ease, transform .5s ease;
+}
+.pc-ghost.pc-fade { opacity: .35; transform: translateY(2px); }
+.pc-done {
+position: relative; z-index: 2; margin: 0 18px 22px; padding: 13px 0; border-radius: 26px;
+border: 1px solid rgba(242,139,176,.55); background: linear-gradient(135deg, rgba(242,139,176,.85), rgba(226,122,166,.85));
+color: #fff; font-size: 14px; font-weight: 700; cursor: pointer; letter-spacing: 2px;
+box-shadow: 0 6px 22px rgba(242,139,176,.35);
+}
+.pc-close {
+position: relative; z-index: 2; padding: 6px 13px; border-radius: 15px;
+border: 1px solid rgba(242,139,176,.5); background: rgba(242,139,176,.2);
+color: #f6d4e6; font-size: 12px; font-weight: 600; cursor: pointer; letter-spacing: .5px;
+}
+.pc-chat-lock {
+position: fixed; inset: 0; z-index: 960;
+display: flex; align-items: center; justify-content: center;
+background: rgba(18,10,24,.55); backdrop-filter: blur(2px);
+}
+.pc-chat-lock-inner {
+text-align: center; font-size: 15px; font-weight: 600; color: #f2c9e4; line-height: 2;
+text-shadow: 0 2px 14px rgba(0,0,0,.6);
+}
+.pc-chat-lock-inner span { font-size: 12px; font-weight: 400; color: rgba(232,217,236,.6); }
+@media (prefers-color-scheme: dark) {
+.pc-chat-lock { background: rgba(10,6,14,.62); }
+}
 .chat-presence { max-width:52vw; overflow:hidden; text-overflow:ellipsis; }
 </style>
 </head>
@@ -8638,9 +8718,9 @@ background:#f28bb0; color:#fff; font-size:13px; font-weight:700; cursor:pointer;
       </div>
     </div>
     <div class="splash-footcard">
-      <div class="splash-ver" id="splash-ver" data-build-ts="1789746768996">
+      <div class="splash-ver" id="splash-ver" data-build-ts="1789822375006">
         <span class="sv-app">love lucky <b>v3.50.0</b></span>
-        <span class="sv-deploy">部署于 2026-09-18 23:52<span id="splash-ver-live"></span></span>
+        <span class="sv-deploy">部署于 2026-09-19 20:52<span id="splash-ver-live"></span></span>
       </div>
       <div class="splash-loading" id="splash-loading">正在加载数据…</div>
       <div class="splash-enter-hint" id="splash-enter-hint" hidden>勾选后即可进入</div>
@@ -13386,6 +13466,10 @@ background:#f28bb0; color:#fff; font-size:13px; font-weight:700; cursor:pointer;
             <span class="mi-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 7h6"/><path d="M5 13.5C5 10.4 8.1 8 12 8s7 2.4 7 5.5c0 1.6-.9 3.1-2.3 4.1V20h-2.4l-.4-1.2a9.3 9.3 0 01-3.8 0L9.7 20H7.3v-2.4C5.9 16.6 5 15.1 5 13.5z"/><circle cx="9.3" cy="12.7" r=".55" fill="currentColor" stroke="none"/><path d="M18.8 12.3l1.7-.9"/></svg></span>
             <span>存钱罐</span>
           </button>
+          <button class="more-item" id="more-phonecheck" data-mcat="tool" title="查手机（TA 自主查看你的手机，占有欲 Max）">
+            <span class="mi-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="7" y="2.5" width="10" height="19" rx="2.2"/><path d="M11 18.5h2"/><path d="M10 6.5h4"/><circle cx="12" cy="13" r="2.6"/><path d="M12 9.5l1.2-2.6-2.4.3z"/></svg></span>
+            <span>查手机</span>
+          </button>
         </div>
         <div class="more-grid" id="more-grid-ask" hidden>
           <button class="more-item" id="more-ask-now" title="让TA现在问一次（TA的询问）">
@@ -13414,6 +13498,29 @@ background:#f28bb0; color:#fff; font-size:13px; font-weight:700; cursor:pointer;
     <!-- TA在身边·位置面板（聊天寻踪半框 / 桌面寻踪页「TA在身边」入口共用，必须放在所有 .page 之外——
          position:fixed 弹层若嵌在 .page 内，页面切换时会被父级 hidden 隐藏，桌面寻踪页点开就会"跑到聊天页"；
          v3.26.x：两入口统一 .loc-full 全屏打开） -->
+    <!-- 查手机：梦角自主查看我方手机（阴湿男鬼型 DADDY · 占有欲台词 · 查看期间聊天暂停） -->
+    <div class="phone-check-panel" id="phone-check-panel" hidden>
+      <div class="pc-head">
+        <button class="pc-back" id="pc-back" aria-label="返回">‹</button>
+        <div class="pc-title" id="pc-title">TA 正在查看你的手机…</div>
+        <button class="pc-close" id="pc-close" type="button">✕ 关闭</button>
+      </div>
+      <div class="pc-tape" id="pc-tape"></div>
+      <div class="pc-screen">
+        <div class="pc-screen-top"><span class="pc-clock" id="pc-clock"></span><span class="pc-battery">▮▮▮</span></div>
+        <div class="pc-row"><div class="pc-row-label">相册</div><div class="pc-row-body" id="pc-album"></div></div>
+        <div class="pc-row"><div class="pc-row-label">最近聊天</div><div class="pc-row-body" id="pc-chats"></div></div>
+        <div class="pc-row"><div class="pc-row-label">备忘录</div><div class="pc-row-body" id="pc-memo"></div></div>
+        <div class="pc-row"><div class="pc-row-label">今日足迹</div><div class="pc-row-body" id="pc-activity"></div></div>
+      </div>
+      <div class="pc-ghost" id="pc-ghost"></div>
+      <button class="pc-done" id="pc-done" type="button">手机还给你</button>
+    </div>
+    <!-- 聊天暂停遮罩（查手机期间聊天界面暂停） -->
+    <div class="pc-chat-lock" id="pc-chat-lock" hidden>
+      <div class="pc-chat-lock-inner">🔒 TA 正在查看你的手机<br><span>聊天已暂停，看完就还给你</span></div>
+    </div>
+
     <div class="loc-panel" id="loc-panel" hidden>
       <div class="loc-head">
         <button class="loc-back" id="loc-back" aria-label="返回">
@@ -29880,16 +29987,14 @@ fillAvatar(av, rec.side === 'out' ? 'cs-avatar-user' : 'cs-avatar-partner');
 if (rec.side === 'in') {
 av.style.cursor = 'pointer';
 av.title = T('对 TA 拍一拍');
-let pokeTapT = null;    // touch 路布点
-let pokeTapP = null;    // pointer 路布点
+let pokeTapT = null;    // touch 路轻点布点
+let pokeTapP = null;    // pointer 路轻点布点
 let pokeTapGuard = 0;   // 三路共用防重入
-let pokeLongT = null, pokeLongP = null, pokeLongTimer = 0;
-function pokeLongStart(rec) {
-clearTimeout(pokeLongTimer);
-pokeLongTimer = setTimeout(() => {
-if (!rec || rec.cancelled || rec.fired) return;
+let pokeDblT = null, pokeDblP = null, pokeDblTimer = 0;
+function pokeFireDbl(rec) {
+if (!rec || rec.fired || rec.cancelled) return;
 rec.fired = true;
-pokeTapGuard = Date.now() + 900; // 长按后抑制随后的短按开面板 / click 兜底
+pokeTapGuard = Date.now() + 900; // 发戳戳后抑制随后的单击开面板 / click 兜底
 try {
 let full = '';
 try { if (window.MochiPresence && window.MochiPresence.fullText) full = window.MochiPresence.fullText() || ''; } catch (x) {}
@@ -29897,76 +30002,76 @@ addIn('戳了戳' + chatPartnerName() + '（想念戳戳' + (full ? ' · ' + ful
 } catch (err) {
 try { addIn('戳了戳' + chatPartnerName() + '（想念戳戳）', { special: 'poke' }); } catch (e2) {}
 }
-try { if (navigator.vibrate) navigator.vibrate(35); } catch (x) {}
-}, 650);
+try { if (navigator.vibrate) navigator.vibrate(35); } catch (x) {} // 触感区别：双击戳戳震动
 }
-function pokeLongCancel() { clearTimeout(pokeLongTimer); }
+function pokeDblReset() { if (pokeDblTimer) { clearTimeout(pokeDblTimer); pokeDblTimer = 0; } }
+function pokeTapOnce(rec) {
+if (Date.now() < pokeTapGuard) return;
+if (pokeDblT) {
+const t = pokeDblT;
+pokeDblT = null;
+pokeDblReset();
+pokeFireDbl(t); // 双击命中：发戳戳
+return;
+}
+pokeDblT = rec;
+pokeDblReset();
+pokeDblTimer = setTimeout(() => {
+pokeDblT = null;
+if (Date.now() < pokeTapGuard) return;
+pokeTapGuard = Date.now() + 800;
+openPokeCard(); // 单击（未二次轻点）：打开拍一拍
+}, 260);
+}
 av.addEventListener('touchstart', (e) => {
 if (Date.now() < pokeTapGuard) return; // 已由其他路开过，让位
 const t = e.changedTouches && e.changedTouches[0];
 if (!t) return;
 pokeTapT = { x: t.clientX, y: t.clientY, t: Date.now(), id: t.identifier };
-pokeLongT = { x: t.clientX, y: t.clientY, id: t.identifier, fired: false, cancelled: false };
-pokeLongStart(pokeLongT);
 }, { passive: true });
 av.addEventListener('touchmove', (e) => {
-if (!pokeLongT) return;
+if (!pokeTapT) return;
 const t = e.changedTouches && e.changedTouches[0];
-if (!t || t.identifier !== pokeLongT.id) return;
-const dx = t.clientX - pokeLongT.x, dy = t.clientY - pokeLongT.y;
-if (dx * dx + dy * dy > 144) { pokeLongT.cancelled = true; pokeLongCancel(); }
+if (!t || t.identifier !== pokeTapT.id) return;
+const dx = t.clientX - pokeTapT.x, dy = t.clientY - pokeTapT.y;
+if (dx * dx + dy * dy > 144) { pokeTapT = null; pokeDblT = null; pokeDblReset(); }
 }, { passive: true });
 av.addEventListener('touchend', (e) => {
+if (Date.now() < pokeTapGuard) return;
 const t = e.changedTouches && e.changedTouches[0];
-pokeLongCancel();
-if (pokeLongT && t && t.identifier === pokeLongT.id) {
-const fired = pokeLongT.fired;
-pokeLongT = null;
-if (fired) { pokeTapT = null; return; } // 长按已发戳戳：松手不再开拍一拍
-}
-if (!pokeTapT || !t || t.identifier !== pokeTapT.id || Date.now() < pokeTapGuard) return;
-const dt = Date.now() - pokeTapT.t;
+if (!pokeTapT || !t || t.identifier !== pokeTapT.id) return;
 const dx = t.clientX - pokeTapT.x;
 const dy = t.clientY - pokeTapT.y;
+const dt = Date.now() - pokeTapT.t;
 pokeTapT = null;
-if (dx * dx + dy * dy > 144 || dt > 450) return; // 滑动/按住不算点（与 pointer 路同口径，文本异形护哨兵唯一）
-pokeTapGuard = Date.now() + 800;
-openPokeCard();
+if (dx * dx + dy * dy > 144 || dt > 450) return; // 滑动/按住不算轻点（哨兵 G1 touch 路同口径）
+pokeTapOnce({ x: t.clientX, y: t.clientY, t: Date.now(), id: t.identifier, fired: false, cancelled: false });
 }, { passive: true });
-av.addEventListener('touchcancel', () => { pokeTapT = null; if (pokeLongT) { pokeLongT.cancelled = true; pokeLongCancel(); pokeLongT = null; } }, { passive: true });
+av.addEventListener('touchcancel', () => { pokeTapT = null; pokeDblT = null; pokeDblReset(); }, { passive: true });
 av.addEventListener('pointerdown', (e) => {
 if (Date.now() < pokeTapGuard) return;
-const rec = { x: e.clientX, y: e.clientY, t: Date.now(), id: e.pointerId, fired: false, cancelled: false };
-pokeLongP = rec;
-pokeLongStart(rec);
-if (e.pointerType !== 'mouse') pokeTapP = rec; // mouse 短按交给 click 兜底
+if (e.pointerType !== 'mouse') pokeTapP = { x: e.clientX, y: e.clientY, t: Date.now(), id: e.pointerId, fired: false, cancelled: false }; // mouse 交给 click 兜底
 });
 av.addEventListener('pointermove', (e) => {
-if (!pokeLongP || e.pointerId !== pokeLongP.id) return;
-const dx = e.clientX - pokeLongP.x, dy = e.clientY - pokeLongP.y;
-if (dx * dx + dy * dy > 144) { pokeLongP.cancelled = true; pokeLongCancel(); }
+if (!pokeTapP || e.pointerId !== pokeTapP.id) return;
+const dx = e.clientX - pokeTapP.x, dy = e.clientY - pokeTapP.y;
+if (dx * dx + dy * dy > 144) { pokeTapP = null; pokeDblT = null; pokeDblReset(); }
 });
 av.addEventListener('pointerup', (e) => {
-pokeLongCancel();
-if (pokeLongP && e.pointerId === pokeLongP.id) {
-const fired = pokeLongP.fired;
-pokeLongP = null;
-if (fired) { pokeTapP = null; return; } // 长按已发戳戳：松手不再开拍一拍
-}
-if (!pokeTapP || e.pointerId !== pokeTapP.id || e.pointerType === 'mouse' || Date.now() < pokeTapGuard) return;
+if (Date.now() < pokeTapGuard) return;
+if (!pokeTapP || e.pointerId !== pokeTapP.id || e.pointerType === 'mouse') return;
 const dx = e.clientX - pokeTapP.x;
 const dy = e.clientY - pokeTapP.y;
 const dt = Date.now() - pokeTapP.t;
 pokeTapP = null;
-if (dt > 450 || dx * dx + dy * dy > 144) return; // 滑动/按住不算点，滚动照常
-pokeTapGuard = Date.now() + 800;
-openPokeCard();
+if (dt > 450 || dx * dx + dy * dy > 144) return; // 滑动/按住不算轻点（哨兵 G1 pointer 路同口径）
+pokeTapOnce({ x: e.clientX, y: e.clientY, t: Date.now(), id: e.pointerId, fired: false, cancelled: false });
 });
-av.addEventListener('pointercancel', () => { pokeTapP = null; if (pokeLongP) { pokeLongP.cancelled = true; pokeLongCancel(); pokeLongP = null; } });
+av.addEventListener('pointercancel', () => { pokeTapP = null; pokeDblT = null; pokeDblReset(); });
 av.addEventListener('click', (e) => {
 if (Date.now() < pokeTapGuard) { e.preventDefault(); e.stopPropagation(); return; }
 e.stopPropagation();
-openPokeCard();
+pokeTapOnce({ x: e.clientX, y: e.clientY, t: Date.now(), id: 0, fired: false, cancelled: false });
 });
 }
 if (rec.side === 'in' && rec.initiative && !rec.retracted) {
@@ -54447,10 +54552,10 @@ s.set(CK_MISS_KEY + ckToday(), String(n));
 const name = (function () { try { if (window.contactNameOf) return window.contactNameOf(cid); } catch (e) {} return 'TA'; })();
 const action = ckActionSummary(cid);
 if (n >= 3) {
-ckSayTo(cid, '📋 <b>' + name + ' 查岗了</b>：第三次没接电话了，快报备一下在干嘛！', isCur);
-ckSayTo(cid, '📱 <b>行动报告</b>：' + action, isCur);
-ckSayTo(cid, '（查岗升级 · 已自动记录，等 TA 报备）', isCur);
+ckSayTo(cid, '📱 <b>' + name + ' 要查你的手机了</b>：三次没接电话，手机拿来，乖。', isCur);
+ckSayTo(cid, '（查手机中 · 聊天已暂停，看完就还给你）', isCur);
 try { s.set(CK_MISS_KEY + ckToday(), '0'); } catch (e) {} // 报备后清零重计
+try { if (window.startPhoneCheck) window.startPhoneCheck(cid, isCur, true); } catch (e) {}
 } else {
 const ques = ['没接电话，在干嘛呢？', '电话没接上，忙什么呢？', '未接来电，看到快回我！'][(n - 1) % 3];
 ckSayTo(cid, '📋 <b>' + name + ' 查岗</b>：' + ques, isCur);
@@ -54846,6 +54951,123 @@ setTimeout(scheduleCallCheck, (60 + Math.random() * 60) * 1000);
 }
 scheduleCallCheck();
 }, (45 + Math.random() * 75) * 1000);
+const PC_GHOST_LINES = [
+'手机拿来，乖。',
+'屏幕后面藏着谁，嗯？',
+'相册里怎么有别人的影子……删掉，好不好？',
+'你今天给谁发消息了，一条一条念给我听。',
+'别躲，我已经看到了。',
+'占有你的一切，包括这块屏幕。',
+'锁屏密码？你觉得那拦得住我吗，宝宝。',
+'备忘录里写的是谁……哦，是我啊。那没事了。',
+'下次再接不到电话，手机就不是你的了。',
+'乖，把聊天记录打开，我要慢慢看。',
+'夜深了，屏幕的光只该照着我。',
+'你躲在哪里都没用，我闻得到你的气息。'
+];
+const PC_ALBUM_POOL = ['晚霞', '路边的猫', '咖啡拉花', '我们的合影', '窗外的雨', '小蛋糕', '你的背影', '路灯', '玫瑰', '云'];
+const PC_CHAT_POOL = ['「在干嘛」→「在想你」', '「晚安」→「好梦，我的」', '「到家了吗」→「刚到」', '「吃饭没」→「吃了，想你」', '「别熬夜」→「知道啦」', '「在吗」→「在，怎么了」'];
+const PC_ACT_POOL = ['浏览了 3 张照片', '给「TA」发了 2 条消息', '看了 1 次「TA 的朋友圈」', '备忘录更新过', '刷了会儿手机', '点开过聊天框又关上了'];
+let pcTimer = null, pcAutoTimer = null, pcLineIdx = 0, pcChatLocked = false;
+function pcEl(id) { try { return document.getElementById(id); } catch (e) { return null; } }
+function pcClock() {
+const now = new Date();
+return (now.getHours() < 10 ? '0' : '') + now.getHours() + ':' + (now.getMinutes() < 10 ? '0' : '') + now.getMinutes();
+}
+function pcRand(pool) { return pool[Math.floor(Math.random() * pool.length)]; }
+function pcShuffle(a) { const b = a.slice(); for (let i = b.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); const t = b[i]; b[i] = b[j]; b[j] = t; } return b; }
+function pcRenderBody(cid) {
+try {
+const s = ckStoreOf(cid);
+const albumEl = pcEl('pc-album'), chatsEl = pcEl('pc-chats'), memoEl = pcEl('pc-memo'), actEl = pcEl('pc-activity');
+if (albumEl) albumEl.innerHTML = pcShuffle(PC_ALBUM_POOL).slice(0, 4).map(w => '<span class="pc-chip">' + w + '</span>').join('');
+if (chatsEl) chatsEl.innerHTML = pcShuffle(PC_CHAT_POOL).slice(0, 3).map(c => '<div class="pc-chat-line">' + c + '</div>').join('');
+if (memoEl) {
+let memo = '';
+try { memo = (s.get('memo-text') || '').trim(); } catch (e) { memo = ''; }
+memoEl.innerHTML = memo ? '<div class="pc-chat-line">· ' + memo + '</div>' : '<div class="pc-chat-line">· 备忘：记得想你</div>';
+}
+if (actEl) actEl.innerHTML = pcShuffle(PC_ACT_POOL).slice(0, 3).map(a => '<div class="pc-chat-line">· ' + a + '</div>').join('');
+const clk = pcEl('pc-clock');
+if (clk) clk.textContent = pcClock();
+} catch (e) {}
+}
+function pcGhostLoop() {
+const g = pcEl('pc-ghost');
+if (!g) return;
+const line = PC_GHOST_LINES[pcLineIdx % PC_GHOST_LINES.length];
+pcLineIdx++;
+g.textContent = '“' + line + '”';
+g.classList.remove('pc-fade');
+void g.offsetWidth;
+g.classList.add('pc-fade');
+}
+function pcLockChat(lock) {
+pcChatLocked = !!lock;
+try {
+const inp = document.getElementById('chat-input'), send = document.getElementById('chat-send');
+if (inp) inp.disabled = !!lock;
+if (send) send.disabled = !!lock;
+const mask = pcEl('pc-chat-lock');
+if (mask) mask.hidden = !lock;
+const more = document.getElementById('chat-more-btn');
+if (more) more.disabled = !!lock;
+} catch (e) {}
+}
+function startPhoneCheck(cid, isCur, fromMissed) {
+try {
+const panel = pcEl('phone-check-panel');
+if (!panel) return;
+panel.hidden = false;
+pcLineIdx = 0;
+pcRenderBody(cid || (window.__activeCid || 'default'));
+pcGhostLoop();
+const name = (function () { try { if (window.contactNameOf) return window.contactNameOf(cid || (window.__activeCid || 'default')); } catch (e) {} return 'TA'; })();
+const title = pcEl('pc-title');
+if (title) title.textContent = (fromMissed ? name + ' 闯进来了 · ' : '') + 'TA 正在查看你的手机…';
+if (window.playSfx) { try { window.playSfx('in'); } catch (e) {} }
+pcLockChat(true);
+try { if (pcTimer) clearInterval(pcTimer); } catch (e) {}
+pcTimer = setInterval(function () { pcGhostLoop(); }, 2600);
+try { if (pcAutoTimer) clearTimeout(pcAutoTimer); } catch (e) {}
+pcAutoTimer = setTimeout(function () { phoneCheckClose(); }, 25000 + Math.floor(Math.random() * 35000));
+try {
+if (isCur && window.chatAddSystem) window.chatAddSystem('📱 <b>' + name + ' 正在查看你的手机</b>（聊天暂停中…）');
+else if (window.chatAppendToDeskMsg) window.chatAppendToDeskMsg(cid, '📱 <b>' + name + ' 正在查看你的手机</b>（聊天暂停中…）');
+} catch (e) {}
+} catch (e) {}
+}
+function phoneCheckClose() {
+try {
+if (pcTimer) { clearInterval(pcTimer); pcTimer = null; }
+if (pcAutoTimer) { clearTimeout(pcAutoTimer); pcAutoTimer = null; }
+const panel = pcEl('phone-check-panel');
+if (panel) panel.hidden = true;
+pcLockChat(false);
+try {
+const name = (function () { try { if (window.contactNameOf) return window.contactNameOf(window.__activeCid || 'default'); } catch (e) {} return 'TA'; })();
+if (window.chatAddSystem) window.chatAddSystem('📱 <b>' + name + ' 看完手机了</b>：“乖，这次放过你。下次别让我找不到人。”');
+} catch (e) {}
+if (window.playSfx) { try { window.playSfx('out'); } catch (e) {} }
+} catch (e) {}
+}
+(function () {
+const back = pcEl('pc-back');
+if (back) back.addEventListener('click', function () { try { phoneCheckClose(); } catch (e) {} });
+const close = pcEl('pc-close');
+if (close) close.addEventListener('click', function () { try { phoneCheckClose(); } catch (e) {} });
+const done = pcEl('pc-done');
+if (done) done.addEventListener('click', function () { try { phoneCheckClose(); } catch (e) {} });
+const more = document.getElementById('more-phonecheck');
+if (more) more.addEventListener('click', function (e) {
+try { e.stopPropagation(); } catch (x) {}
+try { const mp = document.getElementById('chat-more-panel'); if (mp) mp.hidden = true; } catch (x) {}
+startPhoneCheck(window.__activeCid || 'default', true, false);
+});
+})();
+window.startPhoneCheck = startPhoneCheck;
+window.phoneCheckClose = phoneCheckClose;
+window.__pcLockChat = pcLockChat;
 })();
 } catch (__e) { try { console.error("[JS] call.js", __e && __e.message || __e); } catch (x) {} if (window.__jsErrors) window.__jsErrors.push(String(__e && __e.message || __e)); } })();
 (function () { try {
@@ -84763,4 +84985,4 @@ lastHeal: his
 <!-- __MOCHI_EOF__ -->
 </body>
 </html>
-<!-- __MOCHI_EOF__ mu750l7o -->
+<!-- __MOCHI_EOF__ mu8e136m -->
