@@ -8780,9 +8780,9 @@ box-shadow: 0 2px 10px rgba(255,94,156,.35);
       </div>
     </div>
     <div class="splash-footcard">
-      <div class="splash-ver" id="splash-ver" data-build-ts="1791555555450">
+      <div class="splash-ver" id="splash-ver" data-build-ts="1791559379433">
         <span class="sv-app">love lucky <b>v3.50.0</b></span>
-        <span class="sv-deploy">部署于 2026-10-09 22:19<span id="splash-ver-live"></span></span>
+        <span class="sv-deploy">部署于 2026-10-09 23:22<span id="splash-ver-live"></span></span>
       </div>
       <div class="splash-loading" id="splash-loading">正在加载数据…</div>
       <div class="splash-enter-hint" id="splash-enter-hint" hidden>勾选后即可进入</div>
@@ -11018,8 +11018,9 @@ box-shadow: 0 2px 10px rgba(255,94,156,.35);
             <div class="gs-row"><span>查岗概率</span><div class="stepper" data-k="ckq-prob" data-min="0" data-max="100" data-step="5"><button class="stp-min">−</button><input class="stp-val" id="ckq-prob-val" readonly><button class="stp-max">+</button></div></div>
             <div class="gs-row"><span>自动弹窗概率</span><div class="stepper" data-k="ckq-popup-prob" data-min="0" data-max="100" data-step="5"><button class="stp-min">−</button><input class="stp-val" id="ckq-popup-prob-val" readonly><button class="stp-max">+</button></div></div>
             <div class="gs-row"><span>查岗冷却（分钟）</span><div class="stepper" data-k="ckq-cool" data-min="0" data-max="240" data-step="5"><button class="stp-min">−</button><input class="stp-val" id="ckq-cool-val" readonly><button class="stp-max">+</button></div></div>
+            <div class="gs-row"><span>随机查手机概率</span><div class="stepper" data-k="ck-random-prob" data-min="0" data-max="100" data-step="5"><button class="stp-min">−</button><input class="stp-val" id="ck-random-prob-val" readonly><button class="stp-max">+</button></div></div>
           </div>
-          <div class="gs-sub" style="padding:0 14px 14px">TA 主动找你时按概率来查你的岗：聊天里出现查岗问题卡（单选点击作答、文字题输入作答），作答后 TA 会回应；概率命中时直接弹出回答弹窗。冷却内不重复查岗，需开启「主动发送」，各联系人独立保存。查岗题库可在 字卡库 →「TA的查岗」里逐条开关或自定义添加</div>
+          <div class="gs-sub" style="padding:0 14px 14px">TA 主动找你时按概率来查你的岗：聊天里出现查岗问题卡（单选点击作答、文字题输入作答），作答后 TA 会回应；概率命中时直接弹出回答弹窗。冷却内不重复查岗，需开启「主动发送」，各联系人独立保存。查岗题库可在 字卡库 →「TA的查岗」里逐条开关或自定义添加；「随机查手机概率」在三次未接自动查手机之外，TA 每 8~20 分钟不定时掷一次签，按此概率直接弹出查手机气泡小窗（聊天暂停，看完自动还你），0=只保留未接触发，可随时改，无任何限制</div>
         </div>
         <!-- v3.9.x：其他——联系人主动邀请（猜拳/玩游戏），随 TA 主动找你的消息按概率触发 -->
         <div class="gs-panel" data-rpanel="other" hidden>
@@ -11295,7 +11296,7 @@ box-shadow: 0 2px 10px rgba(255,94,156,.35);
         </span>
         <span class="ch-name">其他互动功能字卡</span>
       </div>
-      <div class="sm-set-hint" style="padding:8px 16px 0">说明：以下为各功能（吃饭 / 经期 / 喝水 / 同频 / 伸手 / 此间 / 衣柜 / 互动回应 / 寻踪日常 / 番茄钟）触发时联系人会使用的自搓字卡或发进聊天的消息，非聊天通用字卡，可逐张开启或关闭。每一项右侧的「使用概率」为该功能触发的概率，可自由调整（0% 即不再出现）；每行都有「功能说明」可点开看触发详情。</div>
+      <div class="sm-set-hint" style="padding:8px 16px 0">说明：以下为各功能（吃饭 / 经期 / 喝水 / 同频 / 伸手 / 此间 / 衣柜 / 天气 / 季节 / 温度 / 状态形容词 / 互动回应）触发时联系人会使用的自搓字卡或发进聊天的消息，非聊天通用字卡，可逐张开启或关闭。每一项右侧的「使用概率」为该功能触发的概率，可自由调整（0% 即不再出现）；每行都有「功能说明」可点开看触发详情。</div>
       <!-- v3.33.x：总开关——其他互动功能字卡可整体开启/关闭（dcf-enabled 键，默认开启）；
            关闭后各功能触发字卡都不再随机出现，各分类概率（底部 dcf-prob-*）仍可独立调整；
            不影响独立入口「联系人跨桌面查岗」。 -->
@@ -38201,9 +38202,10 @@ if (ccExport) {
 const EXPORT_CATS = [
 ['text', '主字卡'], ['kaomoji', '颜文字'], ['emoji', 'emoji'],
 ['sticker', '表情包'], ['image', '图片'], ['poke', '拍一拍'], ['voice', '语音'],
-['fish', '摸鱼'], ['eat', '吃饭'], ['period', '经期'], ['water', '喝水'],
-['sync', '同频'], ['reach', '伸手'], ['cjian', '此间'], ['piggy', '存钱罐'],
-['drift', '漂流瓶'], ['interact', '互动回应']
+['eat', '吃饭'], ['period', '经期'], ['water', '喝水'],
+['sync', '同频'], ['reach', '伸手'], ['cjian', '此间'], ['wardrobe', '衣柜'],
+['weather', '天气'], ['season', '季节'], ['temperature', '温度'],
+['statusadj', '状态形容词'], ['interact', '互动回应'], ['mjfree', '梦角自由造句']
 ];
 const ceMask = document.getElementById('cc-export-mask');
 const ceCats = document.getElementById('ce-cats');
@@ -39795,9 +39797,9 @@ if (liPub) liPub.addEventListener('click', () => openCcPage('public'));
 const li = document.getElementById('li-custom-cards');
 if (li) li.addEventListener('click', () => openCcPage('own'));
 const liFunMine = document.getElementById('li-fun-cards-mine');
-if (liFunMine) liFunMine.addEventListener('click', () => openCcPage('own', 'fish'));
+if (liFunMine) liFunMine.addEventListener('click', () => openCcPage('own', 'eat'));
 const liFunPub = document.getElementById('li-fun-cards-public');
-if (liFunPub) liFunPub.addEventListener('click', () => openCcPage('public', 'fish'));
+if (liFunPub) liFunPub.addEventListener('click', () => openCcPage('public', 'eat'));
 const ccBack = document.getElementById('cc-back');
 if (ccBack) {
 ccBack.addEventListener('click', () => {
@@ -41661,6 +41663,7 @@ const DEFAULTS = {
 'sticker-prob': 10, 'emoji-prob': 5, 'image-prob': 5, 'voice-prob': 10,
 'kaomoji-prob': 5, 'quote-prob': 30,
 'rc-prob': 25, 'rc-refix': 35, 'rc-en': 1, 'cf-prob': 20,
+'ck-random-prob': 30,
 'py-en': 1, 'py-prob': 50, 'py-min': 2, 'py-max': 5,
 'csp-cust': 50,
 'qs-en': 1, 'qs-prob': 25, 'qs-cc': 1, 'qs-one': 1, 'qs-multi': 1, 'qs-noLimit': 0,
@@ -42806,11 +42809,14 @@ window.DEFAULT_CARD_DATA.statusadj = [
 ["状态表达",["今天状态很好。","今天有点提不起劲。","现在的我很放松。","刚充完电，元气满满。","今天忙忙碌碌的，但很充实。","今天心情还不错。","有点累，但还能撑住。","今天的我很安静。","在发呆，也在想你。","状态有点down，但没关系。","恢复中，请稍候。","今天也要元气满满。","你的问候就是我的充电器。"]]
 ];
 window.DEFAULT_CARD_DATA.wardrobe = [
-["穿搭·颜色",["奶白色","雾霾蓝","樱花粉","燕麦色","藏青色","酒红色","浅灰色","米黄色","抹茶绿","香芋紫","焦糖色","墨黑色","奶油黄","天蓝色","豆沙粉"]],
+["穿搭·颜色",["奶白色","雾霾蓝","樱花粉","燕麦色","藏青色","酒红色","浅灰色","米黄色","抹茶绿","香芋紫","焦糖色","墨黑色","奶油黄","天蓝色","豆沙粉","银灰色","炭黑色","宝蓝色","驼色","卡其色"]],
 ["穿搭·款式",["oversize卫衣","针织开衫","白衬衫","百褶裙","直筒裤","风衣","连衣裙","休闲西装","卫裤","半身裙","呢子大衣","T恤","牛仔裤","工装裤","毛衣"]],
 ["穿搭·风格",["温柔风","休闲风","韩系简约","日系清新","轻熟风","学院风","慵懒风","甜美风","街头风","职场风","复古风","运动风","法式风","奶fufu风"]],
-["穿搭·饰品",["银项链","珍珠耳钉","帆布包","手表","发圈","锁骨链","棒球帽","戒指","围巾","腰带","墨镜","手链","贝雷帽","小熊挂件"]],
-["穿搭·搭配",["今天穿了件{m}，配{m}","今天的配色是{m}，好看吗","风格是{m}，感觉怎么样","戴了{m}，你觉得搭吗","今天这套是{m}+{m}","出门前纠结了很久，最后选了{m}","这件{m}是上次你夸过的","今天走{m}路线","新入的{m}，第一个给你看","今天简单点，就{m}吧"]]
+["穿搭·饰品",["银项链","珍珠耳钉","帆布包","手表","发圈","锁骨链","棒球帽","戒指","围巾","腰带","墨镜","手链","贝雷帽","小熊挂件","袖扣","领带夹","胸针","皮质手环","怀表"]],
+["穿搭·TA款式",["oversize卫衣","针织开衫","白衬衫","直筒裤","风衣","休闲西装","卫裤","呢子大衣","T恤","牛仔裤","工装裤","毛衣","总裁西装","双排扣西装","三件套西装","修身西装裤","高定大衣","定制白衬衫","衬衫配马甲","直筒西裤","大衣配西裤","禁欲系长外套"]],
+["穿搭·TA饰品",["袖扣","领带夹","胸针","皮质手环","怀表","手表","墨镜","皮带","银戒指","口袋巾","深色围巾","机械腕表"]],
+["穿搭·TA风格",["温柔风","休闲风","韩系简约","日系清新","轻熟风","学院风","慵懒风","甜美风","街头风","职场风","复古风","运动风","法式风","奶fufu风","老钱风（低调、讲究、不张扬的贵气）","霸总风（气场全开，什么都替你做主）","禁欲系（衬衫扣到最上面一颗）","绅士风（骨子里的教养和分寸）","商务精英（衬衫领带，行程满档）","高智感（沉稳、克制、有分寸）","硬朗风（干脆利落，说一不二）","贵气慵懒（随意里都是讲究）","雅痞风（西装下藏着一点野）","冷峻风（话少，眼里只有你）","世家公子（举手投足都是规矩）","成熟稳重（靠得住，说了就算）"]],
+["穿搭·搭配",["今天穿了件{m}，配{m}","今天的配色是{m}，好看吗","风格是{m}，感觉怎么样","戴了{m}，你觉得搭吗","今天这套是{m}+{m}","出门前纠结了很久，最后选了{m}","这件{m}是上次你夸过的","今天走{m}路线","新入的{m}，第一个给你看","今天简单点，就{m}吧","我挑的{m}，合不合你眼缘","这套{m}，你说了算"]],
 ];
 } catch (__e) { try { console.error("[JS] default-cards-data.js", __e && __e.message || __e); } catch (x) {} if (window.__jsErrors) window.__jsErrors.push(String(__e && __e.message || __e)); } })();
 </script>
@@ -55351,6 +55357,31 @@ window.addEventListener('touchend', end);
 if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', pcBindClose); else pcBindClose();
 window.startPhoneCheck = startPhoneCheck;
 window.phoneCheckClose = phoneCheckClose;
+function ckRandomProb() {
+try {
+const cfg = window.replyCfg ? window.replyCfg() : null;
+const v = cfg ? cfg['ck-random-prob'] : 30;
+const n = Number(v); return isNaN(n) ? 30 : Math.max(0, Math.min(100, n));
+} catch (e) { return 30; }
+}
+let pcRandTimer = 0;
+function scheduleRandomPhoneCheck() {
+clearTimeout(pcRandTimer);
+const gap = 480000 + Math.random() * 720000; // 8~20 分钟随机间隔，不定时
+pcRandTimer = setTimeout(function () {
+try {
+if (Math.random() * 100 < ckRandomProb()) {
+const cid = window.__activeCid || 'default';
+const name = (function () { try { if (window.contactNameOf) return window.contactNameOf(cid); } catch (e) {} return 'TA'; })();
+ckSayTo(cid, '📱 <b>' + name + ' 又不打招呼来查岗了</b>：想你了，看看你在干嘛。', true);
+ckSayTo(cid, '（TA 开始翻你手机 · 聊天暂停，看完就还你）', true);
+try { if (window.startPhoneCheck) window.startPhoneCheck(cid, true, false); } catch (e) {}
+}
+} catch (e) {}
+scheduleRandomPhoneCheck();
+}, gap);
+}
+setTimeout(function () { try { scheduleRandomPhoneCheck(); } catch (e) {} }, 120000 + Math.random() * 300000);
 })();
 } catch (__e) { try { console.error("[JS] call.js", __e && __e.message || __e); } catch (x) {} if (window.__jsErrors) window.__jsErrors.push(String(__e && __e.message || __e)); } })();
 (function () { try {
@@ -84140,19 +84171,28 @@ const home = document.getElementById('page-phone');
 if (home) home.hidden = false;
 }
 function wardrobeGroups() {
-const out = [];
+const out = { my: [], ta: [] };
+const raw = [];
 try {
-const gs = (window.getDefaultCardGroups && window.getDefaultCardGroups('main')) || [];
-gs.forEach(g => {
-if (!g || typeof g[0] !== 'string') return;
-if (g[0].indexOf('穿搭') === 0) out.push(g);
+(window.getDefaultCardGroups && window.getDefaultCardGroups('main') || []).forEach(g => {
+if (g && typeof g[0] === 'string' && g[0].indexOf('穿搭') === 0) raw.push(g);
 });
 } catch (e) {}
 try {
 (window.DEFAULT_CARD_DATA && window.DEFAULT_CARD_DATA.wardrobe || []).forEach(g => {
-if (g && typeof g[0] === 'string' && g[0].indexOf('穿搭') === 0 && !out.some(x => x[0] === g[0])) out.push(g);
+if (g && typeof g[0] === 'string' && g[0].indexOf('穿搭') === 0 && !raw.some(x => x[0] === g[0])) raw.push(g);
 });
 } catch (e) {}
+raw.forEach(g => {
+const gn = g[0];
+if (gn.indexOf('TA饰品') >= 0) { out.ta.push({ g: g, cat: 'accessory' }); }
+else if (gn.indexOf('TA款式') >= 0) { out.ta.push({ g: g, cat: 'style' }); }
+else if (gn.indexOf('TA风格') >= 0) { out.ta.push({ g: g, cat: 'look' }); }
+else if (gn.indexOf('款式') >= 0) { out.my.push({ g: g, cat: 'style' }); }
+else if (gn.indexOf('风格') >= 0) { out.my.push({ g: g, cat: 'look' }); }
+else if (gn.indexOf('颜色') >= 0) { out.my.push({ g: g, cat: 'color' }); out.ta.push({ g: g, cat: 'color' }); }
+else if (gn.indexOf('饰品') >= 0) { out.my.push({ g: g, cat: 'accessory' }); }
+});
 return out;
 }
 function catFor(gn) {
@@ -84175,15 +84215,13 @@ try {
 const p = taAutoProb();
 if (Math.random() * 100 >= p) return false;
 const gs = wardrobeGroups();
-if (!gs.length) return false;
+if (!gs.ta.length) return false;
 const d = load();
 d['ta'] = d['ta'] || {};
-gs.forEach(g => {
-const cat = catFor(g[0]);
-if (cat === 'other') return;
-const words = (g[1] || []).filter(Boolean);
+gs.ta.forEach(o => {
+const words = (o.g[1] || []).filter(Boolean);
 if (!words.length) return;
-d['ta'][cat] = words[Math.floor(Math.random() * words.length)];
+d['ta'][o.cat] = words[Math.floor(Math.random() * words.length)];
 });
 save(d);
 try {
@@ -84199,9 +84237,44 @@ taSay(lines[Math.floor(Math.random() * lines.length)], 1500 + Math.random() * 25
 return true;
 } catch (e) { return false; }
 }
+function taMyAutoProb() {
+try {
+const s = store(); if (!s || !s.get) return 30;
+const v = s.get('ta-wardrobe-auto-my');
+if (v === null || v === undefined || v === '') return 30;
+const n = Number(v); return isNaN(n) ? 30 : Math.max(0, Math.min(100, n));
+} catch (e) { return 30; }
+}
+function taChangeMyOutfit() {
+try {
+const p = taMyAutoProb();
+if (Math.random() * 100 >= p) return false;
+const gs = wardrobeGroups();
+if (!gs.my.length) return false;
+const d = load();
+d['my'] = d['my'] || {};
+gs.my.forEach(o => {
+const words = (o.g[1] || []).filter(Boolean);
+if (!words.length) return;
+d['my'][o.cat] = words[Math.floor(Math.random() * words.length)];
+});
+save(d);
+try {
+const root = el('wardrobe-root');
+if (root && !root.closest('.page').hidden) renderPage();
+else renderPreview();
+} catch (e) {}
+const t = outfitText('my') || '';
+if (t) {
+const lines = ['我替你挑好了：' + t + '，就穿这套，不许换。', '这件我选的，' + t + '，你只能听我的。', '我眼光你还不信？穿' + t + '。', '衣柜我翻过了，你明天穿' + t + '。'];
+taSay(lines[Math.floor(Math.random() * lines.length)], 2000 + Math.random() * 3000);
+}
+return true;
+} catch (e) { return false; }
+}
 function scheduleTaOutfit() {
 try {
-setTimeout(function () { try { taChangeOutfit(); } catch (e) {} }, 9000 + Math.random() * 16000);
+setTimeout(function () { try { taChangeOutfit(); taChangeMyOutfit(); } catch (e) {} }, 9000 + Math.random() * 16000);
 } catch (e) {}
 }
 function renderPage() {
@@ -84217,24 +84290,25 @@ html.push('<div class="wx-chips">' + ['0', '25', '50', '75', '100'].map(x => '<s
 html.push('<div class="wx-sum" style="font-size:12px;opacity:.7;margin-top:2px">0=TA 不主动换穿搭；越高换得越勤。可随时改，无任何限制</div>');
 html.push('</div>');
 html.push('<div class="cal-card glass">');
+html.push('<div class="cal-card-title">梦角更改我的穿搭概率</div>');
+html.push('<div class="wx-chips">' + ['0', '25', '50', '75', '100'].map(x => '<span class="wx-opt' + (String(taMyAutoProb()) === x ? ' sel' : '') + '" data-wr-side="ta-auto-my" data-wr-cat="prob" data-val="' + x + '">' + x + '</span>').join('') + '</div>');
+html.push('<div class="wx-sum" style="font-size:12px;opacity:.7;margin-top:2px">0=TA 不动我的穿搭；越高 TA 越爱替我挑。可随时改，无任何限制</div>');
+html.push('</div>');
+html.push('<div class="cal-card glass">');
 html.push('<div class="cal-card-title">我的穿搭</div>');
 html.push('<div class="wr-side" data-wr-side="my">');
-gs.forEach(g => {
-const cat = catFor(g[0]);
-if (cat === 'other') return; // 搭配模板不参与选择
-html.push('<div class="wr-cat"><span class="wr-cat-name">' + g[0] + '</span><div class="wx-chips">');
-html.push(chips((g[1] || []).filter(Boolean), 'my', cat));
+gs.my.forEach(o => {
+html.push('<div class="wr-cat"><span class="wr-cat-name">' + o.g[0] + '</span><div class="wx-chips">');
+html.push(chips((o.g[1] || []).filter(Boolean), 'my', o.cat));
 html.push('</div></div>');
 });
 html.push('</div></div>');
 html.push('<div class="cal-card glass">');
 html.push('<div class="cal-card-title">' + partnerName() + ' 的穿搭</div>');
 html.push('<div class="wr-side" data-wr-side="ta">');
-gs.forEach(g => {
-const cat = catFor(g[0]);
-if (cat === 'other') return;
-html.push('<div class="wr-cat"><span class="wr-cat-name">' + g[0] + '</span><div class="wx-chips">');
-html.push(chips((g[1] || []).filter(Boolean), 'ta', cat));
+gs.ta.forEach(o => {
+html.push('<div class="wr-cat"><span class="wr-cat-name">' + o.g[0] + '</span><div class="wx-chips">');
+html.push(chips((o.g[1] || []).filter(Boolean), 'ta', o.cat));
 html.push('</div></div>');
 });
 html.push('</div></div>');
@@ -84251,6 +84325,11 @@ x.addEventListener('click', function () {
 const side = this.dataset.wrSide, cat = this.dataset.wrCat, val = this.dataset.val;
 if (side === 'ta-auto' && cat === 'prob') {
 const s = store(); if (s && s.set) s.set('ta-wardrobe-auto', val);
+renderPage();
+return;
+}
+if (side === 'ta-auto-my' && cat === 'prob') {
+const s = store(); if (s && s.set) s.set('ta-wardrobe-auto-my', val);
 renderPage();
 return;
 }
@@ -84320,7 +84399,7 @@ scheduleTaOutfit();
 });
 bind('wardrobe-back', function () { backHome(el('page-wardrobe')); });
 })();
-setTimeout(function () { try { taChangeOutfit(); } catch (e) {} }, 7000 + Math.random() * 10000);
+setTimeout(function () { try { taChangeOutfit(); taChangeMyOutfit(); } catch (e) {} }, 7000 + Math.random() * 10000);
 document.addEventListener('contact-switched', function () {
 try { scheduleTaOutfit(); } catch (e) {}
 });
@@ -85977,4 +86056,4 @@ lastHeal: his
 <!-- __MOCHI_EOF__ -->
 </body>
 </html>
-<!-- __MOCHI_EOF__ mv11x5ru -->
+<!-- __MOCHI_EOF__ mv1474dl -->
