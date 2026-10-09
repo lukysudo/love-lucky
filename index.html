@@ -887,11 +887,11 @@ top:-24px !important; left:-24px !important; right:-24px !important; bottom:-24p
 }
 .page-slide { zoom:var(--desk-font-scale, 1); }
 .deco-widget, .mini-row, .checkin, .weekend-box, .music-widget,
-.week-card, .desk-period, .app-grid { zoom:var(--desk-card-scale, 1); }
+.week-card, .desk-period, .desk-weather, .app-grid { zoom:var(--desk-card-scale, 1); }
 @media (max-width: 900px) {
 .page-slide,
 .deco-widget, .mini-row, .checkin, .weekend-box, .music-widget,
-.week-card, .desk-period, .app-grid { zoom:1; }
+.week-card, .desk-period, .desk-weather, .app-grid { zoom:1; }
 }
 .deco-widget {
 position:relative; height:190px; border-radius:26px;
@@ -1379,6 +1379,18 @@ cursor:pointer; -webkit-tap-highlight-color:transparent;
 .week-day.today { background:var(--ink); color:#fff; cursor:default; }
 .week-day.today b { color:#fff; }
 .week-day:not(.today):active { background:rgba(0,0,0,.10); }
+.desk-weather { border-radius:20px; padding:8px 14px; margin-bottom:14px; height:92px; overflow:hidden; box-sizing:border-box; display:flex; flex-direction:column; justify-content:center; cursor:pointer; -webkit-tap-highlight-color:transparent; }
+.desk-weather .dw-inner { display:flex; flex-direction:column; gap:3px; }
+.desk-weather .dw-head { display:flex; align-items:center; justify-content:space-between; font-size:11px; color:var(--muted); letter-spacing:1px; }
+.desk-weather .dw-season { font-size:11px; color:var(--muted); }
+.desk-weather .dw-row { display:flex; align-items:center; justify-content:space-between; gap:8px; }
+.desk-weather .dw-side { display:flex; align-items:center; gap:6px; min-width:0; }
+.desk-weather .dw-side-name { font-size:11px; color:var(--muted); white-space:nowrap; }
+.desk-weather .dw-side-w { font-size:13px; font-weight:600; color:var(--ink); white-space:nowrap; }
+.desk-weather .dw-side-t { font-size:11px; color:var(--muted); white-space:nowrap; }
+.desk-weather .dw-vs { font-size:12px; color:var(--muted); flex-shrink:0; }
+.desk-weather .dw-tip { font-size:11px; color:var(--muted); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; line-height:15px; }
+.desk-weather:active { opacity:.75; }
 .desk-msg {
 position:fixed; top:calc(12px + env(safe-area-inset-top, 0px)); left:50%; transform:translateX(-50%);
 z-index:89; width:min(320px, calc(100% - 24px));
@@ -3222,6 +3234,51 @@ padding:10px 4px 4px; letter-spacing:.2px;
 }
 .cal-scroll { flex:1; overflow-y:auto; scrollbar-width:none; -ms-overflow-style:none; padding:0 18px; }
 .cal-scroll::-webkit-scrollbar { display:none; }
+.wx-intro, .wd-intro { font-size:12px; line-height:1.6; color:var(--muted); padding:12px 4px 4px; letter-spacing:.2px; }
+.wx-panel, .wd-panel { border-radius:20px; padding:14px; margin-bottom:14px; }
+.wx-panel-title, .wd-panel-title { font-size:13px; font-weight:600; color:var(--ink); margin-bottom:10px; }
+.wx-sub { font-size:11px; color:var(--muted); font-weight:400; margin-left:6px; }
+.wx-opts, .wd-opts { display:flex; flex-wrap:wrap; gap:8px; }
+.wx-chips { display:flex; flex-wrap:wrap; gap:8px; margin-bottom:10px; }
+.wx-sum { border-radius:16px; padding:12px 14px; margin-top:4px; background:rgba(246,165,192,.12); }
+.wx-sum-line { font-size:13px; font-weight:600; color:var(--ink); margin-bottom:6px; line-height:1.5; }
+.wx-sum-tip { font-size:12px; line-height:1.6; color:var(--muted); }
+.wx-opt, .wd-opt {
+border:1px solid rgba(0,0,0,.12); background:rgba(255,255,255,.85); color:var(--ink);
+border-radius:12px; padding:6px 12px; font-size:12.5px; cursor:pointer;
+-webkit-tap-highlight-color:transparent; transition:all .15s;
+}
+.wx-opt.sel, .wd-opt.sel { background:var(--ink, #f6a5c0); color:#fff; border-color:transparent; }
+.wx-opt:active, .wd-opt:active { opacity:.75; }
+.wx-tmp-wrap { display:flex; align-items:center; justify-content:center; gap:14px; margin-top:12px; }
+.wx-tmp {
+width:34px; height:34px; border-radius:50%; border:1px solid rgba(0,0,0,.12);
+background:rgba(255,255,255,.85); color:var(--ink); font-size:16px; cursor:pointer;
+display:flex; align-items:center; justify-content:center;
+}
+.wx-tmp-val { font-size:15px; font-weight:600; color:var(--ink); min-width:52px; text-align:center; }
+.wx-tipbox { border-radius:20px; padding:14px; margin-top:4px; font-size:13px; line-height:1.6; color:var(--ink); }
+.wd-preview { border-radius:20px; padding:14px; margin-top:4px; display:flex; align-items:center; gap:12px; }
+.wd-preview-mannequin svg { width:44px; height:44px; color:var(--muted); flex-shrink:0; }
+.wd-preview-txt { flex:1; font-size:13px; line-height:1.6; color:var(--ink); }
+.wd-preview-actions { display:flex; flex-direction:column; gap:8px; flex-shrink:0; }
+.wd-btn {
+border:none; border-radius:12px; padding:8px 12px; font-size:12px; cursor:pointer;
+background:rgba(0,0,0,.06); color:var(--ink); -webkit-tap-highlight-color:transparent;
+}
+.wd-btn-main { background:var(--ink, #f6a5c0); color:#fff; }
+.wd-btn:active { opacity:.8; }
+.wr-side { display:flex; flex-direction:column; gap:12px; }
+.wr-cat-name { font-size:12px; font-weight:600; color:var(--muted); display:block; margin-bottom:8px; letter-spacing:.5px; }
+.wr-preview { border-radius:16px; padding:12px 14px; background:rgba(246,165,192,.12); }
+.wr-preview-line { font-size:13px; line-height:1.6; color:var(--ink); }
+.wr-preview-line b { font-weight:600; }
+.wr-actions { display:flex; gap:10px; margin-top:12px; }
+.wr-send {
+flex:1; border:none; border-radius:12px; padding:10px; font-size:13px; cursor:pointer;
+background:var(--ink, #f6a5c0); color:#fff; -webkit-tap-highlight-color:transparent;
+}
+.wr-send:active { opacity:.8; }
 .cal-card {
 border-radius:20px; padding:18px; margin-bottom:14px;
 background:rgba(255,255,255,.92);
@@ -4578,6 +4635,10 @@ padding:10px 14px 0;
 }
 .mail-paper-body { padding:8px 14px 14px; font-size:13px; color:#333; line-height:24px; word-break:break-word; white-space:pre-wrap; }
 .mail-body-img { max-width:100px; max-height:100px; border-radius:8px; display:inline-block; vertical-align:middle; margin:2px 3px; cursor:zoom-in; }
+.mail-retract-wrap { position:relative; display:inline-block; vertical-align:middle; margin:2px; }
+.mail-insert-wrap .mail-body-img, .mail-retract-wrap .mail-body-img { margin:0; }
+.mail-insert-del { position:absolute; top:-9px; right:-9px; width:18px; height:18px; line-height:16px; text-align:center; font-size:11px; border-radius:50%; background:rgba(60,50,80,.62); color:#fff; border:none; cursor:pointer; padding:0; z-index:2; }
+.mail-retracted { display:inline-block; padding:3px 10px; border-radius:8px; background:#f5f1f8; color:#8a7a9c; font-size:12px; cursor:pointer; }
 .mail-actions { display:flex; gap:8px; margin-top:6px; }
 .mail-reply-form { margin-bottom:8px; }
 .mail-reply-hint { font-size:12px; color:var(--muted); text-align:center; margin-bottom:10px; }
@@ -5251,6 +5312,17 @@ margin-top:8px; max-width:100%;
 .feed-imgs img {
 width:100%; aspect-ratio:1/1; object-fit:cover;
 border-radius:8px; display:block; background:#f2f2f2;
+}
+.feed-img-wrap { position:relative; display:block; }
+.feed-img-wrap img { width:100%; aspect-ratio:1/1; object-fit:cover; border-radius:8px; display:block; background:#f2f2f2; }
+.feed-img-retract {
+position:absolute; top:4px; right:4px; width:18px; height:18px; line-height:16px; text-align:center;
+font-size:11px; border-radius:50%; background:rgba(60,50,80,.6); color:#fff; border:none;
+cursor:pointer; padding:0; opacity:.85; z-index:2;
+}
+.feed-retracted {
+display:inline-block; padding:10px 12px; border-radius:8px; background:#f5f1f8;
+color:#8a7a9c; font-size:12px; cursor:pointer; opacity:.8;
 }
 .feed-flash {
 animation: feedFlash 1.6s ease 2;
@@ -8708,9 +8780,9 @@ box-shadow: 0 2px 10px rgba(255,94,156,.35);
       </div>
     </div>
     <div class="splash-footcard">
-      <div class="splash-ver" id="splash-ver" data-build-ts="1789827357490">
+      <div class="splash-ver" id="splash-ver" data-build-ts="1791552690859">
         <span class="sv-app">love lucky <b>v3.50.0</b></span>
-        <span class="sv-deploy">部署于 2026-09-19 22:15<span id="splash-ver-live"></span></span>
+        <span class="sv-deploy">部署于 2026-10-09 21:31<span id="splash-ver-live"></span></span>
       </div>
       <div class="splash-loading" id="splash-loading">正在加载数据…</div>
       <div class="splash-enter-hint" id="splash-enter-hint" hidden>勾选后即可进入</div>
@@ -8848,6 +8920,18 @@ box-shadow: 0 2px 10px rgba(255,94,156,.35);
 <div class="mc-top">今天的心情</div>
 <div class="mc-b" id="today-mood-text">点一下选心情</div>
 </div>
+</div>
+<!-- 2026-10-09 天气模块：双方天气自主选择 + 穿衣提醒（主页第二页，参考 QQ 情侣空间） -->
+<div class="desk-weather glass" data-desk-widget="desk-weather" data-card-bg="desk-weather" id="desk-weather" title="点击设置天气">
+  <div class="dw-inner">
+    <div class="dw-head"><span class="dw-title">今天天气</span><span class="dw-season" id="dw-season">—</span></div>
+    <div class="dw-row">
+      <div class="dw-side"><span class="dw-side-name" id="dw-my-name">我</span><span class="dw-side-w" id="dw-my-w">—</span><span class="dw-side-t" id="dw-my-t">—</span></div>
+      <div class="dw-vs">⇄</div>
+      <div class="dw-side"><span class="dw-side-name" id="dw-ta-name">TA</span><span class="dw-side-w" id="dw-ta-w">—</span><span class="dw-side-t" id="dw-ta-t">—</span></div>
+    </div>
+    <div class="dw-tip" id="dw-tip">点击设置双方天气</div>
+  </div>
 </div>
 <!-- 功能图标（动态注入 喝水/吃什么/存钱罐/番茄钟/心意市集/心意柜/备忘录） -->
 <div class="app-grid p3-grid" data-app="p3" data-desk-widget="p3apps">
@@ -9765,16 +9849,18 @@ box-shadow: 0 2px 10px rgba(255,94,156,.35);
         <button class="cc-tab" data-type="voice"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0014 0M12 18v3"/></svg>语音</button>
         <!-- v3.32.x：其他互动功能字卡（自定义）——与系统预设【其他互动功能字卡】同分类，
              用户自建的功能字卡存本作用域 cc-groups 同名字段，各功能经 getLibPool 并入抽取；
-             13 个功能 tab 仅「其他互动功能字卡」入口显示，公用/专属入口隐藏（openCcPage 按入口切换） -->
-        <button class="cc-tab" data-type="fish">摸鱼</button>
+             2026-10-09 需求③：删除摸鱼/存钱罐/漂流瓶分组，新增穿搭衣柜分组 -->
         <button class="cc-tab" data-type="eat">吃饭</button>
         <button class="cc-tab" data-type="period">经期</button>
         <button class="cc-tab" data-type="water">喝水</button>
         <button class="cc-tab" data-type="sync">同频</button>
         <button class="cc-tab" data-type="reach">伸手</button>
         <button class="cc-tab" data-type="cjian">此间</button>
-        <button class="cc-tab" data-type="piggy">存钱罐</button>
-        <button class="cc-tab" data-type="drift">漂流瓶</button>
+        <button class="cc-tab" data-type="wardrobe">衣柜</button>
+        <button class="cc-tab" data-type="weather">天气</button>
+        <button class="cc-tab" data-type="season">季节</button>
+        <button class="cc-tab" data-type="temperature">温度</button>
+        <button class="cc-tab" data-type="statusadj">状态形容词</button>
         <button class="cc-tab" data-type="interact">互动回应</button>
         <!-- #317 梦角自由造句：程序生成（梦角说话截字重造句自动入库），这里可查看/删除 -->
         <button class="cc-tab" data-type="mjfree">梦角自由造句</button>
@@ -9863,6 +9949,11 @@ box-shadow: 0 2px 10px rgba(255,94,156,.35);
         <div class="set-row" id="row-featurehub">
           <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="#111111" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/><path d="M11 8v6"/><path d="M8 11h6"/></svg></div>
           <div class="txt">功能大全<span class="sub">全应用功能索引 · 可搜索 · 点条目直达</span></div>
+          <div class="arrow"><svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg></div>
+        </div>
+        <div class="set-row" id="row-presence-custom">
+          <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="#111111" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 3a9 9 0 000 18"/><circle cx="12" cy="12" r="2"/></svg></div>
+          <div class="txt">在线状态自定义<span class="sub">自定 TA 的状态词 / 固定某状态</span></div>
           <div class="arrow"><svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg></div>
         </div>
         <div class="set-row" id="row-about">
@@ -11012,9 +11103,46 @@ box-shadow: 0 2px 10px rgba(255,94,156,.35);
       </div>
     </div>
 
-    <!-- 音效设置（独立页面） -->
-    <div class="page" id="page-sfx-settings" hidden>
+    <!-- 在线状态自定义（需求④：自定 TA 的状态形容词 / 离开理由 / 固定某状态） -->
+    <div class="page" id="page-presence-custom" hidden>
       <div class="chat-head">
+        <span class="ch-back" id="pcs-back">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#111111" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+        </span>
+        <span class="ch-name">在线状态自定义</span>
+      </div>
+      <div class="gs-scroll">
+        <div class="sm-set-hint" style="padding:8px 16px 0">TA 的在线状态在「在线 / 离开 / 离线」之间完全随机切换（昼夜无差别）。这里可自定义 TA 在线时/离开时的状态描述词，也可把 TA 固定在某一个状态。状态词按当前桌面对应的联系人各自保存。</div>
+        <div class="gs-title">固定状态</div>
+        <div class="set-group glass">
+          <div class="gs-row"><span>不固定（保持随机）</span><label class="toggle"><input type="checkbox" id="pcs-auto"><span class="tk"></span></label></div>
+          <div class="gs-row"><span>固定为在线</span><label class="toggle"><input type="checkbox" id="pcs-online"><span class="tk"></span></label></div>
+          <div class="gs-row"><span>固定为离开</span><label class="toggle"><input type="checkbox" id="pcs-away"><span class="tk"></span></label></div>
+          <div class="gs-row"><span>固定为离线</span><label class="toggle"><input type="checkbox" id="pcs-offline"><span class="tk"></span></label></div>
+        </div>
+        <div class="gs-title">在线状态词（TA 在线时显示「在线 · 在做什么」）</div>
+        <div class="set-group glass">
+          <div class="gs-row"><span>使用系统随机状态词</span><label class="toggle"><input type="checkbox" id="pcs-use-sys-mood"><span class="tk"></span></label></div>
+          <div class="gs-sub" style="padding:0 12px 10px">关闭后，仅从下方自定义列表里选词。系统默认词：在学习 / 在忙工作 / 在摸鱼 / 在散步 / 在听歌 / 在发呆 / 在想你 等。</div>
+          <textarea class="pcs-textarea" id="pcs-moods" placeholder="一行一个自定义状态词，例如：&#10;在盯着你回消息&#10;在吃醋&#10;在等你主动找我" style="width:100%;box-sizing:border-box;min-height:88px;border:1px solid rgba(0,0,0,.12);border-radius:12px;padding:10px 12px;font-size:13px;background:rgba(255,255,255,.85);color:var(--ink);"></textarea>
+          <div class="gs-sub" style="padding:6px 12px 0">系统预设形容词（字卡库「状态形容词」分组同源）可点击追加到上方：</div>
+          <div class="pcs-sys-tags" id="pcs-sys-mood-tags" style="display:flex;flex-wrap:wrap;gap:6px;padding:4px 12px 12px"></div>
+        </div>
+        <div class="gs-title">离开理由（TA 离开时显示「离开 · 原因」）</div>
+        <div class="set-group glass">
+          <div class="gs-row"><span>使用系统随机离开理由</span><label class="toggle"><input type="checkbox" id="pcs-use-sys-away"><span class="tk"></span></label></div>
+          <div class="gs-sub" style="padding:0 12px 10px">关闭后，仅从下方自定义列表里选。系统默认：出门办点事 / 在开会 / 在午休 / 在忙 / 暂时离开一下 / 在赶路 / 在办正事。</div>
+          <textarea class="pcs-textarea" id="pcs-aways" placeholder="一行一个自定义离开理由" style="width:100%;box-sizing:border-box;min-height:72px;border:1px solid rgba(0,0,0,.12);border-radius:12px;padding:10px 12px;font-size:13px;background:rgba(255,255,255,.85);color:var(--ink);"></textarea>
+        </div>
+        <div class="gs-title">保存</div>
+        <div class="set-group glass">
+          <div class="gs-row"><button class="pcs-save" id="pcs-save" style="flex:1;border:none;border-radius:12px;padding:12px;background:var(--ink,#f6a5c0);color:#fff;font-size:14px;">保存状态设置</button></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 音效设置（独立页面） -->
+    <div class="page" id="page-sfx-settings" hidden>      <div class="chat-head">
         <span class="ch-back" id="sfx-back">
           <svg viewBox="0 0 24 24" fill="none" stroke="#111111" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
         </span>
@@ -11167,7 +11295,7 @@ box-shadow: 0 2px 10px rgba(255,94,156,.35);
         </span>
         <span class="ch-name">其他互动功能字卡</span>
       </div>
-      <div class="sm-set-hint" style="padding:8px 16px 0">说明：以下为各功能（摸鱼 / 吃饭 / 经期 / 喝水 / 同频 / 伸手 / 此间 / 存钱罐 / 漂流瓶 / 互动回应 / 寻踪日常 / 番茄钟）触发时联系人会使用的自搓字卡或发进聊天的消息，非聊天通用字卡，可逐张开启或关闭。每一项右侧的「使用概率」为该功能触发的概率，可自由调整（0% 即不再出现）；每行都有「功能说明」可点开看触发详情。</div>
+      <div class="sm-set-hint" style="padding:8px 16px 0">说明：以下为各功能（吃饭 / 经期 / 喝水 / 同频 / 伸手 / 此间 / 衣柜 / 互动回应 / 寻踪日常 / 番茄钟）触发时联系人会使用的自搓字卡或发进聊天的消息，非聊天通用字卡，可逐张开启或关闭。每一项右侧的「使用概率」为该功能触发的概率，可自由调整（0% 即不再出现）；每行都有「功能说明」可点开看触发详情。</div>
       <!-- v3.33.x：总开关——其他互动功能字卡可整体开启/关闭（dcf-enabled 键，默认开启）；
            关闭后各功能触发字卡都不再随机出现，各分类概率（底部 dcf-prob-*）仍可独立调整；
            不影响独立入口「联系人跨桌面查岗」。 -->
@@ -11180,15 +11308,17 @@ box-shadow: 0 2px 10px rgba(255,94,156,.35);
         <div class="gs-row" id="dcf-prob-expander-row" style="cursor:pointer"><span>各功能使用概率调节（点此展开 / 收起）</span><span id="dcf-prob-expander-arrow">▾</span></div>
       </div>
       <div class="set-group glass" id="dcf-prob-box" hidden style="margin:0 12px 0">
-        <div class="gs-row"><span>摸鱼字卡概率</span><div class="stepper" id="dcf-prob-fish" data-min="0" data-max="100" data-step="5"><button class="stp-min">−</button><input class="stp-val" id="dcf-prob-fish-val" readonly><button class="stp-max">+</button></div></div>
         <div class="gs-row"><span>吃饭字卡概率</span><div class="stepper" id="dcf-prob-eat" data-min="0" data-max="100" data-step="5"><button class="stp-min">−</button><input class="stp-val" id="dcf-prob-eat-val" readonly><button class="stp-max">+</button></div></div>
         <div class="gs-row"><span>经期字卡概率（温柔前缀/动作/经期关心）</span><div class="stepper" id="dcf-prob-period" data-min="0" data-max="100" data-step="5"><button class="stp-min">−</button><input class="stp-val" id="dcf-prob-period-val" readonly><button class="stp-max">+</button></div></div>
         <div class="gs-row"><span>喝水字卡概率</span><div class="stepper" id="dcf-prob-water" data-min="0" data-max="100" data-step="5"><button class="stp-min">−</button><input class="stp-val" id="dcf-prob-water-val" readonly><button class="stp-max">+</button></div></div>
         <div class="gs-row"><span>同频字卡概率</span><div class="stepper" id="dcf-prob-sync" data-min="0" data-max="100" data-step="5"><button class="stp-min">−</button><input class="stp-val" id="dcf-prob-sync-val" readonly><button class="stp-max">+</button></div></div>
         <div class="gs-row"><span>伸手字卡概率</span><div class="stepper" id="dcf-prob-reach" data-min="0" data-max="100" data-step="5"><button class="stp-min">−</button><input class="stp-val" id="dcf-prob-reach-val" readonly><button class="stp-max">+</button></div></div>
         <div class="gs-row"><span>此间字卡概率</span><div class="stepper" id="dcf-prob-cjian" data-min="0" data-max="100" data-step="5"><button class="stp-min">−</button><input class="stp-val" id="dcf-prob-cjian-val" readonly><button class="stp-max">+</button></div></div>
-        <div class="gs-row"><span>存钱罐字卡概率</span><div class="stepper" id="dcf-prob-piggy" data-min="0" data-max="100" data-step="5"><button class="stp-min">−</button><input class="stp-val" id="dcf-prob-piggy-val" readonly><button class="stp-max">+</button></div></div>
-        <div class="gs-row"><span>漂流瓶字卡概率</span><div class="stepper" id="dcf-prob-drift" data-min="0" data-max="100" data-step="5"><button class="stp-min">−</button><input class="stp-val" id="dcf-prob-drift-val" readonly><button class="stp-max">+</button></div></div>
+        <div class="gs-row"><span>衣柜字卡概率</span><div class="stepper" id="dcf-prob-wardrobe" data-min="0" data-max="100" data-step="5"><button class="stp-min">−</button><input class="stp-val" id="dcf-prob-wardrobe-val" readonly><button class="stp-max">+</button></div></div>
+        <div class="gs-row"><span>天气字卡概率</span><div class="stepper" id="dcf-prob-weather" data-min="0" data-max="100" data-step="5"><button class="stp-min">−</button><input class="stp-val" id="dcf-prob-weather-val" readonly><button class="stp-max">+</button></div></div>
+        <div class="gs-row"><span>季节字卡概率</span><div class="stepper" id="dcf-prob-season" data-min="0" data-max="100" data-step="5"><button class="stp-min">−</button><input class="stp-val" id="dcf-prob-season-val" readonly><button class="stp-max">+</button></div></div>
+        <div class="gs-row"><span>温度字卡概率</span><div class="stepper" id="dcf-prob-temperature" data-min="0" data-max="100" data-step="5"><button class="stp-min">−</button><input class="stp-val" id="dcf-prob-temperature-val" readonly><button class="stp-max">+</button></div></div>
+        <div class="gs-row"><span>状态形容词字卡概率</span><div class="stepper" id="dcf-prob-statusadj" data-min="0" data-max="100" data-step="5"><button class="stp-min">−</button><input class="stp-val" id="dcf-prob-statusadj-val" readonly><button class="stp-max">+</button></div></div>
         <div class="gs-row"><span>互动回应字卡概率</span><div class="stepper" id="dcf-prob-interact" data-min="0" data-max="100" data-step="5"><button class="stp-min">−</button><input class="stp-val" id="dcf-prob-interact-val" readonly><button class="stp-max">+</button></div></div>
         <!-- v3.42.x #422：寻踪日常推送 / 番茄钟完成消息——只读式「发到聊天」概率门控，无独立字卡池，
              不参与上方案引卡管理；0%=不进聊天，100%=原行为。功能说明标签由 default-cards.js 注入。 -->
@@ -11204,15 +11334,17 @@ box-shadow: 0 2px 10px rgba(255,94,156,.35);
            v3.42.x #444：概率框移回页顶但默认折叠（用户报「概率位置太靠后看不到」）——首屏仍是
            字卡列表，fc 页整页滚动规则（chat-pages.css #239）保证展开后列表不被 flex 压扁。 -->
       <div class="card-tabs" id="fc-tabs">
-        <button class="cc-tab sel" data-type="fish">摸鱼</button>
-        <button class="cc-tab" data-type="eat">吃饭</button>
+        <button class="cc-tab sel" data-type="eat">吃饭</button>
         <button class="cc-tab" data-type="period">经期</button>
         <button class="cc-tab" data-type="water">喝水</button>
         <button class="cc-tab" data-type="sync">同频</button>
         <button class="cc-tab" data-type="reach">伸手</button>
         <button class="cc-tab" data-type="cjian">此间</button>
-        <button class="cc-tab" data-type="piggy">存钱罐</button>
-        <button class="cc-tab" data-type="drift">漂流瓶</button>
+        <button class="cc-tab" data-type="wardrobe">衣柜</button>
+        <button class="cc-tab" data-type="weather">天气</button>
+        <button class="cc-tab" data-type="season">季节</button>
+        <button class="cc-tab" data-type="temperature">温度</button>
+        <button class="cc-tab" data-type="statusadj">状态形容词</button>
         <button class="cc-tab" data-type="interact">互动回应</button>
       </div>
       <div class="cc-groups-bar" id="fc-groups-bar"></div>
@@ -12025,6 +12157,14 @@ box-shadow: 0 2px 10px rgba(255,94,156,.35);
           <button class="ch-settings feed-head-btn feed-head-clear" id="feed-head-clear" title="删除朋友圈动态">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="width:18px;height:18px"><path d="M3 6h18"/><path d="M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/><path d="M10 11v6M14 11v6"/></svg>
           </button>
+          <!-- 2026-10-09 需求⑤：朋友圈数据可导出导入（参考聊天记录导出导入） -->
+          <button class="ch-settings feed-head-btn" id="feed-export-btn" title="导出朋友圈数据">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="width:18px;height:18px"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><path d="M7 10l5-5 5 5"/><path d="M12 5v12"/></svg>
+          </button>
+          <button class="ch-settings feed-head-btn" id="feed-import-btn" title="导入朋友圈数据">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="width:18px;height:18px"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><path d="M7 10l5 5 5-5"/><path d="M12 5v12"/></svg>
+          </button>
+          <input type="file" id="feed-import-file" accept=".json,application/json" hidden>
         </span>
       </div>
       <!-- 通知提醒面板（TA 点赞/评论/发布动态的提醒，点击跳转对应动态） -->
@@ -13246,6 +13386,34 @@ box-shadow: 0 2px 10px rgba(255,94,156,.35);
       </div>
     </div>
 
+    <!-- 天气（2026-10-09：双方天气自主选择 + 天气预报 + 梦角穿衣提醒，参考 QQ 情侣空间） -->
+    <div class="page" id="page-weather" hidden>
+      <div class="chat-head">
+        <span class="ch-back" id="weather-back">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#111111" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+        </span>
+        <span class="ch-name">天气</span>
+        <span class="ch-settings" id="weather-send" title="把天气发进聊天">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2L11 13"/><path d="M22 2l-7 20-4-9-9-4 20-7z"/></svg>
+        </span>
+      </div>
+      <div class="cal-scroll" id="weather-root"></div>
+    </div>
+
+    <!-- 穿搭衣柜（2026-10-09：梦角选择衣柜穿搭，颜色/款式/风格/饰品；字卡库同步衣柜分组） -->
+    <div class="page" id="page-wardrobe" hidden>
+      <div class="chat-head">
+        <span class="ch-back" id="wardrobe-back">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#111111" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+        </span>
+        <span class="ch-name">穿搭衣柜</span>
+        <span class="ch-settings" id="wardrobe-send" title="把穿搭发进聊天">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2L11 13"/><path d="M22 2l-7 20-4-9-9-4 20-7z"/></svg>
+        </span>
+      </div>
+      <div class="cal-scroll" id="wardrobe-root"></div>
+    </div>
+
     <!-- 梦角档案：每个梦角一份，记录「我后来才慢慢了解到的TA」（桌面第三页「梦角档案」进入） -->
     <div class="page" id="page-memo-arc" hidden>
       <div class="chat-head">
@@ -13363,6 +13531,14 @@ box-shadow: 0 2px 10px rgba(255,94,156,.35);
           <button class="more-item" id="more-invite" data-mcat="chat" title="邀请TA">
             <span class="mi-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 00-4-4H6a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M19 8v6M22 11h-6"/></svg></span>
             <span>邀请TA</span>
+          </button>
+          <button class="more-item" id="more-weather" data-mcat="chat" title="天气与穿衣提醒">
+            <span class="mi-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M17.5 19a4.5 4.5 0 100-9 6 6 0 00-11.3 2.1A3.5 3.5 0 006 19h11.5z"/><path d="M12 2v2M4.9 4.9l1.4 1.4M19.1 4.9l-1.4 1.4"/></svg></span>
+            <span>天气</span>
+          </button>
+          <button class="more-item" id="more-wardrobe" data-mcat="chat" title="穿搭衣柜">
+            <span class="mi-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8h18l-1.5 11a2 2 0 01-2 1.8h-11a2 2 0 01-2-1.8L3 8z"/><path d="M3 8l2.5-4a2 2 0 011.8-1h9.4a2 2 0 011.8 1L21 8"/><path d="M12 3v18"/></svg></span>
+            <span>穿搭</span>
           </button>
           <button class="more-item" id="more-gift" data-mcat="tool" title="心意集市">
             <span class="mi-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="8" width="18" height="4" rx="1"/><path d="M5 12v8a1 1 0 001 1h12a1 1 0 001-1v-8"/><path d="M12 8v13"/>            <path d="M12 8S10.5 4 8 4 5 6 5 8"/><path d="M12 8s1.5-4 4-4 3 2 3 4"/></svg></span>
@@ -17734,6 +17910,10 @@ return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
 };
 }
 function hourStatus(cid, dateStr, hour) {
+try {
+const fx = store.get('presence-fixed');
+if (fx === 'online' || fx === 'away' || fx === 'offline') return fx;
+} catch (e) {}
 const r = rng(hashStr(cid + '|' + dateStr + '|' + hour + '|full-random'));
 const v = r();
 if (v < 0.34) return 'online';
@@ -17746,12 +17926,28 @@ return '' + d.getFullYear() + p(d.getMonth() + 1) + p(d.getDate());
 }
 const ONLINE_MOODS = ['在学习', '在忙工作', '在摸鱼', '在散步', '在听歌', '在发呆', '在想你', '在刷手机', '在做饭', '在追剧', '在写东西', '在路上', '在看书', '在运动'];
 const AWAY_REASONS = ['出门办点事', '在开会', '在午休', '在忙', '暂时离开一下', '在赶路', '在办正事'];
+function customPool(key) {
+try {
+const raw = store.get(key);
+if (!raw) return null;
+const arr = JSON.parse(raw);
+return Array.isArray(arr) && arr.length ? arr.filter(x => typeof x === 'string' && x.trim()) : null;
+} catch (e) { return null; }
+}
+function useSys(key) { try { return store.get(key) !== '0'; } catch (e) { return true; } }
+function mergedPool(sysPool, custKey, sysKey) {
+const cust = customPool(custKey);
+const use = useSys(sysKey);
+if (!cust || !cust.length) return use ? sysPool : [];
+if (!use) return cust;
+return sysPool.concat(cust);
+}
 function pickPool(cid, dateStr, hour, salt, pool) {
 const r = rng(hashStr(cid + '|' + dateStr + '|' + hour + '|' + salt));
 return pool[Math.floor(r() * pool.length)];
 }
-function moodText(cid, dateStr, hour) { return pickPool(cid, dateStr, hour, 'mood', ONLINE_MOODS); }
-function awayText(cid, dateStr, hour) { return pickPool(cid, dateStr, hour, 'away', AWAY_REASONS); }
+function moodText(cid, dateStr, hour) { return pickPool(cid, dateStr, hour, 'mood', mergedPool(ONLINE_MOODS, 'presence-moods', 'presence-use-sys-mood')); }
+function awayText(cid, dateStr, hour) { return pickPool(cid, dateStr, hour, 'away', mergedPool(AWAY_REASONS, 'presence-aways', 'presence-use-sys-away')); }
 function fullText(cid) {
 try {
 const now = new Date(), ds = dateStr(now), h = now.getHours();
@@ -17837,6 +18033,93 @@ setInterval(function () {
 const h = new Date().getHours();
 if (h !== lastHour) { lastHour = h; hourTick(); }
 }, 20000);
+function pcsShow() {
+const pg = document.getElementById('page-presence-custom');
+if (!pg) return;
+document.querySelectorAll('.page').forEach(p => p.hidden = true);
+pg.hidden = false;
+pcsSyncUI();
+}
+function pcsBack() {
+const pg = document.getElementById('page-presence-custom');
+if (pg) pg.classList.remove('full');
+document.querySelectorAll('.page').forEach(p => p.hidden = true);
+const home = document.getElementById('page-setting');
+if (home) home.hidden = false;
+}
+function pcsVal(key) { try { return store.get(key); } catch (e) { return null; } }
+function pcsSet(key, v) { try { store.set(key, v); } catch (e) {} }
+function pcsSyncUI() {
+const fixed = pcsVal('presence-fixed');
+const setChk = (id, on) => { const c = document.getElementById(id); if (c) c.checked = !!on; };
+setChk('pcs-auto', !fixed);
+setChk('pcs-online', fixed === 'online');
+setChk('pcs-away', fixed === 'away');
+setChk('pcs-offline', fixed === 'offline');
+setChk('pcs-use-sys-mood', pcsVal('presence-use-sys-mood') !== '0');
+setChk('pcs-use-sys-away', pcsVal('presence-use-sys-away') !== '0');
+const moods = customPool('presence-moods');
+const ta = document.getElementById('pcs-moods');
+if (ta) ta.value = (moods || []).join('\n');
+const aways = customPool('presence-aways');
+const ta2 = document.getElementById('pcs-aways');
+if (ta2) ta2.value = (aways || []).join('\n');
+const tags = document.getElementById('pcs-sys-mood-tags');
+if (tags) {
+tags.innerHTML = '';
+const DATA = window.DEFAULT_CARD_DATA && window.DEFAULT_CARD_DATA.statusadj;
+const pool = (DATA && Array.isArray(DATA[0]) && DATA[0][1]) || [];
+const cur = new Set(moods || []);
+pool.forEach(w => {
+if (!w || cur.has(w)) return;
+const s = document.createElement('span');
+s.className = 'wx-opt';
+s.style.cssText = 'font-size:11.5px;padding:4px 9px;cursor:pointer;';
+s.textContent = w;
+s.addEventListener('click', () => {
+const t = document.getElementById('pcs-moods');
+if (!t) return;
+const lines = t.value.split('\n').map(x => x.trim()).filter(Boolean);
+if (lines.indexOf(w) < 0) lines.push(w);
+t.value = lines.join('\n');
+toast('已追加「' + w + '」，记得点保存');
+});
+tags.appendChild(s);
+});
+}
+}
+function pcsSave() {
+const moods = (document.getElementById('pcs-moods') || {}).value || '';
+const aways = (document.getElementById('pcs-aways') || {}).value || '';
+pcsSet('presence-moods', JSON.stringify(moods.split('\n').map(x => x.trim()).filter(Boolean)));
+pcsSet('presence-aways', JSON.stringify(aways.split('\n').map(x => x.trim()).filter(Boolean)));
+pcsSet('presence-use-sys-mood', document.getElementById('pcs-use-sys-mood').checked ? '1' : '0');
+pcsSet('presence-use-sys-away', document.getElementById('pcs-use-sys-away').checked ? '1' : '0');
+let fx = '';
+if (document.getElementById('pcs-online').checked) fx = 'online';
+else if (document.getElementById('pcs-away').checked) fx = 'away';
+else if (document.getElementById('pcs-offline').checked) fx = 'offline';
+pcsSet('presence-fixed', fx);
+render();
+toast('状态设置已保存，立即生效');
+}
+(function () {
+const row = document.getElementById('row-presence-custom');
+if (row) row.addEventListener('click', pcsShow);
+const bk = document.getElementById('pcs-back');
+if (bk) bk.addEventListener('click', pcsBack);
+const sv = document.getElementById('pcs-save');
+if (sv) sv.addEventListener('click', pcsSave);
+['pcs-auto', 'pcs-online', 'pcs-away', 'pcs-offline'].forEach(id => {
+const c = document.getElementById(id);
+if (c) c.addEventListener('change', () => {
+['pcs-auto', 'pcs-online', 'pcs-away', 'pcs-offline'].forEach(o => {
+const el2 = document.getElementById(o);
+if (el2 && o !== id) el2.checked = false;
+});
+});
+});
+})();
 })();
 } catch (__e) { try { console.error("[JS] presence.js", __e && __e.message || __e); } catch (x) {} if (window.__jsErrors) window.__jsErrors.push(String(__e && __e.message || __e)); } })();
 (function () { try {
@@ -36535,10 +36818,10 @@ ccTokenizeGiantMedia(ownPoolCache, 'own');
 return ownPoolCache;
 }
 const CC_TYPES = ['text', 'kaomoji', 'emoji', 'sticker', 'image', 'poke', 'voice'];
-const CC_FUNC_KEYS = ['fish', 'eat', 'period', 'water', 'sync', 'reach', 'cjian', 'piggy', 'drift', 'interact',
+const CC_FUNC_KEYS = ['eat', 'period', 'water', 'sync', 'reach', 'cjian', 'wardrobe', 'weather', 'season', 'temperature', 'statusadj', 'interact',
 'mjfree']; // #317 梦角自由造句：程序生成的重造句卡（dream-free.js），管理页可查看/删除，不进聊天通用池
 const CC_ALL_TYPES = CC_TYPES.concat(CC_FUNC_KEYS);
-const CC_GIF_MAX_B64 = 512 * 1024;
+const CC_GIF_MAX_B64 = 4 * 1024 * 1024;
 function mergeWithPublic(g) {
 const p = pubGroupsRaw();
 let has = false;
@@ -38713,7 +38996,7 @@ if (isGif) {
 if (String(reader.result || '').length > CC_GIF_MAX_B64) {
 skipped++; done++;
 if (done === files.length) finishUpload(done - skipped, skipped);
-toast('GIF「' + ((f && f.name) || '动图') + '」超过 380KB，已跳过');
+toast('GIF「' + ((f && f.name) || '动图') + '」超过 3MB，已跳过');
 return;
 }
 process(reader.result); return;
@@ -42494,6 +42777,41 @@ window.DEFAULT_CARD_DATA.main.push(["嘴馋了",["想吃什么就说，馋不丢
 window.DEFAULT_CARD_DATA.main.push(["加班晚归",["加班辛苦了，记得起身接杯水。","晚归的话，路上给我发个消息。","工作重要，你更重要。","到家了说一声，我等着。","累就打车，别省这个。","晚上的路灯会陪你，我也是。","回来吃点东西再睡，别空着。","今天就算熬过去了，做得不错。","洗把脸，脑子会清醒一点。","我知道你不爱抱怨，所以由我来说：辛苦了。","早点忙完，我给你留着晚安。","别熬夜赶，明天接着来。"]]);
 window.DEFAULT_CARD_DATA.main.push(["出太阳了",["出太阳了，把被子拿去晒晒。","阳光落在桌上，一格一格的。","这样的天不出去走走，可惜了。","晒过的被子，是太阳的味道。","今天的光线很好，适合多看两眼窗外。","太阳很好，心情也跟着亮。","坐到有阳光的地方去，暖和。","晒晒太阳，烦恼会蒸发一些。","光从窗边斜进来，正好落在你常坐的位置。","难得的好天气，别浪费在屋里。"]]);
 window.DEFAULT_CARD_DATA.main.push(["闻到想到你",["路过面包店，想起你说过喜欢这个味道。","风里有栀子的味道，你那边有吗。","这个洗衣液的味道，让我停了一下。","闻到雨后的土腥味，想到那场一起躲过的雨。","谁家在做饭，香味飘得很远。","某种味道一出现，就想到某个时刻的你。","晒过的被子是什么味道，我很想知道。","你的味道我说不上来，但一定认得出。","桂花开了，是秋天的信号。","味道比记忆诚实，一闻到就想你。"]]);
+window.DEFAULT_CARD_DATA.weather = [
+["晴天",["今天是大晴天，阳光很好。","太阳晒得人暖洋洋的。","晴空万里，适合出去走走。","今天阳光明媚，心情也跟着亮。","大晴天，记得多晒晒太阳。","晴天的风都是轻的。","今天是个好天气，适合见面。"]],
+["多云",["今天多云，云一朵一朵的。","太阳偶尔躲进云里。","多云天气，不晒也不闷。","云层有点厚，但光还能透下来。","今天的云很好看，像棉花。","多云转晴的天气最舒服。","云很多，但不会下雨。"]],
+["阴天",["今天阴天，天色有点暗。","阴天适合窝在家里。","灰蒙蒙的天，光线很软。","今天没太阳，风有点凉。","阴天的时候特别想你。","天气阴沉沉的，心情要自己点亮。","阴天不晒，也挺舒服的。"]],
+["雨天",["今天下雨了，记得带伞。","雨声淅淅沥沥的，很好听。","下雨天，路上滑，走慢点。","这场雨要下一阵子，别淋着。","雨天适合一起听雨。","出门前看看天气，带把伞。","雨停了，空气特别清新。","下雨别洗头，会头疼。","雨不大，但淋湿也会着凉。","雨天的窗台，水珠一颗一颗的。"]],
+["雪天",["今天下雪了，白茫茫的一片。","雪花落下来的时候很安静。","下雪天要穿厚一点。","雪天路滑，出门小心。","这场雪下得真好看。","雪落在手心就化了。","今天很冷，围巾帽子都戴上。","雪天适合喝热的东西。","踩在雪上有声音，咯吱咯吱的。","下雪的日子，世界变慢了。"]],
+["大风",["今天风很大，出门注意。","风把头发吹得乱七八糟。","大风天，外套要拉紧。","今天的风带着秋天的味道。","风很大，伞都撑不住。","大风天别站高楼下面。","风的声音呼呼的，像在说话。","风大的日子，回家早点。"]],
+["雷雨",["今天有雷阵雨，注意安全。","雷声有点大，别怕。","打雷的时候关好窗。","雷雨天最好待在家里。","闪电划过的时候，世界亮了一瞬。","雷雨来得快，去得也快。","打雷别站大树下。","雷雨天信号可能不好。"]],
+["雾天",["今天起雾了，能见度低。","雾蒙蒙的，像在梦里。","雾天开车要慢一点。","今天的雾很大，走慢些。","雾散了之后，世界特别干净。","雾天出门，注意安全。","雾里的路灯，像一个个小月亮。"]],
+["炎热",["今天好热，注意防暑。","太阳火辣辣的，别晒太久。","这么热的天，多喝水。","热到只想待在空调房。","今天的空气都是烫的。","这么热，出门要涂防晒。","热天没胃口，也要吃点东西。","傍晚会凉快一点，再等等。"]],
+["寒冷",["今天很冷，多穿点。","气温降下来了，注意保暖。","这么冷的天，手都冻僵了。","冷到不想出门。","今天的风刮在脸上有点疼。","这么冷，秋裤穿起来。","冷天要多喝热水。","屋里比外面暖和，回来就好。"]],
+["天气提醒",["出门前看看天气预报。","天气变化快，衣服多带一件。","早晚温差大，注意添衣。","天气预报说今天有雨。","记得根据天气安排出行。","天气好的时候，心情也会好。","不管什么天气，我都陪你。","天气冷热都要照顾好自己。","外面天气不错，适合见面。","天气不好也没关系，心是晴的。"]]
+];
+window.DEFAULT_CARD_DATA.season = [
+["春天",["春天来了，花都开了。","春天的风是暖的。","这个季节适合出去走走。","春天万物都在发芽。","春困秋乏，春天容易犯困。","春天早晚还是有点凉。","春天的阳光，晒着特别舒服。","换季了，衣服该收拾一下。"]],
+["夏天",["夏天来了，白天变长了。","夏天的傍晚最舒服。","这个季节热是主题。","夏天记得防暑防晒。","夏天的西瓜特别甜。","夏天傍晚的风是凉的。","这个季节容易没胃口。","夏天也要记得好好吃饭。"]],
+["秋天",["秋天到了，落叶满地。","秋天的天空特别高。","这个季节适合贴秋膘。","秋天干燥，多喝水。","秋天的风带着凉意。","早晚温差大，注意添衣。","秋天是个适合见面的季节。","换季的时候，最容易感冒。"]],
+["冬天",["冬天来了，天黑得早。","这个季节最怕冷。","冬天记得穿厚一点。","冬天的被窝最舒服。","冬天容易手凉脚凉。","这个季节适合喝热汤。","冬天的太阳特别珍贵。","下雪的话，记得拍给我看。"]],
+["换季提醒",["换季了，衣柜该换一遍。","季节交替，最要注意身体。","换季的时候容易感冒。","天气变凉了，别硬撑。","换季了，被子记得换。","这段时间的天气最善变。","换季也换换心情。"]]
+];
+window.DEFAULT_CARD_DATA.temperature = [
+["温度感受",["今天好热，感觉要化了。","有点热，但还能接受。","今天温度刚刚好，很舒服。","有点凉，披件外套吧。","今天好冷，手都不想伸出来。","温差好大，注意增减衣服。","这个温度适合睡觉。","感觉温度比昨天高了一点。","今天的气温很宜人。","冷热交替，小心着凉。"]],
+["穿衣提醒",["今天很热，穿薄一点。","今天有点凉，加件外套。","今天很冷，棉服安排上。","今天风大，穿防风一点。","今天适合穿毛衣。","出门记得带件外套，晚上会凉。","这个温度，短袖配薄外套刚刚好。","今天降温了，多穿一件。","今天升温了，可以少穿点。","早晚凉，中午热，灵活穿搭。"]]
+];
+window.DEFAULT_CARD_DATA.statusadj = [
+["状态形容词",["元气满满","电量满格","有点困倦","精神抖擞","懒洋洋的","安安静静","开开心心","有点疲惫","神清气爽","迷迷糊糊","温柔专注","忙忙碌碌","悠闲自得","心事重重","轻松自在","认真营业","发呆中","放空中","充电中","摸鱼中"]],
+["状态表达",["今天状态很好。","今天有点提不起劲。","现在的我很放松。","刚充完电，元气满满。","今天忙忙碌碌的，但很充实。","今天心情还不错。","有点累，但还能撑住。","今天的我很安静。","在发呆，也在想你。","状态有点down，但没关系。","恢复中，请稍候。","今天也要元气满满。","你的问候就是我的充电器。"]]
+];
+window.DEFAULT_CARD_DATA.wardrobe = [
+["穿搭·颜色",["奶白色","雾霾蓝","樱花粉","燕麦色","藏青色","酒红色","浅灰色","米黄色","抹茶绿","香芋紫","焦糖色","墨黑色","奶油黄","天蓝色","豆沙粉"]],
+["穿搭·款式",["oversize卫衣","针织开衫","白衬衫","百褶裙","直筒裤","风衣","连衣裙","休闲西装","卫裤","半身裙","呢子大衣","T恤","牛仔裤","工装裤","毛衣"]],
+["穿搭·风格",["温柔风","休闲风","韩系简约","日系清新","轻熟风","学院风","慵懒风","甜美风","街头风","职场风","复古风","运动风","法式风","奶fufu风"]],
+["穿搭·饰品",["银项链","珍珠耳钉","帆布包","手表","发圈","锁骨链","棒球帽","戒指","围巾","腰带","墨镜","手链","贝雷帽","小熊挂件"]],
+["穿搭·搭配",["今天穿了件{m}，配{m}","今天的配色是{m}，好看吗","风格是{m}，感觉怎么样","戴了{m}，你觉得搭吗","今天这套是{m}+{m}","出门前纠结了很久，最后选了{m}","这件{m}是上次你夸过的","今天走{m}路线","新入的{m}，第一个给你看","今天简单点，就{m}吧"]]
+];
 } catch (__e) { try { console.error("[JS] default-cards-data.js", __e && __e.message || __e); } catch (x) {} if (window.__jsErrors) window.__jsErrors.push(String(__e && __e.message || __e)); } })();
 </script>
 <script>(function () { try {
@@ -42884,7 +43202,7 @@ try { if (window.quoteSpellResetDict) window.quoteSpellResetDict(); } catch (e) 
 }
 return n > 0;
 }
-const FUNC_KEYS = ['fish', 'eat', 'period', 'water', 'sync', 'reach', 'cjian', 'piggy', 'drift', 'interact'];
+const FUNC_KEYS = ['eat', 'period', 'water', 'sync', 'reach', 'cjian', 'wardrobe', 'weather', 'season', 'temperature', 'statusadj', 'interact'];
 const BASE_KEYS = ['main', 'kaomoji', 'emoji', 'touch'];
 const ALL_KEYS = BASE_KEYS.concat(FUNC_KEYS);
 const TAB_LABELS = (function () {
@@ -42988,8 +43306,8 @@ valEl.value = String(nv); dcProbSet(k, nv);
 toast('默认字卡' + label + '占比：' + nv + '%');
 });
 });
-const DCF_DEF = { fish: 35, eat: 35, period: 25, water: 35, garden: 40, sync: 60, reach: 55, cjian: 100, room: 100, piggy: 100, drift: 100, interact: 100, music: 100, deskcheck: 50, checkin: 100, pomo: 100, care: 100, memo: 100, ask: 100 };
-const DCF_DEF_NAME = { fish: '摸鱼', eat: '吃饭', period: '经期', water: '喝水', garden: '花园', sync: '同频', reach: '伸手', cjian: '此间', room: '房间', piggy: '存钱罐', drift: '漂流瓶', interact: '互动回应', music: '音乐', deskcheck: '跨桌面查岗', checkin: '寻踪日常', pomo: '番茄钟', care: 'TA的关心', memo: '备忘提醒', ask: 'TA主动提问' };
+const DCF_DEF = { eat: 35, period: 25, water: 35, garden: 40, sync: 60, reach: 55, cjian: 100, room: 100, interact: 100, music: 100, deskcheck: 50, checkin: 100, pomo: 100, care: 100, memo: 100, ask: 100, wardrobe: 100, weather: 100, season: 100, temperature: 100, statusadj: 100 };
+const DCF_DEF_NAME = { eat: '吃饭', period: '经期', water: '喝水', garden: '花园', sync: '同频', reach: '伸手', cjian: '此间', room: '房间', interact: '互动回应', music: '音乐', deskcheck: '跨桌面查岗', checkin: '寻踪日常', pomo: '番茄钟', care: 'TA的关心', memo: '备忘提醒', ask: 'TA主动提问', wardrobe: '衣柜', weather: '天气', season: '季节', temperature: '温度', statusadj: '状态形容词' };
 function dcfEnabled() {
 try { const v = window.activeStore().get('dcf-enabled'); return v === null ? true : v === '1'; } catch (e) { return true; }
 }
@@ -43051,7 +43369,6 @@ toast('字卡使用概率（' + k + '）：' + nv + '%');
 }
 bindDcfProb();
 const DCF_DESC = {
-fish: '【摸鱼】联系人按你摸鱼/钓鱼的时长、心情推算后，主动来聊天里插科打诨、关心你的字卡。\n概率 = 功能正常触发的这一次，出现字卡的概率（0% 则完全不出现）。\n想彻底关：调 0% 即可；也可本页找到对应字卡逐张关闭。',
 eat: '【吃饭】到饭点/「吃什么」决断时，联系人先发提醒、并按概率隔一会儿再补一句「追问关心」（夜宵时段用「夜宵关心」话术）的字卡。\n概率 = 触发后出现这些内容的概率，0% = 不吃喝提醒。',
 period: '【经期】预测到经期/排卵期的前后，联系人发的温柔关心语（温柔前缀 / 动作 / 经期关心）。\n概率 = 触发后出现的概率，0% = 不发经期关心。\n还想更彻底：到「经期记录」页把「梦角关心」也关掉即可。',
 water: '【喝水】每天 6:00–23:00 时段，联系人按间隔来聊天里催你喝水；当天已打卡达标时降为约 1/4 概率改发夸奖。一天最多约 4 条、至少隔约 50 分钟。\n概率 = 每次判定能否催水的概率，0% = 完全不催。',
@@ -43060,10 +43377,13 @@ sync: '【同频】两个人「同频」页面里的日常投递字卡。\n概�
 reach: '【伸手】「伸手」小动作互动里，联系人回应的字卡。\n概率 = 回应出现字卡的概率，0% = 只飘字不留卡。',
 cjian: '【此间】「此间」感知播报（TA 推测你在做什么）时，联系人说的话术字卡。\n概率 = 播报时出现字卡的概率，0% = 播报不出字卡。',
 room: '【房间】你在「我们的房间」里点互动时，联系人回应的字卡。\n概率 = 点击后出字卡的概率，0% = 点了也不出字卡。',
-piggy: '【存钱罐】存钱/取款后，联系人发来的关心/追问（含「取款关心」），可内联回一句；也控制 TA 偶尔往存钱罐「塞心意币」并发的聊天系统消息。\n概率 = 取款追问 / 塞币彩蛋出现的概率，0% = 不追问、也不塞币。',
-drift: '【漂流瓶】捞起漂流瓶时，瓶内联系人附上的话术字卡。\n概率 = 瓶内出字卡的概率，0% = 不出字卡（仍有信纸兜底，不会空白）。',
 interact: '【互动回应】你主动做的各种小互动（戳一戳 / 拍一拍 / 拉拉手等）时，联系人回应的字卡。\n概率 = 回应出现字卡的概率，0% = 互动不回应字卡。',
 music: '【音乐】听歌 / 点歌 / 分享歌互动时，联系人回应的字卡。\n概率 = 互动时出现字卡的概率，0% = 互动不出字卡。',
+wardrobe: '【衣柜】梦角在「穿搭衣柜」页选择穿搭（颜色/款式/风格/饰品）后，往聊天里发的穿搭字卡。\n概率 = 穿搭推送/回应出现字卡的概率，0% = 不出穿搭字卡。',
+weather: '【天气】天气模块（主页第二页天气卡 / 天气页 / 聊天天气链接）里双方天气自主选择与天气预报使用的天气字卡。\n概率 = 天气相关消息出现字卡的概率，0% = 不自动发天气字卡。',
+season: '【季节】天气模块使用的季节相关字卡（春/夏/秋/冬 + 换季提醒）。\n概率 = 季节提醒出现字卡的概率，0% = 不自动发季节字卡。',
+temperature: '【温度】天气模块使用的温度/穿衣提醒字卡。\n概率 = 穿衣提醒出现字卡的概率，0% = 不自动发穿衣提醒。',
+statusadj: '【状态形容词】在线状态自定义里可用的状态形容词（与 presence.js 状态池联动）。\n概率 = 状态字卡自动发送的概率，0% = 不自动发状态字卡。',
 checkin: '【寻踪日常】联系人定期更新「TA 的日常」（在 / 在做什么 / 想对你说）时，推送到聊天里的三条消息：更新提示 + 日常内容 + 概率「提醒你来寻踪」。\n概率 = 本次更新是否推送到聊天的概率，100% = 每次都发，0% = 完全不发。\n关闭后，寻踪页与历史记录照常生成，只是不再进聊天刷屏。',
 pomo: '【番茄钟】你用番茄钟完成一段专注后，联系人在聊天里发「休息一下」+（如有）「奖励摸鱼」的消息。\n概率 = 完成时发这条消息的概率，0% = 完成时不发。\n番茄钟页里的「发到聊天」开关是这层的额外开关，两者都开才发。',
 care: '【TA的关心（经期）】预测到经期/排卵期的前后、或推迟≥5天时，联系人在聊天里发「经期关心」话术（附「经期关心」标签）。经期中每天最多一条，且按周期第几天有不同基数概率（第1-2天90%、第3-4天70%、第5+天55%；经期前提醒/推迟预警75%）。\n本概率 = 在那些基点之上是否额外放行：100% = 保持原节奏，0% = 完全不发关心。\n更彻底：到「经期记录」页把「梦角关心」按钮也关掉（两者都关才真的完全关）。',
@@ -43791,10 +44111,10 @@ const isWordTok = t => HAN.test(t); // 含汉字＝词 token（非汉字 token �
 function filterCorpus(list) {
 return (list || []).filter(function (s) {
 if (typeof s !== 'string') return false;
-if (s.length < 4 || s.length > 30) return false;
+if (s.length < 2 || s.length > 60) return false;
 if (s.indexOf('data:') === 0 || s.indexOf('|||') >= 0) return false;
 if (/[\uD800-\uDBFF]/.test(s)) return false;
-return (s.match(/[\u4e00-\u9fff]/g) || []).length >= 4;
+return (s.match(/[\u4e00-\u9fff]/g) || []).length >= 2;
 });
 }
 function customPool() {
@@ -43912,6 +44232,20 @@ const sep = mode === 'comma' ? '，' : ' ';
 const out = toks.slice(0, gi).join('') + sep + toks.slice(gi).join('');
 return out !== str ? out : null;
 }
+function shuffleRebuild(s) {
+const str = String(s == null ? '' : s);
+const toks = segment(str).filter(isWordTok);
+if (toks.length < 3) return null;
+const keep = 3 + Math.floor(Math.random() * (toks.length - 2));
+const bag = toks.slice().sort(() => Math.random() - 0.5);
+const picked = bag.slice(0, keep);
+if (Math.random() < 0.5) {
+const wp = wordPool(str);
+if (wp.length) picked.push(wp[Math.floor(Math.random() * wp.length)]);
+}
+const out = picked.sort(() => Math.random() - 0.5).join('');
+return (out && out !== str && (out.match(/[\u4e00-\u9fff]/g) || []).length >= 2) ? out : null;
+}
 window.dreamFreePick = function (c) {
 try {
 if (!c || c['mjf-en'] !== 1) return null;
@@ -43922,10 +44256,14 @@ if (!pool || !pool.length) return null;
 let style = Math.max(0, Math.min(2, Number(c['mjf-style']) || 1));
 if (c['mjf-mix'] === 1) style = Math.floor(Math.random() * 3);
 const pickOf = arr => arr[Math.floor(Math.random() * arr.length)];
-for (let t = 0; t < 8; t++) {
+for (let t = 0; t < 10; t++) {
 const s = pool[Math.floor(Math.random() * pool.length)];
 if (s === lastSrc) continue;
 let mode, material = 'fixed';
+if (Math.random() < 0.12) {
+const shuff = shuffleRebuild(s);
+if (shuff) { lastSrc = s; return { text: shuff, src: s }; }
+}
 if (style === 1) {
 const r = Math.random();
 mode = r < 0.5 ? 'recall' : (r < 0.75 ? 'comma' : 'space');
@@ -43946,20 +44284,7 @@ try {
 const v = String(txt == null ? '' : txt);
 if (!v || v.indexOf('data:') === 0 || v.indexOf('|||') >= 0) return false;
 if (!window.ccAppendCards) return false;
-let cids = 1;
-try {
-const set = new Set([window.__activeCid || 'default']);
-(window.getContacts && window.getContacts() || []).forEach(c => { if (c && c.id) set.add(c.id); });
-cids = set.size;
-} catch (e) { cids = 1; }
-let pubProb = 80;
-try {
-const c = window.replyCfg && window.replyCfg();
-const n = c ? Number(c['mjf-pub']) : NaN;
-if (c && c['mjf-pub'] != null && c['mjf-pub'] !== '' && Number.isFinite(n)) pubProb = Math.max(0, Math.min(100, n));
-} catch (e) {}
-const usePublic = cids > 1 && Math.random() * 100 < pubProb;
-return !!window.ccAppendCards('mjfree', '梦角自由造句', [v], usePublic ? 'public' : 'own');
+return !!window.ccAppendCards('mjfree', '梦角自由造句', [v], 'own');
 } catch (e) { return false; }
 };
 window.dreamFreeSegment = segment;
@@ -55585,18 +55910,22 @@ if (mp) mp.hidden = false;
 }
 window.openMailPage = openMailPage;
 function escHtml(s) { return String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;'); }
-function renderBody(content, fit) {
+function renderBody(content, fit, retractedCards, byTa) {
 const s = mailCleanDisplay(String(content || ''));
 const seg = (t) => {
 t = String(t).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
 return (fit && window.taFit) ? window.taFit(t) : t;
 };
 const RE = /((?:sticker|image):)?(https?:\/\/[^\s"'<>]+|data:image\/[a-zA-Z0-9.+-]+(?:;[a-zA-Z0-9.+-]*(?:=[^;,]*)?)*,[^\s"'<>]+|@@m:[0-9a-f]{32})/g;
+const ret = Array.isArray(retractedCards) ? retractedCards : [];
 return s.replace(RE, function (all, pre, src) {
 if (src.indexOf('http') === 0 && pre !== 'sticker:' && pre !== 'image:') {
 return seg(all); // 普通网址（无附图前缀）按文本保留
 }
 const attrs = String(src).replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+if (ret.indexOf(src) >= 0) {
+return '<span class="mail-retracted" data-src="' + attrs + '">' + (byTa ? '梦角撤回了一张字卡' : '已撤回一张字卡') + '</span> ';
+}
 return '<img class="mail-body-img" src="' + attrs + '" alt="表情"> ';
 });
 }
@@ -55611,11 +55940,11 @@ let out = escHtml((cleaned || '（图片）').slice(0, 30));
 if (fit && window.taFit) out = window.taFit(out);
 return out;
 }
-function letterPaper(title, content, date, author, fit) {
+function letterPaper(title, content, date, author, fit, retractedCards, byTa) {
 return '<div class="mail-paper">' +
 '<div class="mail-paper-head"><span class="mail-paper-author">' + escHtml(author) + '</span><span class="mail-paper-date">' + date + '</span></div>' +
 (title ? '<div class="mail-paper-title">' + escHtml(title) + '</div>' : '') +
-'<div class="mail-paper-body">' + renderBody(content, fit) + '</div>' +
+'<div class="mail-paper-body">' + renderBody(content, fit, retractedCards, byTa) + '</div>' +
 '</div>';
 }
 function bindLetterImgClicks(root) {
@@ -55648,11 +55977,19 @@ const name = partnerName();
 const myName = store.get('lbl-user') || '我';
 let html = '';
 if (l.type === 'received' || l.fromMe) {
-html += letterPaper(l.tt || '来信', l.content, fmtDT(l.tm), l.fromMe ? myName : name, !l.fromMe);
+let p = letterPaper(l.tt || '来信', l.content, fmtDT(l.tm), l.fromMe ? myName : name, !l.fromMe, l.fromMe ? l.retractedCards : null, l.fromMe ? !!l.retractByTa : false);
+if (l.fromMe) p = p.replace('class="mail-paper"', 'class="mail-paper mail-paper-mine" data-role="main"');
+html += p;
 } else if (l.type === 'sent') {
-html += letterPaper(l.tt || '寄出的信', l.content, fmtDT(l.tm), myName, false);
+let p = letterPaper(l.tt || '寄出的信', l.content, fmtDT(l.tm), myName, false, l.retractedCards, !!l.retractByTa);
+p = p.replace('class="mail-paper"', 'class="mail-paper mail-paper-mine" data-role="main"');
+html += p;
 }
-if (l.myReply && l.type !== 'sent') html += letterPaper('我的回信', l.myReply.content, fmtDT(l.myReply.tm), myName, false);
+if (l.myReply && l.type !== 'sent') {
+let p = letterPaper('我的回信', l.myReply.content, fmtDT(l.myReply.tm), myName, false, l.myReply.retractedCards, !!l.retractByTa);
+p = p.replace('class="mail-paper"', 'class="mail-paper mail-paper-mine" data-role="reply"');
+html += p;
+}
 if (l.partnerReply) html += letterPaper('对方的回信', l.partnerReply.content, fmtDT(l.partnerReply.tm), name, true);
 const canFav = l.type === 'received';
 let favAlready = false;
@@ -55690,6 +56027,18 @@ if (l.partnerReply) txt += '\n\n—— 对方的回信 ——\n' + stripImg(l.pa
 window.openModal(l.fromMe ? '寄出的信' : '信件', '', () => {}, { noInput: true, staticText: txt });
 }
 bindLetterImgClicks(document.getElementById('tc-body'));
+const tcBody = document.getElementById('tc-body');
+if (tcBody) {
+tcBody.querySelectorAll('.mail-retracted[data-src]').forEach(function (sp) {
+if (sp.__mailRetractBound) return;
+sp.__mailRetractBound = true;
+sp.style.cssText = 'opacity:.6;font-size:12px;cursor:pointer;';
+sp.addEventListener('click', function (e) {
+e.stopPropagation();
+if (window.viewChatImage) window.viewChatImage(sp.getAttribute('data-src'));
+});
+});
+}
 const close2 = document.getElementById('mail-close2');
 if (close2) close2.addEventListener('click', () => { document.getElementById('tc-mask').hidden = true; viewLetter = null; });
 const replyBtn = document.getElementById('mail-reply-btn');
@@ -55741,6 +56090,7 @@ const list = load();
 const idx = list.findIndex(x => x.id === l.id);
 if (idx >= 0 && !list[idx].myReply) {
 list[idx].myReply = { content: val, tm: Date.now() };
+if (/(?:sticker|image):|data:image\/|@@m:/.test(val)) maybeTaMailRetract(l.id);
 const cfg = mailCfg();
 if (Math.random() * 100 < cfg.replyProb) {
 const replyMsg = taLetterContent(cfg);
@@ -55878,6 +56228,7 @@ const letter = { id: 'l_' + Date.now(), type: 'sent', tt: title, content: conten
 const list = load();
 list.unshift(letter);
 save(list);
+if (/(?:sticker|image):|data:image\/|@@m:/.test(content)) maybeTaMailRetract(letter.id);
 const cfg = mailCfg();
 if (Math.random() * 100 < cfg.replyProb) {
 const replyMsg = taLetterContent(cfg);
@@ -55894,6 +56245,49 @@ render();
 showPage('page-mail');
 selectMailTab('out');
 render();
+}
+function maybeTaMailRetract(id) {
+try {
+const cs = window.activeStore();
+let prob = 25;
+try {
+const v = cs.get('rc-prob');
+if (v !== null && v !== undefined && v !== '') { const n = Number(v); if (!isNaN(n)) prob = n; }
+} catch (e) {}
+if (Math.random() * 100 >= prob) return;
+const delay = 3000 + Math.random() * 12000;   // 梦角「看到后」3~15 秒随机撤回
+setTimeout(() => {
+try {
+const list = load();
+const idx = list.findIndex(x => x.id === id);
+if (idx < 0) return;
+const l = list[idx];
+const candidates = [];
+if (l.type === 'sent' || l.fromMe) {
+if (l.content) candidates.push({ target: l, key: 'content' });
+if (l.myReply && l.myReply.content) candidates.push({ target: l.myReply, key: 'content' });
+}
+if (!candidates.length) return;
+const RE = /((?:sticker|image):)?(https?:\/\/[^\s"'<>]+|data:image\/[a-zA-Z0-9.+-]+(?:;[a-zA-Z0-9.+-]*(?:=[^;,]*)?)*,[^\s"'<>]+|@@m:[0-9a-f]{32})/g;
+const picks = [];
+candidates.forEach(cd => {
+const ret = Array.isArray(cd.target.retractedCards) ? cd.target.retractedCards : [];
+const ms = String(cd.target[cd.key] || '').match(RE) || [];
+ms.forEach(u => {
+if (/^(sticker|image):|^data:image\/|^@@m:/.test(u) && ret.indexOf(u) < 0) picks.push({ target: cd.target, src: u });
+});
+});
+if (!picks.length) return;
+const pick = picks[Math.floor(Math.random() * picks.length)];
+pick.target.retractedCards = (Array.isArray(pick.target.retractedCards) ? pick.target.retractedCards : []).concat(pick.src);
+l.retractByTa = true;
+save(list);
+toast(window.taFit ? window.taFit('梦角撤回了一张字卡') : '梦角撤回了一张字卡');
+if (viewLetter && viewLetter.id === l.id) openLetter(l);
+render();
+} catch (e) {}
+}, delay);
+} catch (e) {}
 }
 const TA_LETTERS = [
 '最近总是想起我们以前聊的那些话。时间过得真快，但有些东西一直没变。给我回信吧。',
@@ -56317,8 +56711,32 @@ span.className = 'mail-media-mark';
 span.style.display = 'none';
 span.textContent = s;
 span.contentEditable = 'false';
+const wrap = document.createElement('span');
+wrap.className = 'mail-insert-wrap';
+wrap.style.cssText = 'position:relative;display:inline-block;vertical-align:middle;margin:2px;';
+wrap.contentEditable = 'false';
+img.style.margin = '0';
+const del = document.createElement('button');
+del.className = 'mail-insert-del';
+del.type = 'button';
+del.textContent = '✕';
+del.setAttribute('aria-label', '撤回这张字卡');
+del.style.cssText = 'position:absolute;top:-9px;right:-9px;width:18px;height:18px;line-height:16px;text-align:center;font-size:11px;border-radius:50%;background:rgba(60,50,80,.62);color:#fff;border:none;cursor:pointer;padding:0;';
+del.addEventListener('click', (e) => {
+e.preventDefault(); e.stopPropagation();
+const w = del.parentNode;
+if (!w) return;
+let n = w.nextSibling;
+if (n && n.className === 'mail-media-mark') { n.remove(); n = w.nextSibling; }
+if (n && n.nodeType === 3 && !String(n.textContent || '').trim()) n.remove();
+w.remove();
+try { textarea.dispatchEvent(new Event('input', { bubbles: true })); } catch (e2) {}
+try { if (window.toast) window.toast('已撤回这张字卡'); } catch (e3) {}
+});
+wrap.appendChild(img);
+wrap.appendChild(del);
 const frag = document.createDocumentFragment();
-frag.appendChild(img);
+frag.appendChild(wrap);
 frag.appendChild(span);
 frag.appendChild(document.createTextNode(' '));
 range.insertNode(frag);
@@ -56654,7 +57072,7 @@ run();
 })();
 const KEY = 'feed-posts';
 const SNAP_KEY = 'feed-posts-snap';
-const LS_BIG_LIMIT = 200 * 1024;
+const LS_BIG_LIMIT = 1024 * 1024;
 function maxPostTs(arr) { return (Array.isArray(arr) ? arr : []).reduce((m, p) => (p && p.ts > m ? p.ts : m), 0); }
 function loadSnap() {
 try {
@@ -57083,7 +57501,14 @@ const imgs = (p.imgs && p.imgs.length) ? p.imgs.slice() : (p.img ? [p.img] : [])
 content = content.replace(/((?:sticker|image):)?(https?:\/\/[^\s"'<>]+|@@m:[0-9a-f]{32}|data:image\/[a-zA-Z0-9.+-]+(?:;[a-zA-Z0-9.+-]*(?:=[^;,]*)?)*,[^\s"'<>]+)/g, (m, pre, u) => { if (u.indexOf('http') === 0 && pre !== 'sticker:' && pre !== 'image:') return m; imgs.push(u); return ' '; });
 let html = inlineBody(content, (p.role || p.by) === 'me' ? '' : p.owner);
 if (imgs.length) {
-html += '<div class="feed-imgs">' + imgs.map(u => '<img src="' + attrEsc(u) + '" alt="图片" loading="lazy">').join('') + feedStickersHtml(p) + '</div>';
+const isTa = p.retractBy === 'ta';
+const ret = Array.isArray(p.retractedImgs) ? p.retractedImgs : [];
+html += '<div class="feed-imgs">' + imgs.map(u => {
+if (ret.indexOf(u) >= 0) {
+return '<span class="feed-retracted" data-src="' + attrEsc(u) + '">' + (isTa ? '梦角撤回了一张字卡' : '已撤回一张字卡') + '</span> ';
+}
+return '<img src="' + attrEsc(u) + '" alt="图片" loading="lazy">';
+}).join('') + feedStickersHtml(p) + '</div>';
 }
 return html;
 }
@@ -57219,7 +57644,7 @@ return '<div class="feed-post" id="feed-post-' + p.id + '"><div class="feed-head
 '<button class="feed-act feed-fav' + (faved ? ' faved' : '') + '" data-fav="' + p.id + '"><svg viewBox="0 0 24 24" fill="' + (faved ? 'currentColor' : 'none') + '" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="width:15px;height:15px"><path d="M12 2l2.4 5 5.6.8-4 4 .9 5.6-4.9-2.6-4.9 2.6.9-5.6-4-4 5.6-.8z"/></svg>收藏</button>' +
 '</div>' + likes + commentsHtmlFor(p, name) + '</div>';
 }
-const FEED_RENDER_MAX = 200, FEED_LOAD_STEP = 100;
+const FEED_RENDER_MAX = 500, FEED_LOAD_STEP = 100;
 let feedShownMain = 0, feedShownAll = 0;
 function feedMoreBtnHtml(remaining) {
 return '<button class="feed-more-btn" type="button">查看更早的动态（还有 ' + remaining + ' 条）</button>';
@@ -57274,6 +57699,35 @@ listEl.querySelectorAll('.feed-imgs img, .feed-inline-img').forEach(img => img.a
 e.stopPropagation();
 if (window.viewChatImage) window.viewChatImage(img.src);
 }));
+}
+function maybeTaFeedRetract(pid) {
+try {
+const cs = window.activeStore();
+let prob = 25;
+try {
+const v = cs.get('rc-prob');
+if (v !== null && v !== undefined && v !== '') { const n = Number(v); if (!isNaN(n)) prob = n; }
+} catch (e) {}
+if (Math.random() * 100 >= prob) return;
+const delay = 3000 + Math.random() * 12000;   // 梦角「看到后」3~15 秒随机撤回
+setTimeout(() => {
+try {
+const list = load();
+const p = list.find(x => x.id === pid);
+if (!p || (p.role || p.by) !== 'me') return;
+const imgs = (p.imgs || []).slice();
+const ret = Array.isArray(p.retractedImgs) ? p.retractedImgs : [];
+const remain = imgs.filter(u => ret.indexOf(u) < 0);
+if (!remain.length) return;
+const src = remain[Math.floor(Math.random() * remain.length)];
+p.retractedImgs = ret.concat(src);
+p.retractBy = 'ta';
+save(list);
+toast(window.taFit ? window.taFit('梦角撤回了一张字卡') : '梦角撤回了一张字卡');
+renderVisible();
+} catch (e) {}
+}, delay);
+} catch (e) {}
 }
 function deletePostConfirm(pid) {
 if (!window.openModal) return;
@@ -57538,6 +57992,10 @@ listEl.querySelectorAll('.feed-sticker[data-sticker-del]').forEach(el2 => el2.ad
 e.stopPropagation();
 const parts = String(el2.dataset.stickerDel).split('|');
 removeFeedSticker(parts[0], parseInt(parts[1], 10));
+}));
+listEl.querySelectorAll('.feed-retracted[data-src]').forEach(sp => sp.addEventListener('click', (e) => {
+e.stopPropagation();
+if (window.viewChatImage) window.viewChatImage(sp.dataset.src);
 }));
 const memCard = listEl.querySelector('.feed-mem-card');
 if (memCard) {
@@ -58047,7 +58505,7 @@ const pickBtn = document.getElementById('feed-pick-img');
 const pickFile = document.getElementById('feed-pick-file');
 const preview = document.getElementById('feed-preview');
 let pickedImgs = [];
-const MAX_PICK = 9;
+const MAX_PICK = 18;
 function renderPreview() {
 if (!preview) return;
 preview.innerHTML = '';
@@ -58175,6 +58633,7 @@ const taAv = cs.get('avatar-partner') || '';
 const post = { id: id, role: 'me', owner: me.owner, authorName: me.authorName, authorAv: '', taName: taName, taAv: '', content: content, imgs: pickedImgs.slice(), ts: Date.now(), likes: [], comments: [] };
 list.unshift(post);
 save(list);
+if (post.imgs.length) maybeTaFeedRetract(id);
 pickedImgs = [];
 renderPreview();
 if (input) input.value = '';
@@ -58253,6 +58712,7 @@ const post = { id: id, role: 'me', owner: me.owner, authorName: me.authorName, a
 list.unshift(post);
 save(list);
 renderVisible();
+if (post.imgs.length) maybeTaFeedRetract(id);
 return id;
 } catch (e) { return null; }
 };
@@ -58841,6 +59301,80 @@ TA_REPLY_POOL.forEach(c => { if (String(c).toLowerCase().indexOf(kw) >= 0) out.p
 } catch (e) {}
 return out;
 } });
+function feedExport() {
+toast('正在导出，请稍候…');
+try {
+const arr = load();
+const n = Array.isArray(arr) ? arr.length : 0;
+if (!n) { toast('没有朋友圈动态可导出'); return; }
+const parts = ['{"app":"mochi-zika-feed","version":"1.0","exportTime":"' + new Date().toISOString() + '","posts":['];
+for (let i = 0; i < n; i++) {
+if (i) parts.push(',');
+parts.push(JSON.stringify(arr[i]));
+}
+parts.push(']}');
+const blob = new Blob(parts, { type: 'application/json;charset=utf-8' });
+const a = document.createElement('a');
+a.href = URL.createObjectURL(blob);
+a.download = '朋友圈_' + new Date().toISOString().slice(0, 10) + '.json';
+document.body.appendChild(a);
+a.click();
+setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 1000);
+toast('已导出 ' + n + ' 条朋友圈动态');
+} catch (e) {
+toast('导出失败：' + (e && e.message || '未知错误'));
+}
+}
+function feedImportFile(file) {
+if (!file) return;
+const reader = new FileReader();
+reader.onload = () => {
+let data;
+try { data = JSON.parse(String(reader.result || '')); } catch (e) { toast('无效的朋友圈数据文件'); return; }
+if (!data || typeof data !== 'object') { toast('无效的朋友圈数据文件'); return; }
+let arr = Array.isArray(data) ? data : null;
+if (!arr && data.posts && Array.isArray(data.posts)) arr = data.posts;
+if (!arr && data.ls && typeof data.ls === 'object') {
+const raw = (data.idb && data.idb['xy-home-v2:default:feed-posts']) || data.ls['xy-home-v2:default:feed-posts'];
+try { arr = typeof raw === 'string' ? JSON.parse(raw) : raw; } catch (e) { arr = null; }
+}
+if (!Array.isArray(arr) || !arr.length) { toast('文件里没有朋友圈数据'); return; }
+const n = arr.length;
+const fmt = (t) => t ? new Date(t).toLocaleString() : '未知';
+const lines = ['文件包含 ' + n + ' 条动态：',
+'· 最早：' + fmt(arr[0] && arr[0].ts),
+'· 最新：' + fmt(arr[n - 1] && arr[n - 1].ts),
+'导入将覆盖当前全部朋友圈动态（不可恢复）。'];
+if (!window.openModal) return;
+window.openModal('确认导入朋友圈数据？', '', () => {
+try {
+const clean = (arr || []).map(normPost);
+if (!feedDbReady) { toast('数据尚未就绪，请稍后再试'); return; }
+save(clean);
+render();
+renderCover();
+renderNoticeBadge();
+toast('已导入 ' + clean.length + ' 条朋友圈动态');
+} catch (e) { toast('导入失败：' + (e && e.message || '未知错误')); }
+}, { noInput: true, staticText: lines.join('\n') });
+};
+reader.onerror = () => { toast('文件读取失败，请重试'); };
+reader.readAsText(file, 'utf-8');
+}
+(function () {
+const exBtn = document.getElementById('feed-export-btn');
+if (exBtn) exBtn.addEventListener('click', feedExport);
+const imBtn = document.getElementById('feed-import-btn');
+const imFile = document.getElementById('feed-import-file');
+if (imBtn && imFile) {
+imBtn.addEventListener('click', () => imFile.click());
+imFile.addEventListener('change', () => {
+const f = imFile.files && imFile.files[0];
+if (f) feedImportFile(f);
+imFile.value = '';
+});
+}
+})();
 })();
 } catch (__e) { try { console.error("[JS] feed.js", __e && __e.message || __e); } catch (x) {} if (window.__jsErrors) window.__jsErrors.push(String(__e && __e.message || __e)); } })();
 (function () { try {
@@ -64482,7 +65016,8 @@ document.addEventListener('DOMContentLoaded', init);
 } else { init(); }
 })();
 } catch (__e) { try { console.error("[JS] gift-shop.js", __e && __e.message || __e); } catch (x) {} if (window.__jsErrors) window.__jsErrors.push(String(__e && __e.message || __e)); } })();
-(function () { try {
+</script>
+<script>(function () { try {
 (function () {
 const GNS = 'xy-home-v2';
 function gStore() { try { return window.xyStore(GNS); } catch (e) { return null; } }
@@ -64954,8 +65489,7 @@ document.addEventListener('mochi-fg-resume', function () { setTimeout(memoRemind
 document.addEventListener('contact-switched', () => { if (!memoPage.hidden) memoRender(); });
 })();
 } catch (__e) { try { console.error("[JS] memo-app.js", __e && __e.message || __e); } catch (x) {} if (window.__jsErrors) window.__jsErrors.push(String(__e && __e.message || __e)); } })();
-</script>
-<script>(function () { try {
+(function () { try {
 (function () {
 const GNS = 'xy-home-v2';
 const page = document.getElementById('page-memo-arc');
@@ -75663,7 +76197,8 @@ fast: false
 };
 })();
 } catch (__e) { try { console.error("[JS] memory-game.js", __e && __e.message || __e); } catch (x) {} if (window.__jsErrors) window.__jsErrors.push(String(__e && __e.message || __e)); } })();
-(function () { try {
+</script>
+<script>(function () { try {
 (function () {
 const panel = document.getElementById('chat-gomoku-panel');
 if (!panel) return;
@@ -76281,8 +76816,7 @@ fast: false
 };
 })();
 } catch (__e) { try { console.error("[JS] gomoku.js", __e && __e.message || __e); } catch (x) {} if (window.__jsErrors) window.__jsErrors.push(String(__e && __e.message || __e)); } })();
-</script>
-<script>(function () { try {
+(function () { try {
 (function () {
 const panel = document.getElementById('chat-linkup-panel');
 if (!panel) return;
@@ -83294,6 +83828,388 @@ update();
 } catch (__e) { try { console.error("[JS] feature-hub.js", __e && __e.message || __e); } catch (x) {} if (window.__jsErrors) window.__jsErrors.push(String(__e && __e.message || __e)); } })();
 (function () { try {
 (function () {
+function el(id) { return document.getElementById(id); }
+function cid() { try { return window.__activeCid || 'default'; } catch (e) { return 'default'; } }
+function partnerName() { try { return window.chatPartnerName ? window.chatPartnerName() : 'TA'; } catch (e) { return 'TA'; } }
+function toast(t) {
+try {
+let n = document.getElementById('cc-toast');
+if (!n) { n = document.createElement('div'); n.id = 'cc-toast'; document.body.appendChild(n); }
+n.textContent = t; n.className = 'cc-toast'; void n.offsetWidth; n.className = 'cc-toast show';
+clearTimeout(n._timer); n._timer = setTimeout(function () { n.className = 'cc-toast'; }, 2000);
+} catch (e) {}
+}
+function userSay(text) { try { if (window.chatSendMsg) window.chatSendMsg(text); } catch (e) {} }
+function taSay(text, delay) {
+setTimeout(function () {
+try { if (window.taSayRaw) window.taSayRaw(text, { special: 'weather', initiative: true }); } catch (e) {}
+}, delay || 1000);
+}
+function openPage(pg) {
+document.querySelectorAll('.page').forEach(p => p.hidden = true);
+pg.hidden = false;
+requestAnimationFrame(function () {
+const tabbar = document.querySelector('.tabbar');
+const phone = document.querySelector('.phone');
+if (tabbar) tabbar.hidden = true;
+if (phone) phone.classList.add('no-statusbar');
+pg.classList.add('full');
+});
+}
+function backHome(pg) {
+if (pg) pg.classList.remove('full');
+document.querySelectorAll('.page').forEach(p => p.hidden = true);
+const home = document.getElementById('page-phone');
+if (home) home.hidden = false;
+}
+function store() { try { return window.activeStore ? window.activeStore() : null; } catch (e) { return null; } }
+function load() {
+try {
+const s = store(); if (!s || !s.get) return {};
+const d = JSON.parse(s.get('weather-data') || 'null');
+return (d && typeof d === 'object') ? d : {};
+} catch (e) { return {}; }
+}
+function save(d) {
+try { const s = store(); if (s && s.set) s.set('weather-data', JSON.stringify(d)); } catch (e) {}
+}
+function defSeason() {
+try {
+const m = new Date().getMonth() + 1;
+if (m >= 3 && m <= 5) return '春天';
+if (m >= 6 && m <= 8) return '夏天';
+if (m >= 9 && m <= 11) return '秋天';
+return '冬天';
+} catch (e) { return '春天'; }
+}
+function pool(key) {
+try {
+const g = (window.DEFAULT_CARD_DATA && window.DEFAULT_CARD_DATA[key]) || [];
+const all = g.reduce((a, x) => a.concat((x && x[1]) || []), []);
+return all.filter(Boolean);
+} catch (e) { return []; }
+}
+function pick(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
+function dressTip(w, t) {
+const wl = String(w || '');
+const tl = String(t || '');
+const num = parseFloat(tl);
+if (wl.indexOf('雪') >= 0 || (isFinite(num) && num <= 0)) return '今天很冷，羽绒服/厚外套安排上，围巾手套别忘。';
+if (wl.indexOf('雷') >= 0 || wl.indexOf('雨') >= 0) return '今天有雨，出门带伞，穿防水一点的外套。';
+if (wl.indexOf('炎热') >= 0 || (isFinite(num) && num >= 30)) return '今天很热，穿清凉透气些，注意防晒多喝水。';
+if (wl.indexOf('风') >= 0) return '今天风大，穿防风的外套，别让风钻进领口。';
+if (isFinite(num)) {
+if (num >= 24) return '今天温度舒适，短袖或薄长袖都行。';
+if (num >= 18) return '今天有点凉，短袖外搭一件薄外套刚刚好。';
+if (num >= 10) return '今天偏凉，毛衣或卫衣安排上。';
+return '今天冷，厚外套加毛衣，别硬扛。';
+}
+if (wl.indexOf('阴') >= 0 || wl.indexOf('多') >= 0) return '今天不晒也不闷，薄外套随身带一件。';
+if (wl.indexOf('雾') >= 0) return '今天有雾，出门注意安全，穿亮一点的颜色。';
+return '今天天气不错，穿得舒服就好。';
+}
+function summary(d) {
+const myW = d['my-w'] || '晴天', myT = d['my-t'] || '', taW = d['ta-w'] || '晴天', taT = d['ta-t'] || '';
+const my = '我这边' + myW + (myT ? ' ' + myT + '°' : '');
+const ta = '你那边' + taW + (taT ? ' ' + taT + '°' : '');
+return my + '，' + ta;
+}
+function makeChatLink(d) {
+const txt = '☁ ' + summary(d);
+return txt;
+}
+function renderDesk() {
+const card = el('desk-weather');
+if (!card) return;
+const d = load();
+const season = d['season'] || defSeason();
+const myW = d['my-w'] || '—', myT = d['my-t'] || '', taW = d['ta-w'] || '—', taT = d['ta-t'] || '';
+const se = el('dw-season'); if (se) se.textContent = season;
+const mn = el('dw-my-name'); if (mn) mn.textContent = '我';
+const tn = el('dw-ta-name'); if (tn) tn.textContent = partnerName();
+const mw = el('dw-my-w'); if (mw) mw.textContent = myW + (myT ? ' ' + myT + '°' : '');
+const tw = el('dw-ta-w'); if (tw) tw.textContent = taW + (taT ? ' ' + taT + '°' : '');
+const tip = el('dw-tip');
+if (tip) tip.textContent = (d['my-w'] || d['ta-w']) ? ('穿衣提醒：' + dressTip(taW || myW, taT || myT)) : '点击设置双方天气';
+}
+function weatherOptsHtml() {
+const wg = (window.DEFAULT_CARD_DATA && window.DEFAULT_CARD_DATA.weather) || [];
+const sg = (window.DEFAULT_CARD_DATA && window.DEFAULT_CARD_DATA.season) || [];
+const wNames = wg.map(g => g && g[0]).filter(Boolean);
+const sNames = sg.map(g => g && g[0]).filter(Boolean);
+const temps = ['-5', '0', '5', '10', '15', '18', '20', '22', '25', '28', '30', '33', '36'];
+const chips = (list, cls) => list.map(x => '<span class="wx-opt" data-wx="' + cls + '" data-val="' + x + '">' + x + '</span>').join('');
+const myChips = chips(wNames, 'my-w');
+const taChips = chips(wNames, 'ta-w');
+return '<div class="cal-card glass">' +
+'<div class="cal-card-title">季节</div><div class="wx-chips">' + chips(sNames, 'season') + '</div>' +
+'<div class="cal-card-title">我的天气</div><div class="wx-chips">' + myChips + '</div>' +
+'<div class="cal-card-title">' + partnerName() + ' 的天气</div><div class="wx-chips">' + taChips + '</div>' +
+'<div class="cal-card-title">温度（我 / ' + partnerName() + '）</div><div class="wx-chips">' + chips(temps, 'my-t') + ' ' + chips(temps, 'ta-t') + '</div>' +
+'<div class="wx-sum" id="wx-sum"></div>' +
+'</div>';
+}
+function renderPage() {
+const root = el('weather-root');
+if (!root) return;
+root.innerHTML = weatherOptsHtml();
+const d = load();
+const season = d['season'] || defSeason();
+document.querySelectorAll('#weather-root .wx-opt[data-wx="season"]').forEach(x => x.classList.toggle('sel', x.dataset.val === season));
+document.querySelectorAll('#weather-root .wx-opt[data-wx="my-w"]').forEach(x => x.classList.toggle('sel', x.dataset.val === d['my-w']));
+document.querySelectorAll('#weather-root .wx-opt[data-wx="ta-w"]').forEach(x => x.classList.toggle('sel', x.dataset.val === d['ta-w']));
+document.querySelectorAll('#weather-root .wx-opt[data-wx="my-t"]').forEach(x => x.classList.toggle('sel', x.dataset.val === String(d['my-t'])));
+document.querySelectorAll('#weather-root .wx-opt[data-wx="ta-t"]').forEach(x => x.classList.toggle('sel', x.dataset.val === String(d['ta-t'])));
+renderSum();
+document.querySelectorAll('#weather-root .wx-opt').forEach(x => {
+x.addEventListener('click', function () {
+const k = this.dataset.wx, v = this.dataset.val;
+const d2 = load();
+if (k === 'season') { d2['season'] = v; }
+else { d2[k] = v; }
+save(d2);
+renderPage();
+renderDesk();
+});
+});
+}
+function renderSum() {
+const d = load();
+const s = el('wx-sum');
+if (!s) return;
+const taW = d['ta-w'], taT = d['ta-t'];
+const tip = taW || taT ? dressTip(taW || d['my-w'], taT || d['my-t']) : '选好双方天气后，我会提醒 TA 怎么穿。';
+s.innerHTML = '<div class="wx-sum-line">' + summary(d) + '</div>' +
+'<div class="wx-sum-tip">' + tip + '</div>';
+}
+function sendWeather() {
+const d = load();
+if (!d['my-w'] && !d['ta-w']) { toast('先选一下双方天气再发送吧'); return; }
+const txt = makeChatLink(d);
+userSay(txt);
+toast('已把天气发进聊天');
+setTimeout(function () {
+const d2 = load();
+const taW = d2['ta-w'] || '晴天', taT = d2['ta-t'] || '';
+const wl = String(taW), num = parseFloat(taT);
+let reply;
+if (wl.indexOf('雪') >= 0 || (isFinite(num) && num <= 0)) reply = '你那边这么冷？围巾围好，手不许露在外面太久。';
+else if (wl.indexOf('雨') >= 0 || wl.indexOf('雷') >= 0) reply = '下雨了就别出门乱跑，要出门带伞。';
+else if (wl.indexOf('炎热') >= 0 || (isFinite(num) && num >= 30)) reply = '这么热还穿这么少？多喝水，别中暑，我不放心。';
+else if (wl.indexOf('风') >= 0) reply = '风大，拉链拉好，别让风吹着脖子。';
+else reply = pick(['天气我知道了，你自己也穿好点。', '嗯，天气记下了，你那边也要照顾好自己。', '这种天气最适合想你了，真的。']);
+taSay(reply, 900);
+}, 1400);
+}
+function taWeatherLine() {
+try {
+const w = pick(pool('weather'));
+return w || '';
+} catch (e) { return ''; }
+}
+window.taWeatherLine = taWeatherLine;
+function bind(id, fn) { const n = el(id); if (n) n.addEventListener('click', fn); }
+(function () {
+const desk = el('desk-weather');
+if (desk) desk.addEventListener('click', function () { renderPage(); openPage(el('page-weather')); });
+bind('more-weather', function () {
+const mp = document.getElementById('chat-more-panel');
+if (mp) mp.hidden = true;
+renderPage();
+openPage(el('page-weather'));
+});
+bind('weather-back', function () { backHome(el('page-weather')); });
+bind('weather-send', sendWeather);
+})();
+renderDesk();
+document.addEventListener('contact-switched', function () { try { renderDesk(); } catch (e) {} });
+window.weatherSummary = function () { try { return summary(load()); } catch (e) { return ''; } };
+})();
+} catch (__e) { try { console.error("[JS] weather.js", __e && __e.message || __e); } catch (x) {} if (window.__jsErrors) window.__jsErrors.push(String(__e && __e.message || __e)); } })();
+(function () { try {
+(function () {
+function el(id) { return document.getElementById(id); }
+function cid() { try { return window.__activeCid || 'default'; } catch (e) { return 'default'; } }
+function partnerName() { try { return window.chatPartnerName ? window.chatPartnerName() : 'TA'; } catch (e) { return 'TA'; } }
+function toast(t) {
+try {
+let n = document.getElementById('cc-toast');
+if (!n) { n = document.createElement('div'); n.id = 'cc-toast'; document.body.appendChild(n); }
+n.textContent = t; n.className = 'cc-toast'; void n.offsetWidth; n.className = 'cc-toast show';
+clearTimeout(n._timer); n._timer = setTimeout(function () { n.className = 'cc-toast'; }, 2000);
+} catch (e) {}
+}
+function userSay(text) { try { if (window.chatSendMsg) window.chatSendMsg(text); } catch (e) {} }
+function taSay(text, delay) {
+setTimeout(function () {
+try { if (window.taSayRaw) window.taSayRaw(text, { special: 'wardrobe', initiative: true }); } catch (e) {}
+}, delay || 1000);
+}
+function store() { try { return window.activeStore ? window.activeStore() : null; } catch (e) { return null; } }
+function load() {
+try {
+const s = store(); if (!s || !s.get) return {};
+const d = JSON.parse(s.get('wardrobe-data') || 'null');
+return (d && typeof d === 'object') ? d : {};
+} catch (e) { return {}; }
+}
+function save(d) {
+try { const s = store(); if (s && s.set) s.set('wardrobe-data', JSON.stringify(d)); } catch (e) {}
+}
+function openPage(pg) {
+document.querySelectorAll('.page').forEach(p => p.hidden = true);
+pg.hidden = false;
+requestAnimationFrame(function () {
+const tabbar = document.querySelector('.tabbar');
+const phone = document.querySelector('.phone');
+if (tabbar) tabbar.hidden = true;
+if (phone) phone.classList.add('no-statusbar');
+pg.classList.add('full');
+});
+}
+function backHome(pg) {
+if (pg) pg.classList.remove('full');
+document.querySelectorAll('.page').forEach(p => p.hidden = true);
+const home = document.getElementById('page-phone');
+if (home) home.hidden = false;
+}
+function wardrobeGroups() {
+const out = [];
+try {
+const gs = (window.getDefaultCardGroups && window.getDefaultCardGroups('main')) || [];
+gs.forEach(g => {
+if (!g || typeof g[0] !== 'string') return;
+if (g[0].indexOf('穿搭') === 0) out.push(g);
+});
+} catch (e) {}
+try {
+(window.DEFAULT_CARD_DATA && window.DEFAULT_CARD_DATA.wardrobe || []).forEach(g => {
+if (g && typeof g[0] === 'string' && g[0].indexOf('穿搭') === 0 && !out.some(x => x[0] === g[0])) out.push(g);
+});
+} catch (e) {}
+return out;
+}
+function catFor(gn) {
+if (gn.indexOf('颜色') >= 0) return 'color';
+if (gn.indexOf('款式') >= 0) return 'style';
+if (gn.indexOf('风格') >= 0) return 'look';
+if (gn.indexOf('饰品') >= 0) return 'accessory';
+return 'other';
+}
+function renderPage() {
+const root = el('wardrobe-root');
+if (!root) return;
+const d = load();
+const gs = wardrobeGroups();
+const html = [];
+html.push('<div class="cal-card glass">');
+html.push('<div class="cal-card-title">我的穿搭</div>');
+html.push('<div class="wr-side" data-wr-side="my">');
+gs.forEach(g => {
+const cat = catFor(g[0]);
+if (cat === 'other') return; // 搭配模板不参与选择
+const cur = d['my'] && d['my'][cat];
+html.push('<div class="wr-cat"><span class="wr-cat-name">' + g[0] + '</span><div class="wx-chips">');
+(g[1] || []).forEach(x => {
+html.push('<span class="wx-opt' + (cur === x ? ' sel' : '') + '" data-wr-side="my" data-wr-cat="' + cat + '" data-val="' + x + '">' + x + '</span>');
+});
+html.push('</div></div>');
+});
+html.push('</div></div>');
+html.push('<div class="cal-card glass">');
+html.push('<div class="cal-card-title">' + partnerName() + ' 的穿搭</div>');
+html.push('<div class="wr-side" data-wr-side="ta">');
+gs.forEach(g => {
+const cat = catFor(g[0]);
+if (cat === 'other') return;
+const cur = d['ta'] && d['ta'][cat];
+html.push('<div class="wr-cat"><span class="wr-cat-name">' + g[0] + '</span><div class="wx-chips">');
+(g[1] || []).forEach(x => {
+html.push('<span class="wx-opt' + (cur === x ? ' sel' : '') + '" data-wr-side="ta" data-wr-cat="' + cat + '" data-val="' + x + '">' + x + '</span>');
+});
+html.push('</div></div>');
+});
+html.push('</div></div>');
+html.push('<div class="cal-card glass">');
+html.push('<div class="cal-card-title">搭配预览</div>');
+html.push('<div class="wr-preview" id="wr-preview"></div>');
+html.push('<div class="wr-actions">');
+html.push('<button type="button" class="wr-send" id="wr-send-my">发我的穿搭</button>');
+html.push('<button type="button" class="wr-send" id="wr-send-ta">发' + partnerName() + '的穿搭</button>');
+html.push('</div></div>');
+root.innerHTML = html.join('');
+document.querySelectorAll('#wardrobe-root .wx-opt').forEach(x => {
+x.addEventListener('click', function () {
+const side = this.dataset.wrSide, cat = this.dataset.wrCat, val = this.dataset.val;
+const d2 = load();
+d2[side] = d2[side] || {};
+if (d2[side][cat] === val) delete d2[side][cat];
+else d2[side][cat] = val;
+save(d2);
+renderPage();
+});
+});
+renderPreview();
+const sm = el('wr-send-my'); if (sm) sm.addEventListener('click', function () { sendOutfit('my'); });
+const st = el('wr-send-ta'); if (st) st.addEventListener('click', function () { sendOutfit('ta'); });
+}
+function outfitText(side) {
+const d = load();
+const o = d[side] || {};
+const color = o['color'] || '', style = o['style'] || '', look = o['look'] || '', acc = o['accessory'] || '';
+if (!color && !style && !look && !acc) return '';
+let tmpl = [];
+try {
+(window.DEFAULT_CARD_DATA && window.DEFAULT_CARD_DATA.wardrobe || []).forEach(g => {
+if (g && g[0] === '穿搭·搭配') tmpl = (g[1] || []).slice();
+});
+} catch (e) {}
+const vars = [color, style, look, acc].filter(Boolean);
+if (tmpl.length && vars.length) {
+const t = tmpl[Math.floor(Math.random() * tmpl.length)];
+let out = t, vi = 0;
+while (out.indexOf('{m}') >= 0 && vi < vars.length) { out = out.replace('{m}', vars[vi]); vi++; }
+return out;
+}
+return vars.join('+');
+}
+function renderPreview() {
+const pv = el('wr-preview');
+if (!pv) return;
+const my = outfitText('my') || '还没选，点上面的词试试';
+const ta = outfitText('ta') || '还没给 TA 选';
+pv.innerHTML = '<div class="wr-preview-line"><b>我：</b>' + my + '</div><div class="wr-preview-line"><b>' + partnerName() + '：</b>' + ta + '</div>';
+}
+function sendOutfit(side) {
+const t = outfitText(side);
+if (!t) { toast('先给' + (side === 'my' ? '自己' : partnerName()) + '选点穿搭再发'); return; }
+const prefix = side === 'my' ? '' : '（' + partnerName() + '的穿搭）';
+userSay('穿搭：' + prefix + t);
+toast('已把穿搭发进聊天');
+setTimeout(function () {
+const ack = side === 'my'
+? ['这件好看，很适合你。', '眼光不错，我记住了。', '下次见面就穿这套？']
+: ['TA 穿这套……还不错，勉强同意。', '嗯，TA 穿这个可以。', '给 TA 挑的？眼光还行。'];
+taSay(ack[Math.floor(Math.random() * ack.length)], 900);
+}, 1400);
+}
+window.taOutfitLine = function () {
+try { return outfitText('ta') || ''; } catch (e) { return ''; }
+};
+function bind(id, fn) { const n = el(id); if (n) n.addEventListener('click', fn); }
+(function () {
+bind('more-wardrobe', function () {
+const mp = document.getElementById('chat-more-panel');
+if (mp) mp.hidden = true;
+renderPage();
+openPage(el('page-wardrobe'));
+});
+bind('wardrobe-back', function () { backHome(el('page-wardrobe')); });
+})();
+})();
+} catch (__e) { try { console.error("[JS] wardrobe.js", __e && __e.message || __e); } catch (x) {} if (window.__jsErrors) window.__jsErrors.push(String(__e && __e.message || __e)); } })();
+(function () { try {
+(function () {
 let isMobile = false, isTablet = false, isIOS = false;
 try {
 const d = window.mochiDevice;
@@ -84943,4 +85859,4 @@ lastHeal: his
 <!-- __MOCHI_EOF__ -->
 </body>
 </html>
-<!-- __MOCHI_EOF__ mu8gzvoy -->
+<!-- __MOCHI_EOF__ mv107rfv -->
