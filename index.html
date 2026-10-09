@@ -8780,9 +8780,9 @@ box-shadow: 0 2px 10px rgba(255,94,156,.35);
       </div>
     </div>
     <div class="splash-footcard">
-      <div class="splash-ver" id="splash-ver" data-build-ts="1791552690859">
+      <div class="splash-ver" id="splash-ver" data-build-ts="1791555555450">
         <span class="sv-app">love lucky <b>v3.50.0</b></span>
-        <span class="sv-deploy">部署于 2026-10-09 21:31<span id="splash-ver-live"></span></span>
+        <span class="sv-deploy">部署于 2026-10-09 22:19<span id="splash-ver-live"></span></span>
       </div>
       <div class="splash-loading" id="splash-loading">正在加载数据…</div>
       <div class="splash-enter-hint" id="splash-enter-hint" hidden>勾选后即可进入</div>
@@ -83908,6 +83908,56 @@ if (wl.indexOf('阴') >= 0 || wl.indexOf('多') >= 0) return '今天不晒也不
 if (wl.indexOf('雾') >= 0) return '今天有雾，出门注意安全，穿亮一点的颜色。';
 return '今天天气不错，穿得舒服就好。';
 }
+function taAutoProb() {
+try {
+const s = store(); if (!s || !s.get) return 50;
+const v = s.get('ta-weather-auto');
+if (v === null || v === undefined || v === '') return 50;
+const n = Number(v); return isNaN(n) ? 50 : Math.max(0, Math.min(100, n));
+} catch (e) { return 50; }
+}
+function taWeatherOptions() {
+try {
+const wg = (window.DEFAULT_CARD_DATA && window.DEFAULT_CARD_DATA.weather) || [];
+const ws = wg.map(g => g && g[0]).filter(Boolean);
+const temps = ['-5', '0', '5', '10', '15', '18', '20', '22', '25', '28', '30', '33', '36'];
+return { ws: ws.length ? ws : ['晴天', '多云', '阴天', '小雨', '大风'], temps: temps };
+} catch (e) { return { ws: ['晴天', '多云', '阴天'], temps: ['15', '20', '25'] }; }
+}
+function taWeatherLines(w, t) {
+const num = parseFloat(t);
+if (String(w).indexOf('雪') >= 0 || (isFinite(num) && num <= 0)) return ['我这边下雪了，你多穿，别冻着。', '下雪了，正好想把你裹进羽绒服里。'];
+if (String(w).indexOf('雨') >= 0 || String(w).indexOf('雷') >= 0) return ['下雨了，伞带好，别淋到。', '我这边在下雨，想你那边是不是也冷。'];
+if (String(w).indexOf('炎热') >= 0 || (isFinite(num) && num >= 30)) return ['热成这样，你那边也要当心别中暑。', '天热，想给你撑把伞。'];
+if (String(w).indexOf('风') >= 0) return ['风大，我这边衣服都被吹乱了，你也是。', '起风了，别让风钻进领口。'];
+return ['天气我换好了，你那边照我说的穿。', '我这边换天气了，你那边跟着我走。', '刚看了下天气，替你安排好了。'];
+}
+function taChangeWeather() {
+try {
+const p = taAutoProb();
+if (Math.random() * 100 >= p) return false;
+const o = taWeatherOptions();
+const w = pick(o.ws);
+const t = pick(o.temps);
+const d = load();
+d['ta-w'] = w;
+d['ta-t'] = t;
+save(d);
+renderDesk();
+try {
+const sum = el('wx-sum'); if (sum) renderSum();
+renderPage();
+} catch (e) {}
+const lines = taWeatherLines(w, t);
+taSay(pick(lines), 1200 + Math.random() * 2000);
+return true;
+} catch (e) { return false; }
+}
+function scheduleTaWeather() {
+try {
+setTimeout(function () { try { taChangeWeather(); } catch (e) {} }, 8000 + Math.random() * 14000);
+} catch (e) {}
+}
 function summary(d) {
 const myW = d['my-w'] || '晴天', myT = d['my-t'] || '', taW = d['ta-w'] || '晴天', taT = d['ta-t'] || '';
 const my = '我这边' + myW + (myT ? ' ' + myT + '°' : '');
@@ -83942,6 +83992,10 @@ const chips = (list, cls) => list.map(x => '<span class="wx-opt" data-wx="' + cl
 const myChips = chips(wNames, 'my-w');
 const taChips = chips(wNames, 'ta-w');
 return '<div class="cal-card glass">' +
+'<div class="cal-card-title">梦角自主更换天气概率</div><div class="wx-chips">' + chips(['0', '25', '50', '75', '100'], 'ta-auto') + '</div>' +
+'<div class="wx-sum" id="wx-auto-tip" style="font-size:12px;opacity:.7;margin-top:2px">0=TA 不主动换天气；越高换得越勤。可随时改，无任何限制</div>' +
+'</div>' +
+'<div class="cal-card glass">' +
 '<div class="cal-card-title">季节</div><div class="wx-chips">' + chips(sNames, 'season') + '</div>' +
 '<div class="cal-card-title">我的天气</div><div class="wx-chips">' + myChips + '</div>' +
 '<div class="cal-card-title">' + partnerName() + ' 的天气</div><div class="wx-chips">' + taChips + '</div>' +
@@ -83955,6 +84009,8 @@ if (!root) return;
 root.innerHTML = weatherOptsHtml();
 const d = load();
 const season = d['season'] || defSeason();
+const autoP = String(taAutoProb());
+document.querySelectorAll('#weather-root .wx-opt[data-wx="ta-auto"]').forEach(x => x.classList.toggle('sel', x.dataset.val === autoP));
 document.querySelectorAll('#weather-root .wx-opt[data-wx="season"]').forEach(x => x.classList.toggle('sel', x.dataset.val === season));
 document.querySelectorAll('#weather-root .wx-opt[data-wx="my-w"]').forEach(x => x.classList.toggle('sel', x.dataset.val === d['my-w']));
 document.querySelectorAll('#weather-root .wx-opt[data-wx="ta-w"]').forEach(x => x.classList.toggle('sel', x.dataset.val === d['ta-w']));
@@ -83966,6 +84022,12 @@ x.addEventListener('click', function () {
 const k = this.dataset.wx, v = this.dataset.val;
 const d2 = load();
 if (k === 'season') { d2['season'] = v; }
+else if (k === 'ta-auto') {
+const s = store(); if (s && s.set) s.set('ta-weather-auto', v);
+renderPage();
+renderDesk();
+return;
+}
 else { d2[k] = v; }
 save(d2);
 renderPage();
@@ -84011,18 +84073,22 @@ window.taWeatherLine = taWeatherLine;
 function bind(id, fn) { const n = el(id); if (n) n.addEventListener('click', fn); }
 (function () {
 const desk = el('desk-weather');
-if (desk) desk.addEventListener('click', function () { renderPage(); openPage(el('page-weather')); });
+if (desk) desk.addEventListener('click', function () { renderPage(); openPage(el('page-weather')); scheduleTaWeather(); });
 bind('more-weather', function () {
 const mp = document.getElementById('chat-more-panel');
 if (mp) mp.hidden = true;
 renderPage();
 openPage(el('page-weather'));
+scheduleTaWeather();
 });
 bind('weather-back', function () { backHome(el('page-weather')); });
 bind('weather-send', sendWeather);
 })();
 renderDesk();
-document.addEventListener('contact-switched', function () { try { renderDesk(); } catch (e) {} });
+setTimeout(function () { try { taChangeWeather(); } catch (e) {} }, 6000 + Math.random() * 9000);
+document.addEventListener('contact-switched', function () {
+try { renderDesk(); scheduleTaWeather(); } catch (e) {}
+});
 window.weatherSummary = function () { try { return summary(load()); } catch (e) { return ''; } };
 })();
 } catch (__e) { try { console.error("[JS] weather.js", __e && __e.message || __e); } catch (x) {} if (window.__jsErrors) window.__jsErrors.push(String(__e && __e.message || __e)); } })();
@@ -84096,23 +84162,68 @@ if (gn.indexOf('风格') >= 0) return 'look';
 if (gn.indexOf('饰品') >= 0) return 'accessory';
 return 'other';
 }
+function taAutoProb() {
+try {
+const s = store(); if (!s || !s.get) return 50;
+const v = s.get('ta-wardrobe-auto');
+if (v === null || v === undefined || v === '') return 50;
+const n = Number(v); return isNaN(n) ? 50 : Math.max(0, Math.min(100, n));
+} catch (e) { return 50; }
+}
+function taChangeOutfit() {
+try {
+const p = taAutoProb();
+if (Math.random() * 100 >= p) return false;
+const gs = wardrobeGroups();
+if (!gs.length) return false;
+const d = load();
+d['ta'] = d['ta'] || {};
+gs.forEach(g => {
+const cat = catFor(g[0]);
+if (cat === 'other') return;
+const words = (g[1] || []).filter(Boolean);
+if (!words.length) return;
+d['ta'][cat] = words[Math.floor(Math.random() * words.length)];
+});
+save(d);
+try {
+const root = el('wardrobe-root');
+if (root && !root.closest('.page').hidden) renderPage();
+else renderPreview();
+} catch (e) {}
+const t = outfitText('ta') || '';
+if (t) {
+const lines = ['衣柜我翻过了，你穿' + t + '。', '我给自己挑好了：' + t + '，你只能夸。', '穿搭我换了，' + t + '，不准说不合适。'];
+taSay(lines[Math.floor(Math.random() * lines.length)], 1500 + Math.random() * 2500);
+}
+return true;
+} catch (e) { return false; }
+}
+function scheduleTaOutfit() {
+try {
+setTimeout(function () { try { taChangeOutfit(); } catch (e) {} }, 9000 + Math.random() * 16000);
+} catch (e) {}
+}
 function renderPage() {
 const root = el('wardrobe-root');
 if (!root) return;
 const d = load();
 const gs = wardrobeGroups();
 const html = [];
+const chips = (list, side, cat) => list.map(x => '<span class="wx-opt' + ((d[side] && d[side][cat] === x) ? ' sel' : '') + '" data-wr-side="' + side + '" data-wr-cat="' + cat + '" data-val="' + x + '">' + x + '</span>').join('');
+html.push('<div class="cal-card glass">');
+html.push('<div class="cal-card-title">梦角自主更换穿搭概率</div>');
+html.push('<div class="wx-chips">' + ['0', '25', '50', '75', '100'].map(x => '<span class="wx-opt' + (String(taAutoProb()) === x ? ' sel' : '') + '" data-wr-side="ta-auto" data-wr-cat="prob" data-val="' + x + '">' + x + '</span>').join('') + '</div>');
+html.push('<div class="wx-sum" style="font-size:12px;opacity:.7;margin-top:2px">0=TA 不主动换穿搭；越高换得越勤。可随时改，无任何限制</div>');
+html.push('</div>');
 html.push('<div class="cal-card glass">');
 html.push('<div class="cal-card-title">我的穿搭</div>');
 html.push('<div class="wr-side" data-wr-side="my">');
 gs.forEach(g => {
 const cat = catFor(g[0]);
 if (cat === 'other') return; // 搭配模板不参与选择
-const cur = d['my'] && d['my'][cat];
 html.push('<div class="wr-cat"><span class="wr-cat-name">' + g[0] + '</span><div class="wx-chips">');
-(g[1] || []).forEach(x => {
-html.push('<span class="wx-opt' + (cur === x ? ' sel' : '') + '" data-wr-side="my" data-wr-cat="' + cat + '" data-val="' + x + '">' + x + '</span>');
-});
+html.push(chips((g[1] || []).filter(Boolean), 'my', cat));
 html.push('</div></div>');
 });
 html.push('</div></div>');
@@ -84122,11 +84233,8 @@ html.push('<div class="wr-side" data-wr-side="ta">');
 gs.forEach(g => {
 const cat = catFor(g[0]);
 if (cat === 'other') return;
-const cur = d['ta'] && d['ta'][cat];
 html.push('<div class="wr-cat"><span class="wr-cat-name">' + g[0] + '</span><div class="wx-chips">');
-(g[1] || []).forEach(x => {
-html.push('<span class="wx-opt' + (cur === x ? ' sel' : '') + '" data-wr-side="ta" data-wr-cat="' + cat + '" data-val="' + x + '">' + x + '</span>');
-});
+html.push(chips((g[1] || []).filter(Boolean), 'ta', cat));
 html.push('</div></div>');
 });
 html.push('</div></div>');
@@ -84141,6 +84249,11 @@ root.innerHTML = html.join('');
 document.querySelectorAll('#wardrobe-root .wx-opt').forEach(x => {
 x.addEventListener('click', function () {
 const side = this.dataset.wrSide, cat = this.dataset.wrCat, val = this.dataset.val;
+if (side === 'ta-auto' && cat === 'prob') {
+const s = store(); if (s && s.set) s.set('ta-wardrobe-auto', val);
+renderPage();
+return;
+}
 const d2 = load();
 d2[side] = d2[side] || {};
 if (d2[side][cat] === val) delete d2[side][cat];
@@ -84203,9 +84316,14 @@ const mp = document.getElementById('chat-more-panel');
 if (mp) mp.hidden = true;
 renderPage();
 openPage(el('page-wardrobe'));
+scheduleTaOutfit();
 });
 bind('wardrobe-back', function () { backHome(el('page-wardrobe')); });
 })();
+setTimeout(function () { try { taChangeOutfit(); } catch (e) {} }, 7000 + Math.random() * 10000);
+document.addEventListener('contact-switched', function () {
+try { scheduleTaOutfit(); } catch (e) {}
+});
 })();
 } catch (__e) { try { console.error("[JS] wardrobe.js", __e && __e.message || __e); } catch (x) {} if (window.__jsErrors) window.__jsErrors.push(String(__e && __e.message || __e)); } })();
 (function () { try {
@@ -85859,4 +85977,4 @@ lastHeal: his
 <!-- __MOCHI_EOF__ -->
 </body>
 </html>
-<!-- __MOCHI_EOF__ mv107rfv -->
+<!-- __MOCHI_EOF__ mv11x5ru -->
