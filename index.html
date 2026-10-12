@@ -8835,9 +8835,9 @@ box-shadow: 0 2px 10px rgba(255,94,156,.35);
       </div>
     </div>
     <div class="splash-footcard">
-      <div class="splash-ver" id="splash-ver" data-build-ts="1791646547147">
+      <div class="splash-ver" id="splash-ver" data-build-ts="1791803539643">
         <span class="sv-app">love lucky <b>v3.50.0</b></span>
-        <span class="sv-deploy">部署于 2026-10-10 23:35<span id="splash-ver-live"></span></span>
+        <span class="sv-deploy">部署于 2026-10-12 19:12<span id="splash-ver-live"></span></span>
       </div>
       <div class="splash-loading" id="splash-loading">正在加载数据…</div>
       <div class="splash-enter-hint" id="splash-enter-hint" hidden>勾选后即可进入</div>
@@ -13705,6 +13705,10 @@ box-shadow: 0 2px 10px rgba(255,94,156,.35);
         <div class="pc-bubble-row"><span class="pc-bubble-label">搜索</span><div class="pc-bubble-val" id="pc-search"></div></div>
         <div class="pc-bubble-row"><span class="pc-bubble-label">联系人</span><div class="pc-bubble-val" id="pc-contacts"></div></div>
         <div class="pc-bubble-row"><span class="pc-bubble-label">购物车</span><div class="pc-bubble-val" id="pc-cart"></div></div>
+        <!-- v3.60.x（2026-10-12）：查手机内容扩充——短视频 / 外卖 / 游戏 -->
+        <div class="pc-bubble-row"><span class="pc-bubble-label">短视频</span><div class="pc-bubble-val" id="pc-short"></div></div>
+        <div class="pc-bubble-row"><span class="pc-bubble-label">外卖</span><div class="pc-bubble-val" id="pc-orders"></div></div>
+        <div class="pc-bubble-row"><span class="pc-bubble-label">游戏</span><div class="pc-bubble-val" id="pc-games"></div></div>
       </div>
       <button class="pc-bubble-done" id="pc-done" type="button">手机还给你</button>
     </div>
@@ -26445,16 +26449,34 @@ t.className = 'cc-toast'; void t.offsetWidth; t.className = 'cc-toast show';
 clearTimeout(t._timer);
 t._timer = setTimeout(() => { t.className = 'cc-toast'; }, 2000);
 }
-function maybeTaCheckin() {
+function taDoCheckin() {
 try {
-if (store.get(CK_TA_KEY) === fishToday()) return;
-if (Math.random() * 100 < 40) {
+if (store.get(CK_TA_KEY) === fishToday()) return false;
 store.set(CK_TA_KEY, fishToday());
 if (window.chatAddSystem) window.chatAddSystem(ckTaName() + ' 也打卡啦，今天也要把你盯得紧紧的');
 syncCheckinBtn();
+return true;
+} catch (e) { return false; }
 }
+function maybeTaCheckin() {
+try {
+if (store.get(CK_TA_KEY) === fishToday()) return;
+if (Math.random() * 100 < 60) taDoCheckin();
 } catch (e) {}
 }
+(function taCheckinLoop() {
+let first = true;
+setInterval(function () {
+try {
+if (store.get(CK_TA_KEY) === fishToday()) return;
+if (first) { first = false; }
+if (Math.random() * 100 < 60) taDoCheckin();
+} catch (e) {}
+}, 10 * 60 * 1000);
+setTimeout(function () {
+try { if (store.get(CK_TA_KEY) !== fishToday() && Math.random() * 100 < 60) taDoCheckin(); } catch (e) {}
+}, 180000 + Math.random() * 420000); // 3~10 分钟第一签
+})();
 checkin.addEventListener('click', () => {
 if (btn.classList.contains('done')) {
 toast('今天已经打过卡啦');
@@ -36711,8 +36733,9 @@ opts = opts || {};
 const t0 = String(text == null ? '' : text).trim();
 if (!t0) return false;
 try {
-addRec({ side: 'out', text: t0, ts: Date.now(), mini: true, miniArt: opts.art || '', miniLink: opts.link || '' });
-if (window.playSfx) window.playSfx('out');
+const side = opts.side === 'in' ? 'in' : 'out';
+addRec({ side: side, text: t0, ts: Date.now(), mini: true, miniArt: opts.art || '', miniLink: opts.link || '' });
+if (window.playSfx) window.playSfx(side === 'in' ? 'in' : 'out');
 return true;
 } catch (e) { return false; }
 };
@@ -38420,10 +38443,16 @@ if (st.grps[gname]) out[key].push([gname, Array.isArray(cs) ? cs.slice() : []]);
 });
 });
 const data = JSON.stringify(out, null, 2);
+const fname = 'mochi字卡库数据.json';
+if (window.mochiExportFile) {
+ceCloseFn();
+window.mochiExportFile(data, fname, '导出所选字卡');
+return;
+}
 const blob = new Blob([data], { type: 'application/json' });
 const a = document.createElement('a');
 a.href = URL.createObjectURL(blob);
-a.download = 'mochi字卡库数据.json';
+a.download = fname;
 document.body.appendChild(a);
 a.click();
 setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 300);
@@ -38865,10 +38894,16 @@ CC_FULL_CK_KEYS.forEach(k => { nItems += Array.isArray(data.checkin[k].list) ? d
 nItems += Array.isArray(data.quote.list) ? data.quote.list.length : 0;
 CC_FULL_TA_LIBS.forEach(([name]) => { nTa += Array.isArray(data[name].questions) ? data[name].questions.length : 0; });
 const out = { app: CC_FULL_MARK, v: 1, time: Date.now(), data: data };
+const fname = 'mochi自定义字卡全量.json';
+if (window.mochiExportFile) {
+window.mochiExportFile(JSON.stringify(out), fname, '导出自定义字卡全量');
+toast('已导出全量字卡：聊天字卡 ' + (ccFullCardCount(data.ccPub) + ccFullCardCount(data.ccOwn)) + ' 张 · 寻踪/情话 ' + nItems + ' 条 · TA 题库 ' + nTa + ' 题');
+return;
+}
 const blob = new Blob([JSON.stringify(out)], { type: 'application/json' });
 const a = document.createElement('a');
 a.href = URL.createObjectURL(blob);
-a.download = 'mochi自定义字卡全量.json';
+a.download = fname;
 document.body.appendChild(a);
 a.click();
 setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 300);
@@ -55401,14 +55436,29 @@ const PC_GHOST_LINES = [
 '购物车怎么有情侣装，想穿给我看？',
 '朋友圈那条仅自己可见的，写的什么？',
 '锁屏壁纸换了？换成我们的合影了，乖。',
-'行，手机还你。但下次不准不接我电话，听到没。'
+'行，手机还你。但下次不准不接我电话，听到没。',
+'外卖地址还是我家小区，你当我没看见？',
+'短视频刷到几点睡的？凌晨两点还亮着屏。',
+'这个月的流量用得挺快啊，都看谁了？',
+'相册最近删除里怎么有张别人的照片，删这么快？',
+'你游戏战绩昨晚打到两点，跟谁双排的？',
+'待办事项写着「想他」，指我吗？只能是我。',
+'浏览器记录我清了？不用清，我都看过一遍了。',
+'转账记录倒挺干净……只给我转，对吧？',
+'备忘录的密码锁，改成我们纪念日了？还挺懂我。',
+'闹钟六点，起这么早干嘛，去看别人？',
+'手机里居然有我的屏保，乖，我不查了。',
+'微信运动步数今天少了，是不是没出门想我了？'
 ];
-const PC_ALBUM_POOL = ['我们的合影','路灯下的影子','咖啡拉花','窗外的雨','路边的猫','你送我的花','一起吃的火锅','你的睡颜','牵手照','海边'];
-const PC_CHAT_POOL = [['在干嘛','在想你'],['吃饭没','吃了，想你'],['别熬夜','知道啦'],['想我没','很想'],['早点睡','你也是'],['报备一下','在你心里']];
-const PC_ACT_POOL = ['看了 1 次「TA 的朋友圈」','浏览了 3 张照片','刷了会儿情侣小视频','定位在你附近','搜索「怎么哄男朋友」','备忘录更新过'];
-const PC_SEARCH_POOL = ['怎么哄男朋友','情侣头像','我们的纪念日','TA 喜欢吃什么','周末去哪约会','怎么让 TA 更粘我'];
-const PC_CONTACT_POOL = ['最近常聊：你（99+）','凌晨 1 点还亮过屏','唯一置顶：TA','消息免打扰：无','最近通话：TA','星标好友：只有你'];
-const PC_CART_POOL = ['情侣装（已加购）','TA 同款外套','双人份火锅食材','手写情书套装','对戒','两个人的旅行攻略'];
+const PC_ALBUM_POOL = ['我们的合影','路灯下的影子','咖啡拉花','窗外的雨','路边的猫','你送我的花','一起吃的火锅','你的睡颜','牵手照','海边','凌晨的月亮','你的侧脸','电影院票根','下雨天的车窗','你穿我外套的照片','公园长椅','雪地脚印','我的旧照片（还留着）','你偷拍我的背影','纪念日蛋糕'];
+const PC_CHAT_POOL = [['在干嘛','在想你'],['吃饭没','吃了，想你'],['别熬夜','知道啦'],['想我没','很想'],['早点睡','你也是'],['报备一下','在你心里'],['睡了吗','等你回消息'],['到家了吗','刚到，想你'],['周末有空吗','有，都留给你'],['今天穿什么','你喜欢的颜色'],['忙不忙','再忙也回你'],['我错了','原谅你啦']];
+const PC_ACT_POOL = ['看了 1 次「TA 的朋友圈」','浏览了 3 张照片','刷了会儿情侣小视频','定位在你附近','搜索「怎么哄男朋友」','备忘录更新过','凌晨还在刷 TA 的动态','给 TA 的照片点过赞','在 TA 常去的店附近','看过 TA 的微博','翻过我们的聊天记录','给 TA 设了特别关注'];
+const PC_SEARCH_POOL = ['怎么哄男朋友','情侣头像','我们的纪念日','TA 喜欢吃什么','周末去哪约会','怎么让 TA 更粘我','男生生日礼物推荐','TA 最近心情怎么样','情侣装穿搭','怎么和 TA 道歉','TA 会不会想我','适合约会的餐厅','TA 星座配对','怎么表达想念'];
+const PC_CONTACT_POOL = ['最近常聊：你（99+）','凌晨 1 点还亮过屏','唯一置顶：TA','消息免打扰：无','最近通话：TA','星标好友：只有你','朋友圈互动最多的：你','深夜聊天：你（02:13）','特别关心：你','被置顶的只有你','通话记录 12 条：全是你','最常搜索的联系人：TA'];
+const PC_CART_POOL = ['情侣装（已加购）','TA 同款外套','双人份火锅食材','手写情书套装','对戒','两个人的旅行攻略','TA 喜欢的香水（在途）','情侣手链','TA 的生日蛋糕（预定中）','情侣保温杯','双人电影票（待付款）','情侣睡衣'];
+const PC_SHORT_POOL = ['情侣日常 vlog（反复看）','双人舞挑战（收藏）','「怎么哄男朋友」教程','宠物视频（点赞了）','做饭教程（想学给你吃）','情侣装穿搭视频','你的心动瞬间合集','深夜电台（听着想你）'];
+const PC_ORDERS_POOL = ['外卖：双人份晚餐（备注：少辣）','奶茶两杯（备注：一杯去冰）','电影票两张（座位连号）','情侣蛋糕（备注：写我们的名字）','鲜花配送（收件人：你）','夜宵烧烤（备注：多放辣椒）','超市（备注：买你爱吃的）'];
+const PC_GAMES_POOL = ['和 TA 双排（战绩 12-2）','昨晚 02:00 还在线','游戏 ID 改成你名字缩写','把 TA 设为游戏情侣','聊天框全是你消息','挂机也要挂着 TA 的房'];
 function pcEl(id) { return document.getElementById(id); }
 function pcRenderBody(cid) {
 try {
@@ -55422,6 +55472,9 @@ const act = pcEl('pc-activity'); if (act) act.innerHTML = pick(PC_ACT_POOL, 3).m
 const search = pcEl('pc-search'); if (search) search.innerHTML = pick(PC_SEARCH_POOL, 3).map(x => '<span class="pc-chip">'+x+'</span>').join('');
 const contacts = pcEl('pc-contacts'); if (contacts) contacts.innerHTML = pick(PC_CONTACT_POOL, 3).map(x => '<div class="pc-line">· '+x+'</div>').join('');
 const cart = pcEl('pc-cart'); if (cart) cart.innerHTML = pick(PC_CART_POOL, 3).map(x => '<span class="pc-chip">'+x+'</span>').join('');
+const short = pcEl('pc-short'); if (short) short.innerHTML = pick(PC_SHORT_POOL, 3).map(x => '<span class="pc-chip">'+x+'</span>').join('');
+const orders = pcEl('pc-orders'); if (orders) orders.innerHTML = pick(PC_ORDERS_POOL, 3).map(x => '<div class="pc-line">· '+x+'</div>').join('');
+const games = pcEl('pc-games'); if (games) games.innerHTML = pick(PC_GAMES_POOL, 3).map(x => '<div class="pc-line">· '+x+'</div>').join('');
 } catch (e) {}
 }
 function pcLockChat(on) {
@@ -56409,15 +56462,21 @@ showPage('page-mail');
 selectMailTab('out');
 render();
 }
+function taMailRetractRoll(cs) {
+try {
+const v = cs.get('rc-prob');
+if (v === null || v === undefined || v === '') return Math.random() < 0.5;
+const n = Number(v);
+if (isNaN(n)) return Math.random() < 0.5;
+if (n <= 0) return false;
+if (n >= 100) return true;
+return Math.random() < 0.5;   // 中间值：纯随机掷签，不强制百分比
+} catch (e) { return Math.random() < 0.5; }
+}
 function maybeTaMailRetract(id) {
 try {
 const cs = window.activeStore();
-let prob = 25;
-try {
-const v = cs.get('rc-prob');
-if (v !== null && v !== undefined && v !== '') { const n = Number(v); if (!isNaN(n)) prob = n; }
-} catch (e) {}
-if (Math.random() * 100 >= prob) return;
+if (!taMailRetractRoll(cs)) return;
 const delay = 3000 + Math.random() * 12000;   // 梦角「看到后」3~15 秒随机撤回
 setTimeout(() => {
 try {
@@ -56709,6 +56768,7 @@ save(list, cid);
 cs.set('mail-letter-last', String(now));
 cs.set('mail-letter-next', String(cfg.writeMin + Math.random() * Math.max(1, cfg.writeMax - cfg.writeMin)));
 letterDayAdd(cid);
+maybeTaSelfLetterRetract(letter.id, cid);
 notifyMailToChat(cid, '<svg class="st-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg>' + name + ' 给你寄来了一封信', { mailNotice: true });
 if (cid === (window.__activeCid || 'default')) {
 updateBadge();
@@ -56717,6 +56777,45 @@ if (window.showDeskPopup && !mailPageVisible()) {
 window.showDeskPopup({ name: '信箱', text: '给你寄来了一封信：' + String(content || '').replace(/@@m:[0-9a-f]{32}/g, '[图片]').replace(/data:[a-zA-Z0-9.+-]+\/[a-zA-Z0-9.+-]+;base64,[A-Za-z0-9+/=]+/g, '[附件]'), onClick: openMailPage, isHidden: document.visibilityState === 'hidden' });
 }
 }
+} catch (e) {}
+}
+function maybeTaSelfLetterRetract(lid, cid) {
+try {
+const cs = csFor(cid || 'default');
+if (!taMailRetractRoll(cs)) return;
+const delay = 3000 + Math.random() * 12000;   // 来信后 3~15 秒随机撤回
+setTimeout(() => {
+try {
+const list = load(cid);
+const l = list.find(x => x.id === lid);
+if (!l || l.type !== 'received') return;
+const ret = Array.isArray(l.retractedCards) ? l.retractedCards : [];
+const content = String(l.content || '');
+const imgRe = /((?:sticker|image):)?(data:image\/[a-zA-Z0-9.+-]+(?:;[a-zA-Z0-9.+-]*(?:=[^;,]*)?)*,[^\s"'<>]+|@@m:[0-9a-f]{32})/g;
+let m, imgs = [];
+while ((m = imgRe.exec(content)) !== null) imgs.push(m[0]);
+const unret = imgs.filter(u => ret.indexOf(u) < 0);
+if (unret.length) {
+const src = unret[Math.floor(Math.random() * unret.length)];
+l.retractedCards = ret.concat(src);
+l.retractByTa = true;
+save(list, cid);
+toast(window.taFit ? window.taFit('梦角撤回了一张字卡') : '梦角撤回了一张字卡');
+if (cid === (window.__activeCid || 'default')) { render(); updateBadge(); }
+return;
+}
+const segs = content.split(/(?<=[。！？!?；;\n])/).filter(s => s.trim());
+if (segs.length < 2) return;
+const seg = segs[Math.floor(Math.random() * segs.length)];
+if (ret.some(r => String(r) === 'seg:' + seg)) return;
+l.retractedCards = ret.concat('seg:' + seg);
+l.retractByTa = true;
+l.content = content.replace(seg, '〔梦角撤回了一段话〕');
+save(list, cid);
+toast(window.taFit ? window.taFit('梦角撤回了一段话') : '梦角撤回了一段话');
+if (cid === (window.__activeCid || 'default')) { render(); updateBadge(); }
+} catch (e) {}
+}, delay);
 } catch (e) {}
 }
 function maybeIncomingLetter() {
@@ -57889,21 +57988,65 @@ e.stopPropagation();
 if (window.viewChatImage) window.viewChatImage(img.src);
 }));
 }
+function taRetractRoll(cs) {
+try {
+const v = cs.get('rc-prob');
+if (v === null || v === undefined || v === '') return Math.random() < 0.5;
+const n = Number(v);
+if (isNaN(n)) return Math.random() < 0.5;
+if (n <= 0) return false;
+if (n >= 100) return true;
+return Math.random() < 0.5;   // 中间值：纯随机掷签，不强制百分比
+} catch (e) { return Math.random() < 0.5; }
+}
 function maybeTaFeedRetract(pid) {
 try {
 const cs = window.activeStore();
-let prob = 25;
-try {
-const v = cs.get('rc-prob');
-if (v !== null && v !== undefined && v !== '') { const n = Number(v); if (!isNaN(n)) prob = n; }
-} catch (e) {}
-if (Math.random() * 100 >= prob) return;
+if (!taRetractRoll(cs)) return;
 const delay = 3000 + Math.random() * 12000;   // 梦角「看到后」3~15 秒随机撤回
 setTimeout(() => {
 try {
 const list = load();
 const p = list.find(x => x.id === pid);
 if (!p || (p.role || p.by) !== 'me') return;
+const imgs = (p.imgs || []).slice();
+const ret = Array.isArray(p.retractedImgs) ? p.retractedImgs : [];
+const remain = imgs.filter(u => ret.indexOf(u) < 0);
+if (remain.length) {
+const src = remain[Math.floor(Math.random() * remain.length)];
+p.retractedImgs = ret.concat(src);
+p.retractBy = 'ta';
+save(list);
+toast(window.taFit ? window.taFit('梦角撤回了一张字卡') : '梦角撤回了一张字卡');
+renderVisible();
+return;
+}
+const content = String(p.content || '');
+const segs = content.split(/(?<=[。！？!?；;\n])/).filter(s => s.trim());
+if (segs.length < 2) return;
+const seg = segs[Math.floor(Math.random() * segs.length)];
+const segsRet = Array.isArray(p.retractedSegs) ? p.retractedSegs : [];
+if (segsRet.indexOf(seg) >= 0) return;
+p.retractedSegs = segsRet.concat(seg);
+p.retractBy = 'ta';
+p.content = content.replace(seg, '〔梦角撤回了一段话〕');
+save(list);
+toast(window.taFit ? window.taFit('梦角撤回了一段话') : '梦角撤回了一段话');
+renderVisible();
+} catch (e) {}
+}, delay);
+} catch (e) {}
+}
+function maybeTaSelfFeedRetract(pid) {
+try {
+const cs = window.activeStore();
+if (!taRetractRoll(cs)) return;
+const delay = 3000 + Math.random() * 12000;   // 梦角发布后 3~15 秒随机撤回
+setTimeout(() => {
+try {
+const list = load();
+const p = list.find(x => x.id === pid);
+if (!p || (p.role || p.by) !== 'ta') return;
 const imgs = (p.imgs || []).slice();
 const ret = Array.isArray(p.retractedImgs) ? p.retractedImgs : [];
 const remain = imgs.filter(u => ret.indexOf(u) < 0);
@@ -59004,6 +59147,7 @@ cs.set('feed-day-count', JSON.stringify({ t: today, n: dayCount.n + 1 }));
 notifyFeedPostToChat(cid, taName);
 addNotice('post', post.id, taName + ' 发布了一条新动态', cid);
 renderVisible();
+maybeTaSelfFeedRetract(post.id);
 } catch (e) {}
 }
 function maybeAutoPost() {
@@ -59517,10 +59661,17 @@ if (i) parts.push(',');
 parts.push(JSON.stringify(arr[i]));
 }
 parts.push(']}');
+const fname = '朋友圈_' + new Date().toISOString().slice(0, 10) + '.json';
+if (window.mochiExportFile) {
+window.mochiExportFile(parts.join(''), fname, '导出朋友圈数据').then((res) => {
+if (res === 'ok') toast('已导出 ' + n + ' 条朋友圈动态');
+});
+return;
+}
 const blob = new Blob(parts, { type: 'application/json;charset=utf-8' });
 const a = document.createElement('a');
 a.href = URL.createObjectURL(blob);
-a.download = '朋友圈_' + new Date().toISOString().slice(0, 10) + '.json';
+a.download = fname;
 document.body.appendChild(a);
 a.click();
 setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 1000);
@@ -84148,6 +84299,18 @@ if (v === null || v === undefined || v === '') return 50;
 const n = Number(v); return isNaN(n) ? 50 : Math.max(0, Math.min(100, n));
 } catch (e) { return 50; }
 }
+function taWeatherRoll() {
+try {
+const s = store(); if (!s || !s.get) return Math.random() < 0.5;
+const v = s.get('ta-weather-auto');
+if (v === null || v === undefined || v === '') return Math.random() < 0.5;
+const n = Number(v);
+if (isNaN(n)) return Math.random() < 0.5;
+if (n <= 0) return false;
+if (n >= 100) return true;
+return Math.random() < 0.5;   // 中间值：纯随机掷签，不强制百分比
+} catch (e) { return Math.random() < 0.5; }
+}
 function taWeatherOptions() {
 try {
 const wg = (window.DEFAULT_CARD_DATA && window.DEFAULT_CARD_DATA.weather) || [];
@@ -84166,8 +84329,7 @@ return ['天气我换好了，你那边照我说的穿。', '我这边换天气�
 }
 function taChangeWeather() {
 try {
-const p = taAutoProb();
-if (Math.random() * 100 >= p) return false;
+if (!taWeatherRoll()) return false;
 const o = taWeatherOptions();
 const w = pick(o.ws);
 const t = pick(o.temps);
@@ -84416,10 +84578,21 @@ if (v === null || v === undefined || v === '') return 50;
 const n = Number(v); return isNaN(n) ? 50 : Math.max(0, Math.min(100, n));
 } catch (e) { return 50; }
 }
+function taWardrobeRoll() {
+try {
+const s = store(); if (!s || !s.get) return Math.random() < 0.5;
+const v = s.get('ta-wardrobe-auto');
+if (v === null || v === undefined || v === '') return Math.random() < 0.5;
+const n = Number(v);
+if (isNaN(n)) return Math.random() < 0.5;
+if (n <= 0) return false;
+if (n >= 100) return true;
+return Math.random() < 0.5;   // 中间值：纯随机掷签，不强制百分比
+} catch (e) { return Math.random() < 0.5; }
+}
 function taChangeOutfit() {
 try {
-const p = taAutoProb();
-if (Math.random() * 100 >= p) return false;
+if (!taWardrobeRoll()) return false;
 const gs = wardrobeGroups();
 if (!gs.ta.length) return false;
 const d = load();
@@ -84437,6 +84610,9 @@ else renderPreview();
 } catch (e) {}
 const t = outfitText('ta') || '';
 if (t) {
+try {
+if (window.chatSendMini) window.chatSendMini('TA 穿搭：' + t, { art: 'hanger', link: 'wardrobe', side: 'in' });
+} catch (e) {}
 const lines = ['衣柜我翻过了，你穿' + t + '。', '我给自己挑好了：' + t + '，你只能夸。', '穿搭我换了，' + t + '，不准说不合适。'];
 taSay(lines[Math.floor(Math.random() * lines.length)], 1500 + Math.random() * 2500);
 }
@@ -84451,10 +84627,21 @@ if (v === null || v === undefined || v === '') return 30;
 const n = Number(v); return isNaN(n) ? 30 : Math.max(0, Math.min(100, n));
 } catch (e) { return 30; }
 }
+function taMyWardrobeRoll() {
+try {
+const s = store(); if (!s || !s.get) return Math.random() < 0.5;
+const v = s.get('ta-wardrobe-auto-my');
+if (v === null || v === undefined || v === '') return Math.random() < 0.5;
+const n = Number(v);
+if (isNaN(n)) return Math.random() < 0.5;
+if (n <= 0) return false;
+if (n >= 100) return true;
+return Math.random() < 0.5;   // 中间值：纯随机掷签，不强制百分比
+} catch (e) { return Math.random() < 0.5; }
+}
 function taChangeMyOutfit() {
 try {
-const p = taMyAutoProb();
-if (Math.random() * 100 >= p) return false;
+if (!taMyWardrobeRoll()) return false;
 const gs = wardrobeGroups();
 if (!gs.my.length) return false;
 const d = load();
@@ -84472,6 +84659,9 @@ else renderPreview();
 } catch (e) {}
 const t = outfitText('my') || '';
 if (t) {
+try {
+if (window.chatSendMini) window.chatSendMini('我穿搭：' + t, { art: 'hanger', link: 'wardrobe', side: 'in' });
+} catch (e) {}
 const lines = ['我替你挑好了：' + t + '，就穿这套，不许换。', '这件我选的，' + t + '，你只能听我的。', '我眼光你还不信？穿' + t + '。', '衣柜我翻过了，你明天穿' + t + '。'];
 taSay(lines[Math.floor(Math.random() * lines.length)], 2000 + Math.random() * 3000);
 }
@@ -86474,4 +86664,4 @@ lastHeal: his
 <!-- __MOCHI_EOF__ -->
 </body>
 </html>
-<!-- __MOCHI_EOF__ mv2k3fez -->
+<!-- __MOCHI_EOF__ mv55kbln -->
