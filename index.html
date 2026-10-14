@@ -8835,9 +8835,9 @@ box-shadow: 0 2px 10px rgba(255,94,156,.35);
       </div>
     </div>
     <div class="splash-footcard">
-      <div class="splash-ver" id="splash-ver" data-build-ts="1791803539643">
+      <div class="splash-ver" id="splash-ver" data-build-ts="1791983608614">
         <span class="sv-app">love lucky <b>v3.50.0</b></span>
-        <span class="sv-deploy">部署于 2026-10-12 19:12<span id="splash-ver-live"></span></span>
+        <span class="sv-deploy">部署于 2026-10-14 21:13<span id="splash-ver-live"></span></span>
       </div>
       <div class="splash-loading" id="splash-loading">正在加载数据…</div>
       <div class="splash-enter-hint" id="splash-enter-hint" hidden>勾选后即可进入</div>
@@ -13705,10 +13705,10 @@ box-shadow: 0 2px 10px rgba(255,94,156,.35);
         <div class="pc-bubble-row"><span class="pc-bubble-label">搜索</span><div class="pc-bubble-val" id="pc-search"></div></div>
         <div class="pc-bubble-row"><span class="pc-bubble-label">联系人</span><div class="pc-bubble-val" id="pc-contacts"></div></div>
         <div class="pc-bubble-row"><span class="pc-bubble-label">购物车</span><div class="pc-bubble-val" id="pc-cart"></div></div>
-        <!-- v3.60.x（2026-10-12）：查手机内容扩充——短视频 / 外卖 / 游戏 -->
+        <!-- v3.60.x（2026-10-12）：查手机内容扩充——短视频 / 外卖 -->
         <div class="pc-bubble-row"><span class="pc-bubble-label">短视频</span><div class="pc-bubble-val" id="pc-short"></div></div>
         <div class="pc-bubble-row"><span class="pc-bubble-label">外卖</span><div class="pc-bubble-val" id="pc-orders"></div></div>
-        <div class="pc-bubble-row"><span class="pc-bubble-label">游戏</span><div class="pc-bubble-val" id="pc-games"></div></div>
+        <!-- v3.61.x（2026-10-14）：删除「游戏」栏目 -->
       </div>
       <button class="pc-bubble-done" id="pc-done" type="button">手机还给你</button>
     </div>
@@ -55458,7 +55458,6 @@ const PC_CONTACT_POOL = ['最近常聊：你（99+）','凌晨 1 点还亮过屏
 const PC_CART_POOL = ['情侣装（已加购）','TA 同款外套','双人份火锅食材','手写情书套装','对戒','两个人的旅行攻略','TA 喜欢的香水（在途）','情侣手链','TA 的生日蛋糕（预定中）','情侣保温杯','双人电影票（待付款）','情侣睡衣'];
 const PC_SHORT_POOL = ['情侣日常 vlog（反复看）','双人舞挑战（收藏）','「怎么哄男朋友」教程','宠物视频（点赞了）','做饭教程（想学给你吃）','情侣装穿搭视频','你的心动瞬间合集','深夜电台（听着想你）'];
 const PC_ORDERS_POOL = ['外卖：双人份晚餐（备注：少辣）','奶茶两杯（备注：一杯去冰）','电影票两张（座位连号）','情侣蛋糕（备注：写我们的名字）','鲜花配送（收件人：你）','夜宵烧烤（备注：多放辣椒）','超市（备注：买你爱吃的）'];
-const PC_GAMES_POOL = ['和 TA 双排（战绩 12-2）','昨晚 02:00 还在线','游戏 ID 改成你名字缩写','把 TA 设为游戏情侣','聊天框全是你消息','挂机也要挂着 TA 的房'];
 function pcEl(id) { return document.getElementById(id); }
 function pcRenderBody(cid) {
 try {
@@ -55474,7 +55473,6 @@ const contacts = pcEl('pc-contacts'); if (contacts) contacts.innerHTML = pick(PC
 const cart = pcEl('pc-cart'); if (cart) cart.innerHTML = pick(PC_CART_POOL, 3).map(x => '<span class="pc-chip">'+x+'</span>').join('');
 const short = pcEl('pc-short'); if (short) short.innerHTML = pick(PC_SHORT_POOL, 3).map(x => '<span class="pc-chip">'+x+'</span>').join('');
 const orders = pcEl('pc-orders'); if (orders) orders.innerHTML = pick(PC_ORDERS_POOL, 3).map(x => '<div class="pc-line">· '+x+'</div>').join('');
-const games = pcEl('pc-games'); if (games) games.innerHTML = pick(PC_GAMES_POOL, 3).map(x => '<div class="pc-line">· '+x+'</div>').join('');
 } catch (e) {}
 }
 function pcLockChat(on) {
@@ -55543,13 +55541,21 @@ const v = cfg ? cfg['ck-random-prob'] : 30;
 const n = Number(v); return isNaN(n) ? 30 : Math.max(0, Math.min(100, n));
 } catch (e) { return 30; }
 }
+function pcRandomRoll() {
+try {
+const p = ckRandomProb();
+if (p <= 0) return false;
+if (p >= 100) return true;
+return Math.random() < 0.5;
+} catch (e) { return Math.random() < 0.5; }
+}
 let pcRandTimer = 0;
 function scheduleRandomPhoneCheck() {
 clearTimeout(pcRandTimer);
 const gap = 480000 + Math.random() * 720000; // 8~20 分钟随机间隔，不定时
 pcRandTimer = setTimeout(function () {
 try {
-if (Math.random() * 100 < ckRandomProb()) {
+if (pcRandomRoll()) {
 const cid = window.__activeCid || 'default';
 const name = (function () { try { if (window.contactNameOf) return window.contactNameOf(cid); } catch (e) {} return 'TA'; })();
 ckSayTo(cid, '📱 <b>' + name + ' 又不打招呼来查岗了</b>：想你了，看看你在干嘛。', true);
@@ -56141,7 +56147,7 @@ return '<img class="mail-body-img" src="' + attrs + '" alt="表情"> ';
 if (ret.some(r => String(r).indexOf('seg:') === 0) && out.indexOf('〔梦角撤回了一段话〕') >= 0) {
 const segSrc = String(ret.find(r => String(r).indexOf('seg:') === 0) || '').slice(4);
 const attrs = String(segSrc).replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
-out = out.replace('〔梦角撤回了一段话〕', '<span class="mail-retracted" data-src="' + attrs + '">' + (byTa ? '梦角撤回了一段话' : '已撤回一段话') + '</span> ');
+out = out.replace('〔梦角撤回了一段话〕', '<span class="mail-retracted" data-seg="1" data-src="' + attrs + '">' + (byTa ? '梦角撤回了一段话' : '已撤回一段话') + '</span> ');
 }
 return out;
 }
@@ -56251,7 +56257,13 @@ sp.__mailRetractBound = true;
 sp.style.cssText = 'opacity:.6;font-size:12px;cursor:pointer;';
 sp.addEventListener('click', function (e) {
 e.stopPropagation();
-if (window.viewChatImage) window.viewChatImage(sp.getAttribute('data-src'));
+const src = sp.getAttribute('data-src') || '';
+if (sp.getAttribute('data-seg')) {
+if (window.openModal) window.openModal('梦角撤回的一段话', '', function () {}, { noInput: true, staticText: '「' + src + '」' });
+else alert('被撤回的一段话：' + src);
+return;
+}
+if (window.viewChatImage) window.viewChatImage(src);
 });
 });
 }
@@ -56499,16 +56511,6 @@ ms.forEach(u => {
 if (/^(sticker|image):|^data:image\/|^@@m:/.test(u) && ret.indexOf(u) < 0) picks.push({ target: cd.target, src: u });
 });
 });
-if (picks.length) {
-const pick = picks[Math.floor(Math.random() * picks.length)];
-pick.target.retractedCards = (Array.isArray(pick.target.retractedCards) ? pick.target.retractedCards : []).concat(pick.src);
-l.retractByTa = true;
-save(list);
-toast(window.taFit ? window.taFit('梦角撤回了一张字卡') : '梦角撤回了一张字卡');
-if (viewLetter && viewLetter.id === l.id) openLetter(l);
-render();
-return;
-}
 const segCandidates = [];
 candidates.forEach(cd => {
 const ret = Array.isArray(cd.target.retractedCards) ? cd.target.retractedCards : [];
@@ -56518,7 +56520,18 @@ segs.forEach(seg => {
 if (ret.indexOf('seg:' + seg) < 0) segCandidates.push({ target: cd.target, seg: seg });
 });
 });
-if (!segCandidates.length) return;
+const canSeg = segCandidates.length > 0;
+if (!canSeg && !picks.length) return;
+if ((picks.length && canSeg) ? Math.random() < 0.5 : picks.length) {
+const pick = picks[Math.floor(Math.random() * picks.length)];
+pick.target.retractedCards = (Array.isArray(pick.target.retractedCards) ? pick.target.retractedCards : []).concat(pick.src);
+l.retractByTa = true;
+save(list);
+toast(window.taFit ? window.taFit('梦角撤回了一张字卡') : '梦角撤回了一张字卡');
+if (viewLetter && viewLetter.id === l.id) openLetter(l);
+render();
+return;
+}
 const pick = segCandidates[Math.floor(Math.random() * segCandidates.length)];
 const mark = '〔梦角撤回了一段话〕';
 pick.target.retractedCards = (Array.isArray(pick.target.retractedCards) ? pick.target.retractedCards : []).concat('seg:' + pick.seg);
@@ -56795,7 +56808,12 @@ const imgRe = /((?:sticker|image):)?(data:image\/[a-zA-Z0-9.+-]+(?:;[a-zA-Z0-9.+
 let m, imgs = [];
 while ((m = imgRe.exec(content)) !== null) imgs.push(m[0]);
 const unret = imgs.filter(u => ret.indexOf(u) < 0);
-if (unret.length) {
+const segs = content.split(/(?<=[。！？!?；;\n])/).filter(s => s.trim());
+const segCands = segs.filter(s => !ret.some(r => String(r) === 'seg:' + s));
+const canImg = unret.length > 0;
+const canSeg = segCands.length > 0 && segs.length >= 2;
+if (!canImg && !canSeg) return;
+if ((canImg && canSeg) ? Math.random() < 0.5 : canImg) {
 const src = unret[Math.floor(Math.random() * unret.length)];
 l.retractedCards = ret.concat(src);
 l.retractByTa = true;
@@ -56804,10 +56822,7 @@ toast(window.taFit ? window.taFit('梦角撤回了一张字卡') : '梦角撤回
 if (cid === (window.__activeCid || 'default')) { render(); updateBadge(); }
 return;
 }
-const segs = content.split(/(?<=[。！？!?；;\n])/).filter(s => s.trim());
-if (segs.length < 2) return;
-const seg = segs[Math.floor(Math.random() * segs.length)];
-if (ret.some(r => String(r) === 'seg:' + seg)) return;
+const seg = segCands[Math.floor(Math.random() * segCands.length)];
 l.retractedCards = ret.concat('seg:' + seg);
 l.retractByTa = true;
 l.content = content.replace(seg, '〔梦角撤回了一段话〕');
@@ -58012,7 +58027,14 @@ if (!p || (p.role || p.by) !== 'me') return;
 const imgs = (p.imgs || []).slice();
 const ret = Array.isArray(p.retractedImgs) ? p.retractedImgs : [];
 const remain = imgs.filter(u => ret.indexOf(u) < 0);
-if (remain.length) {
+const content = String(p.content || '');
+const segs = content.split(/(?<=[。！？!?；;\n])/).filter(s => s.trim());
+const segsRet = Array.isArray(p.retractedSegs) ? p.retractedSegs : [];
+const segCands = segs.filter(s => segsRet.indexOf(s) < 0);
+const canImg = remain.length > 0;
+const canSeg = segCands.length > 0 && segs.length >= 2;
+if (!canImg && !canSeg) return;
+if ((canImg && canSeg) ? Math.random() < 0.5 : canImg) {
 const src = remain[Math.floor(Math.random() * remain.length)];
 p.retractedImgs = ret.concat(src);
 p.retractBy = 'ta';
@@ -58021,12 +58043,7 @@ toast(window.taFit ? window.taFit('梦角撤回了一张字卡') : '梦角撤回
 renderVisible();
 return;
 }
-const content = String(p.content || '');
-const segs = content.split(/(?<=[。！？!?；;\n])/).filter(s => s.trim());
-if (segs.length < 2) return;
-const seg = segs[Math.floor(Math.random() * segs.length)];
-const segsRet = Array.isArray(p.retractedSegs) ? p.retractedSegs : [];
-if (segsRet.indexOf(seg) >= 0) return;
+const seg = segCands[Math.floor(Math.random() * segCands.length)];
 p.retractedSegs = segsRet.concat(seg);
 p.retractBy = 'ta';
 p.content = content.replace(seg, '〔梦角撤回了一段话〕');
@@ -58050,7 +58067,14 @@ if (!p || (p.role || p.by) !== 'ta') return;
 const imgs = (p.imgs || []).slice();
 const ret = Array.isArray(p.retractedImgs) ? p.retractedImgs : [];
 const remain = imgs.filter(u => ret.indexOf(u) < 0);
-if (remain.length) {
+const content = String(p.content || '');
+const segs = content.split(/(?<=[。！？!?；;\n])/).filter(s => s.trim());
+const segsRet = Array.isArray(p.retractedSegs) ? p.retractedSegs : [];
+const segCands = segs.filter(s => segsRet.indexOf(s) < 0);
+const canImg = remain.length > 0;
+const canSeg = segCands.length > 0 && segs.length >= 2;
+if (!canImg && !canSeg) return;
+if ((canImg && canSeg) ? Math.random() < 0.5 : canImg) {
 const src = remain[Math.floor(Math.random() * remain.length)];
 p.retractedImgs = ret.concat(src);
 p.retractBy = 'ta';
@@ -58059,12 +58083,7 @@ toast(window.taFit ? window.taFit('梦角撤回了一张字卡') : '梦角撤回
 renderVisible();
 return;
 }
-const content = String(p.content || '');
-const segs = content.split(/(?<=[。！？!?；;\n])/).filter(s => s.trim());
-if (segs.length < 2) return;
-const seg = segs[Math.floor(Math.random() * segs.length)];
-const segsRet = Array.isArray(p.retractedSegs) ? p.retractedSegs : [];
-if (segsRet.indexOf(seg) >= 0) return;
+const seg = segCands[Math.floor(Math.random() * segCands.length)];
 p.retractedSegs = segsRet.concat(seg);
 p.retractBy = 'ta';
 p.content = content.replace(seg, '〔梦角撤回了一段话〕');
@@ -58339,10 +58358,20 @@ e.stopPropagation();
 const parts = String(el2.dataset.stickerDel).split('|');
 removeFeedSticker(parts[0], parseInt(parts[1], 10));
 }));
-listEl.querySelectorAll('.feed-retracted[data-src]').forEach(sp => sp.addEventListener('click', (e) => {
+listEl.querySelectorAll('.feed-retracted[data-src]').forEach(sp => {
+if (sp.__feedRetractBound) return;
+sp.__feedRetractBound = true;
+sp.addEventListener('click', (e) => {
 e.stopPropagation();
-if (window.viewChatImage) window.viewChatImage(sp.dataset.src);
-}));
+const src = sp.getAttribute('data-src') || '';
+if (sp.getAttribute('data-seg')) {
+if (window.openModal) window.openModal('梦角撤回的一段话', '', function () {}, { noInput: true, staticText: '「' + src + '」' });
+else alert('被撤回的一段话：' + src);
+return;
+}
+if (window.viewChatImage) window.viewChatImage(src);
+});
+});
 const memCard = listEl.querySelector('.feed-mem-card');
 if (memCard) {
 memCard.addEventListener('click', (e) => {
@@ -86664,4 +86693,4 @@ lastHeal: his
 <!-- __MOCHI_EOF__ -->
 </body>
 </html>
-<!-- __MOCHI_EOF__ mv55kbln -->
+<!-- __MOCHI_EOF__ mv84rtpi -->
