@@ -8838,9 +8838,9 @@ box-shadow: 0 2px 10px rgba(255,94,156,.35);
       </div>
     </div>
     <div class="splash-footcard">
-      <div class="splash-ver" id="splash-ver" data-build-ts="1792913033824">
+      <div class="splash-ver" id="splash-ver" data-build-ts="1792914230961">
         <span class="sv-app">love lucky <b>v3.50.0</b></span>
-        <span class="sv-deploy">部署于 2026-10-25 15:23<span id="splash-ver-live"></span></span>
+        <span class="sv-deploy">部署于 2026-10-25 15:43<span id="splash-ver-live"></span></span>
       </div>
       <div class="splash-loading" id="splash-loading">正在加载数据…</div>
       <div class="splash-enter-hint" id="splash-enter-hint" hidden>勾选后即可进入</div>
@@ -83801,6 +83801,16 @@ update();
 function el(id) { return document.getElementById(id); }
 function cid() { try { return window.__activeCid || 'default'; } catch (e) { return 'default'; } }
 function partnerName() { try { return window.chatPartnerName ? window.chatPartnerName() : 'TA'; } catch (e) { return 'TA'; } }
+function myNick() {
+try {
+const s = store();
+if (s && s.get) {
+const v = s.get('lbl-user');
+if (v && String(v).trim()) return String(v).trim();
+}
+} catch (e) {}
+return '我';
+}
 function toast(t) {
 try {
 let n = document.getElementById('cc-toast');
@@ -83957,8 +83967,8 @@ setTimeout(function () { try { taChangeWeather(); } catch (e) {} }, 8000 + Math.
 }
 function summary(d) {
 const myW = d['my-w'] || '晴天', myT = d['my-t'] || '', taW = d['ta-w'] || '晴天', taT = d['ta-t'] || '';
-const my = '我这边' + myW + (myT ? ' ' + myT + '°' : '');
-const ta = '你那边' + taW + (taT ? ' ' + taT + '°' : '');
+const my = myNick() + '这边' + myW + (myT ? ' ' + myT + '°' : '');
+const ta = partnerName() + '那边' + taW + (taT ? ' ' + taT + '°' : '');
 return my + '，' + ta;
 }
 function makeChatLink(d) {
@@ -83996,7 +84006,7 @@ return '<div class="cal-card glass">' +
 '<div class="cal-card-title">季节</div><div class="wx-chips">' + chips(sNames, 'season') + '</div>' +
 '<div class="cal-card-title">我的天气</div><div class="wx-chips">' + myChips + '</div>' +
 '<div class="cal-card-title">' + partnerName() + ' 的天气</div><div class="wx-chips">' + taChips + '</div>' +
-'<div class="cal-card-title">温度（我 / ' + partnerName() + '）</div><div class="wx-chips">' + chips(temps, 'my-t') + ' ' + chips(temps, 'ta-t') + '</div>' +
+'<div class="cal-card-title">温度（' + myNick() + ' / ' + partnerName() + '）</div><div class="wx-chips">' + chips(temps, 'my-t') + ' ' + chips(temps, 'ta-t') + '</div>' +
 '<div class="wx-sum" id="wx-sum"></div>' +
 '</div>';
 }
@@ -84097,6 +84107,16 @@ window.weatherSummary = function () { try { return summary(load()); } catch (e) 
 function el(id) { return document.getElementById(id); }
 function cid() { try { return window.__activeCid || 'default'; } catch (e) { return 'default'; } }
 function partnerName() { try { return window.chatPartnerName ? window.chatPartnerName() : 'TA'; } catch (e) { return 'TA'; } }
+function myNick() {
+try {
+const s = store();
+if (s && s.get) {
+const v = s.get('lbl-user');
+if (v && String(v).trim()) return String(v).trim();
+}
+} catch (e) {}
+return '我';
+}
 function toast(t) {
 try {
 let n = document.getElementById('cc-toast');
@@ -84214,7 +84234,7 @@ else renderPreview();
 const t = outfitText('ta') || '';
 if (t) {
 try {
-if (window.chatSendMini) window.chatSendMini('TA 穿搭：' + t, { art: 'hanger', link: 'wardrobe', side: 'in' });
+if (window.chatSendMini) window.chatSendMini(partnerName() + ' 穿搭：' + t, { art: 'hanger', link: 'wardrobe', side: 'in' });
 } catch (e) {}
 const lines = ['衣柜我翻过了，你穿' + t + '。', '我给自己挑好了：' + t + '，你只能夸。', '穿搭我换了，' + t + '，不准说不合适。'];
 taSay(lines[Math.floor(Math.random() * lines.length)], 1500 + Math.random() * 2500);
@@ -84263,7 +84283,7 @@ else renderPreview();
 const t = outfitText('my') || '';
 if (t) {
 try {
-if (window.chatSendMini) window.chatSendMini('我穿搭：' + t, { art: 'hanger', link: 'wardrobe', side: 'in' });
+if (window.chatSendMini) window.chatSendMini(myNick() + ' 穿搭：' + t, { art: 'hanger', link: 'wardrobe', side: 'in' });
 } catch (e) {}
 const lines = ['我替你挑好了：' + t + '，就穿这套，不许换。', '这件我选的，' + t + '，你只能听我的。', '我眼光你还不信？穿' + t + '。', '衣柜我翻过了，你明天穿' + t + '。'];
 taSay(lines[Math.floor(Math.random() * lines.length)], 2000 + Math.random() * 3000);
@@ -84316,7 +84336,7 @@ const root = el('wardrobe-root');
 if (root && !root.closest('.page').hidden) renderPage();
 else renderPreview();
 } catch (e) {}
-const txt = '情侣装已就位：他穿' + pair.ta + '，我穿' + pair.my;
+const txt = '情侣装已就位：' + partnerName() + '穿' + pair.ta + '，' + myNick() + '穿' + pair.my;
 if (window.chatSendMini) window.chatSendMini(txt, { art: 'heart', link: 'wardrobe' });
 taSay('乖，情侣装穿好了。' + pair.my + '配' + pair.ta + '，谁都不许分开。', 900);
 } catch (e) {}
@@ -86267,4 +86287,4 @@ lastHeal: his
 <!-- __MOCHI_EOF__ -->
 </body>
 </html>
-<!-- __MOCHI_EOF__ mvni4msg -->
+<!-- __MOCHI_EOF__ mvniuai9 -->
