@@ -3122,6 +3122,11 @@ border-radius:8px; margin:2px 4px 0 0; vertical-align:middle;
 }
 .fav-item-imgs { display:flex; gap:6px; flex-wrap:wrap; margin-top:8px; }
 .fav-item-imgs img { width:64px; height:64px; object-fit:cover; border-radius:8px; }
+.fav-item-cmt { margin-top:10px; padding-top:8px; border-top:1px dashed rgba(0,0,0,.12); font-size:12px; line-height:1.7; }
+.fav-item-cmt-line { color:var(--muted); word-break:break-word; }
+.fav-item-cmt-line b { font-weight:600; color:var(--main-text); }
+.fav-item-cmt-reply { padding-left:10px; }
+.fav-item-cmt .fav-item-img { width:28px; height:28px; object-fit:cover; border-radius:4px; vertical-align:middle; }
 .mem-scroll { flex:1; overflow-y:auto; scrollbar-width:none; -ms-overflow-style:none; padding:0 18px; }
 .mem-scroll::-webkit-scrollbar { display:none; }
 .mem-card {
@@ -8838,9 +8843,9 @@ box-shadow: 0 2px 10px rgba(255,94,156,.35);
       </div>
     </div>
     <div class="splash-footcard">
-      <div class="splash-ver" id="splash-ver" data-build-ts="1792914230961">
+      <div class="splash-ver" id="splash-ver" data-build-ts="1793538060594">
         <span class="sv-app">love lucky <b>v3.50.0</b></span>
-        <span class="sv-deploy">部署于 2026-10-25 15:43<span id="splash-ver-live"></span></span>
+        <span class="sv-deploy">部署于 2026-11-01 21:01<span id="splash-ver-live"></span></span>
       </div>
       <div class="splash-loading" id="splash-loading">正在加载数据…</div>
       <div class="splash-enter-hint" id="splash-enter-hint" hidden>勾选后即可进入</div>
@@ -13990,6 +13995,11 @@ box-shadow: 0 2px 10px rgba(255,94,156,.35);
         <div class="set-row" id="cs-import-all">
           <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="#111111" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><path d="M7 10l5 5 5-5"/><path d="M12 5v12"/><path d="M3 19h18"/></svg></div>
           <div class="txt">导入全部桌面聊天记录</div>
+        </div>
+        <!-- v3.62.x（2026-11-01）需求四：聊天记录检索——按日期 / 关键字检索当前聊天记录（参照 QQ 聊天记录检索方式，结果可点击跳转定位） -->
+        <div class="set-row" id="cs-search-msgs">
+          <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="#111111" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.35-4.35"/></svg></div>
+          <div class="txt">检索聊天记录<span class="sub">按日期或关键字查找，结果点击可跳转到对应消息</span></div>
         </div>
         <div class="set-row danger" id="cs-clear-msgs">
           <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/><path d="M10 11v6M14 11v6"/></svg></div>
@@ -27840,7 +27850,9 @@ const arr = chatTailRead();
 arr.push(entry);
 while (arr.length > CHAT_TAIL_MAX) arr.shift();
 store.set('chat-tail', JSON.stringify(arr));
-} catch (e) {}
+} catch (e) {
+try { flushPersistNow(); } catch (e2) {}
+}
 }
 function chatTailDrop(rec) {
 try {
@@ -27875,6 +27887,52 @@ return add.length; // FIX 2026-09-13 #407：回放条数上抛（插入/排序=�
 } catch (e) {}
 return 0;
 }
+const TA_OUTBOX_KEY = 'ta-outbox';
+function taOutboxRead() { try { const a = JSON.parse(localStorage.getItem(TA_OUTBOX_KEY) || '[]'); return Array.isArray(a) ? a : []; } catch (e) { return []; } }
+function taOutboxWrite(arr) { try { localStorage.setItem(TA_OUTBOX_KEY, JSON.stringify(arr.slice(-60))); } catch (e) {} }
+window.taOutboxPush = function (entry) {
+try {
+if (!entry || typeof entry.text !== 'string' || !entry.text) return;
+const arr = taOutboxRead();
+arr.push({ sig: entry.sig || (Date.now() + '|' + Math.random().toString(36).slice(2, 8)), text: entry.text, type: entry.type || 'text', ts: entry.ts || Date.now(), initiative: entry.initiative !== false });
+taOutboxWrite(arr);
+} catch (e) {}
+};
+window.taOutboxDrop = function (sig) {
+try { if (!sig) return; taOutboxWrite(taOutboxRead().filter(j => j.sig !== sig)); } catch (e) {}
+};
+window.taOutboxFlush = function () {
+try {
+const arr = taOutboxRead();
+if (!arr.length) return;
+const kept = [];
+for (let i = 0; i < arr.length; i++) {
+const j = arr[i];
+if (!j || typeof j.text !== 'string' || !j.text) continue;
+let dup = false;
+for (let k = msgs.length - 1; k >= Math.max(0, msgs.length - 80); k--) {
+const m = msgs[k];
+if (m && m.side === 'in' && m.text === j.text && Math.abs((m.ts || 0) - (j.ts || 0)) < 300000) { dup = true; break; }
+}
+if (dup) continue;
+kept.push(j);
+}
+taOutboxWrite(kept);
+if (!kept.length) return;
+const myCid = window.__activeCid || 'default';
+for (let i = 0; i < kept.length; i++) {
+(function (idx, entry) {
+setTimeout(function () {
+try {
+if ((window.__activeCid || 'default') !== myCid) return;
+const m = addIn(entry.text, { type: entry.type === 'image' ? 'image' : undefined, initiative: !!entry.initiative });
+try { if (m) window.taOutboxDrop(entry.sig); } catch (e) {}
+} catch (e) {}
+}, 1200 + idx * 2000);
+})(i, kept[i]);
+}
+} catch (e) {}
+};
 let authLoadedPrefix = null;
 let idbRetryTimer = null;
 let idbRetryCount = 0;
@@ -28359,6 +28417,7 @@ chatDbReady = true;
 authLoadedPrefix = myPrefix;
 idbRetryCount = 0;
 try { if (chatTailMerge() > 0) changed = true; } catch (e) {} // #180：权威就绪后回放尾巴日志（上次会话未落盘的最近消息）；FIX #407 回放插入=下标位移，并入 changed 走重渲，防屏上 data-idx 陈旧串条
+try { if (window.taOutboxFlush) window.taOutboxFlush(); } catch (e) {} // v3.62.x（2026-11-01）需求三：权威就绪后补发上次会话「排队未投递」的 TA 消息
 try { chatLedgerSave(myPrefix, idbArr.length, msgsBytes(idbArr)); } catch (e) {}
 try {
 lastIdbLoadPrefix = window.activePrefix();
@@ -30187,10 +30246,12 @@ let pokeTapT = null;    // touch 路轻点布点
 let pokeTapP = null;    // pointer 路轻点布点
 let pokeTapGuard = 0;   // 三路共用防重入
 let pokeDblT = null, pokeDblTimer = 0;
-function pokeFireDbl(rec) {
+let pokeLongT = null, pokeLongTimer = 0;
+function pokeLongReset() { if (pokeLongTimer) { clearTimeout(pokeLongTimer); pokeLongTimer = 0; } }
+function pokeFireLong(rec) {
 if (!rec || rec.fired || rec.cancelled) return;
 rec.fired = true;
-pokeTapGuard = Date.now() + 900; // 发戳戳后抑制随后的单击开面板 / click 兜底
+pokeTapGuard = Date.now() + 1200; // 发戳戳后抑制随后的轻点 / 双击 / click
 try {
 let full = '';
 try { if (window.MochiPresence && window.MochiPresence.fullText) full = window.MochiPresence.fullText() || ''; } catch (x) {}
@@ -30198,7 +30259,19 @@ addIn('戳了戳' + chatPartnerName() + '（想念戳戳' + (full ? ' · ' + ful
 } catch (err) {
 try { addIn('戳了戳' + chatPartnerName() + '（想念戳戳）', { special: 'poke' }); } catch (e2) {}
 }
-try { if (navigator.vibrate) navigator.vibrate(35); } catch (x) {} // 触感区别：双击戳戳震动
+try { if (navigator.vibrate) navigator.vibrate(35); } catch (x) {} // 触感区别：长按戳戳震动
+}
+function pokeFireDbl(rec) {
+if (!rec || rec.fired || rec.cancelled) return;
+rec.fired = true;
+pokeTapGuard = Date.now() + 900; // 发拍一拍后抑制随后的单击开面板 / click 兜底
+try {
+const cards = pokeAllCards();
+const act = cards.length ? pick(cards) : '拍了拍你';
+sendPoke(act);
+} catch (err) {
+try { sendPoke('拍了拍你'); } catch (e2) {}
+}
 }
 function pokeDblReset() { if (pokeDblTimer) { clearTimeout(pokeDblTimer); pokeDblTimer = 0; } }
 function pokeTapOnce(rec) {
@@ -30207,7 +30280,7 @@ if (pokeDblT) {
 const t = pokeDblT;
 pokeDblT = null;
 pokeDblReset();
-pokeFireDbl(t); // 双击命中：发戳戳
+pokeFireDbl(t); // 双击命中：自动拍一拍
 return;
 }
 pokeDblT = rec;
@@ -30224,13 +30297,18 @@ if (Date.now() < pokeTapGuard) return; // 已由其他路开过，让位
 const t = e.changedTouches && e.changedTouches[0];
 if (!t) return;
 pokeTapT = { x: t.clientX, y: t.clientY, t: Date.now(), id: t.identifier };
+pokeLongT = { x: t.clientX, y: t.clientY, t: Date.now(), id: t.identifier, fired: false, cancelled: false };
+pokeLongReset();
+pokeLongTimer = setTimeout(() => {
+if (pokeLongT && !pokeLongT.fired && !pokeLongT.cancelled) { pokeLongT.fired = true; pokeFireLong(pokeLongT); }
+}, 500);
 }, { passive: true });
 av.addEventListener('touchmove', (e) => {
 if (!pokeTapT) return;
 const t = e.changedTouches && e.changedTouches[0];
 if (!t || t.identifier !== pokeTapT.id) return;
 const dx = t.clientX - pokeTapT.x, dy = t.clientY - pokeTapT.y;
-if (dx * dx + dy * dy > 144) { pokeTapT = null; pokeDblT = null; pokeDblReset(); }
+if (dx * dx + dy * dy > 144) { pokeTapT = null; pokeDblT = null; pokeDblReset(); if (pokeLongT) { pokeLongT.cancelled = true; } pokeLongReset(); }
 }, { passive: true });
 av.addEventListener('touchend', (e) => {
 if (Date.now() < pokeTapGuard) return;
@@ -30240,10 +30318,24 @@ const dx = t.clientX - pokeTapT.x;
 const dy = t.clientY - pokeTapT.y;
 const dt = Date.now() - pokeTapT.t;
 pokeTapT = null;
+if (pokeLongT) {
+const longFired = pokeLongT.fired;
+pokeLongT = null;
+pokeLongReset();
+if (longFired) return; // 长按已发戳戳：抑制本次轻点，避免再开面板/触发双击
+}
 if (dx * dx + dy * dy > 144 || dt > 450) return; // 滑动/按住不算轻点（哨兵 G1 touch 路同口径）
 pokeTapOnce({ x: t.clientX, y: t.clientY, t: Date.now(), id: t.identifier, fired: false, cancelled: false });
 }, { passive: true });
-av.addEventListener('touchcancel', () => { pokeTapT = null; pokeDblT = null; pokeDblReset(); }, { passive: true });
+av.addEventListener('touchcancel', () => { pokeTapT = null; pokeDblT = null; pokeDblReset(); pokeLongT = null; pokeLongReset(); }, { passive: true });
+av.addEventListener('contextmenu', (e) => {
+e.preventDefault();
+e.stopPropagation();
+if (Date.now() < pokeTapGuard) return;
+if (pokeLongT && pokeLongT.fired) return;
+if (pokeLongT) { pokeLongT.cancelled = true; pokeLongT = null; pokeLongReset(); }
+pokeFireLong({ fired: false, cancelled: false });
+});
 av.addEventListener('pointerdown', (e) => {
 if (Date.now() < pokeTapGuard) return;
 if (e.pointerType !== 'mouse') pokeTapP = { x: e.clientX, y: e.clientY, t: Date.now(), id: e.pointerId, fired: false, cancelled: false }; // mouse 交给 click 兜底
@@ -31171,6 +31263,8 @@ await new Promise(r => setTimeout(r, randInt(900, 1800)));
 if (!sameCid()) { hideTyping(); return; }
 hideTyping();
 }
+const _spSig = Date.now() + '|sp' + si + '|' + Math.random().toString(36).slice(2, 6);
+try { if (window.taOutboxPush) window.taOutboxPush({ sig: _spSig, text: rep.spell[si], type: 'text', ts: Date.now(), initiative: true }); } catch (e) {}
 m = addIn(rep.spell[si], {
 quote: si === 0 ? quote : null,
 qside: 'out',
@@ -31181,6 +31275,7 @@ silent: si > 0 ? true : silent,
 tag: '词典逐卡连发',
 tagNoDup: true
 });
+try { if (window.taOutboxDrop) window.taOutboxDrop(_spSig); } catch (e) {}
 }
 } else if (rep.mjFree) {
 m = addIn(rep.text, {
@@ -31595,12 +31690,16 @@ const acMin = Math.max(1, Number(cfgn(c, 'as-count-min', 1)) || 1);
 const acMax = Math.max(acMin, Number(cfgn(c, 'as-count-max', 2)) || 2);
 const count = randInt(acMin, acMax);
 for (let i = 0; i < count; i++) {
+const _am = autoMsg();
+const _sig = Date.now() + '|ta' + i + '|' + Math.random().toString(36).slice(2, 6);
+try { if (window.taOutboxPush) window.taOutboxPush({ sig: _sig, text: _am.text, type: _am.type, ts: Date.now(), initiative: true }); } catch (e) {}
 setTimeout(() => {
 if (!sameAutoCid()) return; // FIX #187
 hideTyping();
-const am = autoMsg();
+const am = _am;
 const willRetract = hit(c['rc-prob']);
 const m = addIn(am.text, { type: am.type, initiative: true, silent: i > 0 || willRetract });
+try { if (window.taOutboxDrop) window.taOutboxDrop(_sig); } catch (e) {} // 投递成功即摘除
 if (i === 0 && window.replyGuideHint) window.replyGuideHint('as'); // v3.27.x #218 互动频率引导（首条主动消息落地时提醒可调）
 try { console.log('[mochi-auto] 主动发送消息: type=%s initiative=true retract=%s', am.type, willRetract); } catch(e){}
 if (willRetract && m) {
@@ -34329,7 +34428,7 @@ if (quoteEq(rec.quote, quoteSnapOf(m))) return i;
 return -1;
 }
 function jumpToMsg(idx) {
-let target = body.querySelector('.msg[data-idx="' + idx + '"]');
+let target = body.querySelector('[data-idx="' + idx + '"]');
 if (!target) {
 if (idx < renderStart) {
 renderStart = Math.max(0, idx - JUMP_VIEW);
@@ -34340,7 +34439,7 @@ while (renderEnd <= idx && renderEnd < limit) {
 loadNewerIncremental(Math.min(idx + JUMP_VIEW + 1, limit));
 }
 }
-target = body.querySelector('.msg[data-idx="' + idx + '"]');
+target = body.querySelector('[data-idx="' + idx + '"]');
 }
 if (!target) return false;
 unpinChatAndAnchor(); // FIX 2026-09-11 #334：跳转=用户定位历史浏览，与手动上翻同权解除贴底钉住——钉住态下旧区 lazy 图 onload 触发 #162 图片补滚把视图拽回底部，搜索/引用跳转表现「点了没反应」
@@ -34349,6 +34448,7 @@ target.classList.add('highlight');
 setTimeout(() => target.classList.remove('highlight'), 2200);
 return true;
 }
+window.chatJumpToMsg = function (idx) { try { if (typeof idx !== 'number' || idx < 0 || idx >= msgs.length) return false; return jumpToMsg(idx); } catch (e) { return false; } };
 if (body) {
 body.addEventListener('click', (e) => {
 const qb = e.target.closest('.msg-quote');
@@ -34680,6 +34780,17 @@ last = mm.index + mm[0].length;
 html += escTxt(str.slice(last));
 return html;
 }
+function favFeedCommentsHtml(f) {
+if (!Array.isArray(f.comments) || !f.comments.length) return '';
+const who = (c) => (c && c.authorName) || ((c && (c.role || c.by)) === 'me' ? '我' : 'TA');
+return '<div class="fav-item-cmt">' + f.comments.map(c => {
+let h = '<div class="fav-item-cmt-line"><b>' + escTxt(who(c)) + '：</b>' + favTextHtml(c.content || '') + '</div>';
+if (Array.isArray(c.replies) && c.replies.length) {
+h += c.replies.map(r => '<div class="fav-item-cmt-line fav-item-cmt-reply"><b>' + escTxt(who(r)) + '</b> 回复 <b>' + escTxt(who(c)) + '</b>：' + favTextHtml(r.content || '') + '</div>').join('');
+}
+return h;
+}).join('') + '</div>';
+}
 list2.forEach(f => renderFavItem(f));
 function renderFavItem(f) {
 const kind = f.kind || 'msg';
@@ -34710,6 +34821,7 @@ let html = '<div class="fav-item-card">' +
 '<span class="fav-item-tag">朋友圈动态</span>' +
 (f.text ? '<div class="fav-item-body">' + favTextHtml(f.text) + '</div>' : '') +
 ((f.imgs && f.imgs.length) ? '<div class="fav-item-imgs">' + f.imgs.map(u => '<img src="' + attrEsc(u) + '" alt="图片" loading="lazy" decoding="async">').join('') + '</div>' : '') +
+favFeedCommentsHtml(f) +
 '</div>';
 m.innerHTML = html + side;
 fillAvatar(m.querySelector('.msg-av'), 'cs-avatar-user');
@@ -41374,6 +41486,158 @@ reader.readAsText(f, 'utf-8');
 input.click();
 });
 }
+function openChatSearch() {
+try {
+const old = [...document.querySelectorAll('div')].find(d => d.style && d.style.zIndex === '9990');
+if (old) old.remove();
+} catch (e) {}
+const arr = (window.getChatMsgs && window.getChatMsgs()) || null;
+if (!arr || !arr.length) { toast('当前没有聊天记录可检索'); return; }
+const partner = store.get('cs-lbl-partner') || 'TA';
+const mask = document.createElement('div');
+mask.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:9990;display:flex;align-items:center;justify-content:center;padding:14px';
+const box = document.createElement('div');
+box.style.cssText = 'width:100%;max-width:430px;max-height:88vh;display:flex;flex-direction:column;background:#fff;border-radius:16px;overflow:hidden;box-shadow:0 10px 40px rgba(0,0,0,.28)';
+const head = document.createElement('div');
+head.style.cssText = 'display:flex;align-items:center;justify-content:space-between;padding:14px 16px;border-bottom:1px solid #eee;background:#fafafa';
+head.innerHTML = '<div style="font-size:16px;font-weight:700;color:#111">检索聊天记录</div>';
+const closeBtn = document.createElement('button');
+closeBtn.textContent = '×';
+closeBtn.style.cssText = 'border:none;background:none;font-size:22px;color:#999;cursor:pointer;padding:0 4px';
+closeBtn.addEventListener('click', () => mask.remove());
+head.appendChild(closeBtn);
+box.appendChild(head);
+const cond = document.createElement('div');
+cond.style.cssText = 'padding:12px 16px;display:flex;flex-direction:column;gap:10px;border-bottom:1px solid #f0f0f0';
+const now = new Date();
+const mkSel = (vals, sel) => {
+const s = document.createElement('select');
+s.style.cssText = 'flex:1;padding:8px 6px;border:1px solid #ddd;border-radius:8px;font-size:14px;color:#111;background:#fff;min-width:0';
+vals.forEach(v => { const o = document.createElement('option'); o.value = String(v); o.textContent = sel === 'y' ? v + ' 年' : (sel === 'm' ? v + ' 月' : v + ' 日'); s.appendChild(o); });
+return s;
+};
+const ySel = mkSel(Array.from({ length: 8 }, (_, i) => now.getFullYear() - i).reverse(), 'y');
+const mSel = mkSel(Array.from({ length: 12 }, (_, i) => i + 1), 'm');
+const dSel = mkSel(Array.from({ length: 31 }, (_, i) => i + 1), 'd');
+const anyDay = document.createElement('button');
+anyDay.textContent = '不限日期';
+anyDay.style.cssText = 'flex:0 0 auto;padding:8px 12px;border:1px solid #ddd;border-radius:8px;font-size:13px;background:#fff;color:#111';
+let anyOn = false;
+anyDay.addEventListener('click', () => {
+anyOn = !anyOn;
+anyDay.style.borderColor = anyOn ? '#111' : '#ddd';
+anyDay.style.background = anyOn ? '#111' : '#fff';
+anyDay.style.color = anyOn ? '#fff' : '#111';
+});
+const dayRow = document.createElement('div');
+dayRow.style.cssText = 'display:flex;gap:6px;align-items:center';
+dayRow.appendChild(ySel); dayRow.appendChild(mSel); dayRow.appendChild(dSel); dayRow.appendChild(anyDay);
+cond.appendChild(dayRow);
+const kwRow = document.createElement('div');
+kwRow.style.cssText = 'display:flex;gap:8px';
+const kw = document.createElement('input');
+kw.type = 'text';
+kw.placeholder = '输入关键字，如：到家 / 加班 / 想你…';
+kw.style.cssText = 'flex:1;padding:9px 10px;border:1px solid #ddd;border-radius:10px;font-size:14px;color:#111;background:#fff;min-width:0';
+const goBtn = document.createElement('button');
+goBtn.textContent = '检索';
+goBtn.style.cssText = 'flex:0 0 auto;padding:9px 18px;border:none;border-radius:10px;background:#111;color:#fff;font-size:14px;font-weight:600';
+kwRow.appendChild(kw); kwRow.appendChild(goBtn);
+cond.appendChild(kwRow);
+box.appendChild(cond);
+const res = document.createElement('div');
+res.style.cssText = 'flex:1;overflow-y:auto;padding:10px 12px;background:#fff;min-height:120px';
+const empty = () => {
+res.innerHTML = '<div style="text-align:center;color:#aaa;font-size:13px;padding:28px 0">选择日期或输入关键字后点「检索」<br>点击结果可跳转到对应消息</div>';
+};
+empty();
+box.appendChild(res);
+const esc = (s) => String(s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+const fmtMsg = (m) => {
+const t = (m && m.ts) ? new Date(m.ts) : null;
+const hh = t ? (t.getHours() < 10 ? '0' : '') + t.getHours() + ':' + (t.getMinutes() < 10 ? '0' : '') + t.getMinutes() : '--:--';
+let txt = String((m && m.text) || '');
+if (m && m.type === 'image') txt = '[图片]';
+else if (m && m.type === 'sticker') txt = '[表情包]';
+else if (m && m.type === 'voice') txt = '[语音消息]';
+else if (txt.indexOf('data:image/') === 0 || txt.indexOf('@@m:') === 0) txt = '[图片]';
+else if (txt.indexOf('data:audio/') === 0) txt = '[语音消息]';
+else if (txt.length > 60) txt = txt.slice(0, 60) + '…';
+return { hh: hh, txt: txt, who: (m && m.side === 'out') ? '我' : partner };
+};
+const runSearch = () => {
+const k = String(kw.value || '').trim();
+const results = [];
+for (let i = 0; i < arr.length; i++) {
+const m = arr[i];
+if (!m || m.retracted) continue;
+if (!anyOn) {
+const t = new Date(m.ts || 0);
+if (t.getFullYear() !== Number(ySel.value) || (t.getMonth() + 1) !== Number(mSel.value) || t.getDate() !== Number(dSel.value)) continue;
+}
+if (k) {
+const body = String(m.text || '');
+if (body.indexOf(k) < 0) continue;
+}
+results.push({ i: i, m: m });
+if (results.length >= 200) break;
+}
+if (!results.length) { res.innerHTML = '<div style="text-align:center;color:#aaa;font-size:13px;padding:28px 0">没有找到匹配的聊天记录</div>'; return; }
+const frag = document.createDocumentFragment();
+results.forEach(r => {
+const f = fmtMsg(r.m);
+const item = document.createElement('div');
+item.style.cssText = 'display:flex;gap:8px;padding:9px 8px;border-radius:10px;cursor:pointer;align-items:flex-start';
+item.addEventListener('mouseover', () => { item.style.background = '#f6f6f6'; });
+item.addEventListener('mouseout', () => { item.style.background = 'transparent'; });
+let bodyHtml = esc(String(f.txt).replace(/<[^>]*>/g, ''));
+if (k) {
+const idx = bodyHtml.indexOf(esc(k));
+if (idx >= 0) bodyHtml = bodyHtml.slice(0, idx) + '<mark style="background:#ffe08a;color:#111;border-radius:3px">' + esc(k) + '</mark>' + bodyHtml.slice(idx + esc(k).length);
+}
+item.innerHTML = '<div style="flex:0 0 auto;font-size:12px;color:#999;padding-top:2px">' + f.hh + '</div>' +
+'<div style="flex:0 0 auto;font-size:12px;color:' + (r.m.side === 'out' ? '#e07a9a' : '#111') + ';font-weight:600;padding-top:2px">' + esc(f.who) + '</div>' +
+'<div style="flex:1;font-size:14px;color:#111;word-break:break-all;line-height:1.4">' + bodyHtml + '</div>';
+item.addEventListener('click', () => {
+mask.remove();
+try { if (window.enterChat) window.enterChat(); } catch (e) {}
+setTimeout(() => {
+try {
+if (!window.chatJumpToMsg || !window.chatJumpToMsg(r.i)) toast('该消息暂无法定位（可上翻聊天历史查看）');
+} catch (e) { toast('跳转失败'); }
+}, 120);
+});
+frag.appendChild(item);
+});
+res.innerHTML = '';
+const cnt = document.createElement('div');
+cnt.style.cssText = 'text-align:center;color:#888;font-size:12px;padding:2px 0 8px';
+cnt.textContent = '共 ' + results.length + ' 条' + (results.length >= 200 ? '（仅显示前 200 条）' : '');
+res.appendChild(cnt);
+res.appendChild(frag);
+};
+goBtn.addEventListener('click', runSearch);
+kw.addEventListener('keydown', (e) => { if (e.key === 'Enter') runSearch(); });
+const foot = document.createElement('div');
+foot.style.cssText = 'padding:10px 16px;border-top:1px solid #f0f0f0;display:flex;gap:8px';
+const resetBtn = document.createElement('button');
+resetBtn.textContent = '重置条件';
+resetBtn.style.cssText = 'flex:1;padding:10px;border:1px solid #ddd;border-radius:10px;background:#fff;color:#555;font-size:14px';
+resetBtn.addEventListener('click', () => { kw.value = ''; anyOn = true; anyDay.style.borderColor = '#111'; anyDay.style.background = '#111'; anyDay.style.color = '#fff'; empty(); });
+const okBtn = document.createElement('button');
+okBtn.textContent = '关闭';
+okBtn.style.cssText = 'flex:1;padding:10px;border:none;border-radius:10px;background:#111;color:#fff;font-size:14px;font-weight:600';
+okBtn.addEventListener('click', () => mask.remove());
+foot.appendChild(resetBtn); foot.appendChild(okBtn);
+box.appendChild(foot);
+mask.appendChild(box);
+mask.addEventListener('click', (e) => { if (e.target === mask) mask.remove(); });
+document.body.appendChild(mask);
+}
+const csSearch = row('cs-search-msgs');
+if (csSearch) {
+csSearch.addEventListener('click', () => { try { openChatSearch(); } catch (e) { toast('检索功能暂不可用'); } });
+}
 const csExportAll = row('cs-export-all');
 if (csExportAll) {
 csExportAll.addEventListener('click', () => {
@@ -47165,10 +47429,8 @@ if (String(v) === '1') {
 store.set('cs-lbl-user', t);
 nickApply();
 chatSystem(pname + ' 给我换了个昵称，现在叫「' + t + '」');
-toast('TA 给我换了个昵称「' + t + '」');
 } else {
 chatSystem(pname + ' 想给我换昵称，我拒绝了');
-toast('已拒绝');
 }
 }, { noInput: true, lock: true, pills: [{ label: '同意', value: '1' }, { label: '拒绝', value: '0' }], pill: '1', staticText: pname + ' 想给你换昵称「' + t + '」，同意吗？' });
 }
@@ -47192,7 +47454,6 @@ const oldName = cPartnerName();
 store.set('cs-lbl-partner', t);
 nickApply();
 chatSystem(oldName + ' 换了个新昵称，现在叫「' + t + '」');
-toast(oldName + ' 换了个新昵称「' + t + '」');
 try {
 if (window.bgNotifyCheck) window.bgNotifyCheck((store.get('lbl-partner') || 'TA') + ' 换了个新昵称', Date.now(), { name: store.get('lbl-partner') || 'TA' });
 } catch (e) {}
@@ -47231,7 +47492,6 @@ const pname = cPartnerName();
 store.set('cs-lbl-user', t);
 nickApply();
 chatSystem(pname + ' 给我换了个昵称，现在叫「' + t + '」');
-toast(pname + ' 给我换了个昵称「' + t + '」');
 }
 } catch (e) {}
 }
@@ -55506,13 +55766,15 @@ const BAOBEI_GROUPS = [
 ];
 function baobeiReply(text) {
 const t = String(text || '');
+const _q = t.trim();
+const quote = _q ? '你说「' + (_q.length > 24 ? _q.slice(0, 24) + '…' : _q) + '」——' : '';
 for (let i = 0; i < BAOBEI_GROUPS.length; i++) {
 const g = BAOBEI_GROUPS[i];
 let hit = false;
 for (let j = 0; j < g.k.length; j++) { if (t.indexOf(g.k[j]) >= 0) { hit = true; break; } }
-if (hit) return g.r[Math.floor(Math.random() * g.r.length)];
+if (hit) return quote + g.r[Math.floor(Math.random() * g.r.length)];
 }
-return BAOBEI_ACK[Math.floor(Math.random() * BAOBEI_ACK.length)];
+return quote + BAOBEI_ACK[Math.floor(Math.random() * BAOBEI_ACK.length)];
 }
 function userBaobei() {
 closeMorePanel();
@@ -58030,6 +58292,7 @@ const ok = window.addMyFavItem({
 kind: 'feed',
 text: p.content || '',
 imgs: (p.imgs || []).slice(),
+comments: (p.comments || []).slice(),
 ts: p.ts || Date.now(),
 side: isMine ? 'out' : 'in'
 });
@@ -86287,4 +86550,4 @@ lastHeal: his
 <!-- __MOCHI_EOF__ -->
 </body>
 </html>
-<!-- __MOCHI_EOF__ mvniuai9 -->
+<!-- __MOCHI_EOF__ mvxu94j6 -->
