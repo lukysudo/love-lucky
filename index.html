@@ -8843,9 +8843,9 @@ box-shadow: 0 2px 10px rgba(255,94,156,.35);
       </div>
     </div>
     <div class="splash-footcard">
-      <div class="splash-ver" id="splash-ver" data-build-ts="1793541554933">
+      <div class="splash-ver" id="splash-ver" data-build-ts="1793544227921">
         <span class="sv-app">love lucky <b>v3.50.0</b></span>
-        <span class="sv-deploy">部署于 2026-11-01 21:59<span id="splash-ver-live"></span></span>
+        <span class="sv-deploy">部署于 2026-11-01 22:43<span id="splash-ver-live"></span></span>
       </div>
       <div class="splash-loading" id="splash-loading">正在加载数据…</div>
       <div class="splash-enter-hint" id="splash-enter-hint" hidden>勾选后即可进入</div>
@@ -30279,20 +30279,13 @@ function pokeDblReset() { if (pokeDblTimer) { clearTimeout(pokeDblTimer); pokeDb
 function pokeTapOnce(rec, dblWin) {
 if (!dblWin) dblWin = 260;
 if (Date.now() < pokeTapGuard) return;
-if (pokeDblT) {
-const t = pokeDblT;
 pokeDblT = null;
-pokeDblReset();
-pokeFireDbl(t); // 双击命中：自动拍一拍
-return;
-}
-pokeDblT = rec;
 pokeDblReset();
 pokeDblTimer = setTimeout(() => {
 pokeDblT = null;
 if (Date.now() < pokeTapGuard) return;
 pokeTapGuard = Date.now() + 800;
-openPokeCard(); // 单击（未二次轻点）：打开拍一拍
+openPokeCard(); // 单击：打开拍一拍自选面板
 }, dblWin);
 }
 av.addEventListener('touchstart', (e) => {
@@ -30330,7 +30323,7 @@ if (longFired) return; // 长按已发戳戳：抑制本次轻点，避免再开
 if (dx * dx + dy * dy > 144 || dt > 450) return; // 滑动/按住不算轻点（哨兵 G1 touch 路同口径）
 pokeLastTouchEnd = Date.now(); // 记录轻点时刻，供 click 兜底吞掉本 tap 的合成 click
 pokeTouchTapT = Date.now();    // 记录 touch 路已布点，供 pointer 路对同一 tap 让位
-pokeTapOnce({ x: t.clientX, y: t.clientY, t: Date.now(), id: t.identifier, fired: false, cancelled: false }, 400); // 手机双击两下间隔可达 400ms
+pokeTapOnce({ x: t.clientX, y: t.clientY, t: Date.now(), id: t.identifier, fired: false, cancelled: false }, 260); // v3.64.x 单击开面板，无需等双击窗
 }, { passive: true });
 av.addEventListener('touchcancel', () => { pokeTapT = null; pokeDblT = null; pokeDblReset(); pokeLongT = null; pokeLongReset(); }, { passive: true });
 av.addEventListener('contextmenu', (e) => {
@@ -30359,14 +30352,14 @@ const dy = e.clientY - pokeTapP.y;
 const dt = Date.now() - pokeTapP.t;
 pokeTapP = null;
 if (dt > 450 || dx * dx + dy * dy > 144) return; // 滑动/按住不算轻点（哨兵 G1 pointer 路同口径）
-pokeTapOnce({ x: e.clientX, y: e.clientY, t: Date.now(), id: e.pointerId, fired: false, cancelled: false }, 400);
+pokeTapOnce({ x: e.clientX, y: e.clientY, t: Date.now(), id: e.pointerId, fired: false, cancelled: false }, 260); // v3.64.x 单击开面板
 });
 av.addEventListener('pointercancel', () => { pokeTapP = null; pokeDblT = null; pokeDblReset(); });
 av.addEventListener('click', (e) => {
 if (Date.now() < pokeTapGuard) { e.preventDefault(); e.stopPropagation(); return; }
 e.stopPropagation();
 if (Date.now() - pokeLastTouchEnd < 350) { e.preventDefault(); e.stopPropagation(); return; }
-pokeTapOnce({ x: e.clientX, y: e.clientY, t: Date.now(), id: 0, fired: false, cancelled: false }, 260);
+pokeTapOnce({ x: e.clientX, y: e.clientY, t: Date.now(), id: 0, fired: false, cancelled: false }, 260); // v3.64.x 鼠标单击开面板
 });
 }
 if (rec.side === 'in' && rec.initiative && !rec.retracted) {
@@ -86557,4 +86550,4 @@ lastHeal: his
 <!-- __MOCHI_EOF__ -->
 </body>
 </html>
-<!-- __MOCHI_EOF__ mvxwc0s5 -->
+<!-- __MOCHI_EOF__ mvxxxb9t -->
