@@ -8843,9 +8843,9 @@ box-shadow: 0 2px 10px rgba(255,94,156,.35);
       </div>
     </div>
     <div class="splash-footcard">
-      <div class="splash-ver" id="splash-ver" data-build-ts="1793544227921">
+      <div class="splash-ver" id="splash-ver" data-build-ts="1793776747329">
         <span class="sv-app">love lucky <b>v3.50.0</b></span>
-        <span class="sv-deploy">部署于 2026-11-01 22:43<span id="splash-ver-live"></span></span>
+        <span class="sv-deploy">部署于 2026-11-04 15:19<span id="splash-ver-live"></span></span>
       </div>
       <div class="splash-loading" id="splash-loading">正在加载数据…</div>
       <div class="splash-enter-hint" id="splash-enter-hint" hidden>勾选后即可进入</div>
@@ -10315,7 +10315,7 @@ box-shadow: 0 2px 10px rgba(255,94,156,.35);
         </div>
         <div class="set-row" id="row-desk-add-page">
           <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="#111111" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M12 8v8M8 12h8"/></svg></div>
-          <div class="txt">新增桌面页<span class="sub">最多 5 页 · 新页空白可放卡片/图片</span></div>
+          <div class="txt">新增桌面页<span class="sub">页数不限 · 新页空白可放卡片/图片</span></div>
           <div class="val" id="desk-pages-val">共 2 页</div>
         </div>
         <div class="set-row" id="row-desk-del-page" hidden>
@@ -10489,7 +10489,7 @@ box-shadow: 0 2px 10px rgba(255,94,156,.35);
           <div class="lic-li">聊天 + 按钮展开更多功能面板（互动 / 小游戏 / 工具 / TA的提问 四分类）：互动类——邀请TA、通话、拍一拍、红包、心意集市、心意柜、头像互动、漂流瓶</div>
           <div class="lic-li">「邀请TA」半框内置【我的邀请】字卡库：预设 + 自定义分组，可存入 / 修改 / 删除邀请字卡，点字卡即可重复发送</div>
           <div class="lic-li">小游戏类——猜拳、Pong、贪吃蛇、打砖块、钓鱼、四子棋、扫雷、记忆翻牌、五子棋、连连看、消消乐、拍卖会；工具类——帮我决定、多人决定、问问TA、搜索记录、占卜、寻踪、此间、心情日记</div>
-          <div class="lic-li">朋友圈贴纸回复：配图动态下点「贴纸」，选表情包贴到照片上（每张照片最多 5 张，自己贴的可点撤回），TA 会按评论概率回贴一张并进朋友圈通知</div>
+          <div class="lic-li">朋友圈贴纸回复：配图动态下点「贴纸」，选表情包贴到照片上（数量不限，自己贴的可点撤回），TA 会按评论概率回贴一张并进朋友圈通知</div>
           <div class="lic-li">回忆闪回：打开朋友圈时，「那年今天」的旧动态会以记忆卡置顶，点击定位到原动态并高亮，✕ 当天不再显示</div>
           <div class="lic-li">心情日记：桌面「日历」→ 顶部心情日记卡，每天选一个心情表情+一句话，TA 的心情按天生成；月视图两人心情曲线对照、心情日历格与连续记录统计（#303）</div>
           <div class="lic-li">「TA 的提问」面板：让 TA 现在问一次（询问 / 小问题 / 好奇 / 吐槽 / 邀请）</div>
@@ -10587,7 +10587,7 @@ box-shadow: 0 2px 10px rgba(255,94,156,.35);
           <details class="lic-grp">
             <summary><span class="lg-num">07</span><span class="lg-name">手机桌面</span><span class="lg-count">14</span></summary>
             <div class="lg-body">
-          <div class="lic-li">桌面多页滑动（scroll-snap，最多 5 页），指示器圆点点击切换，支持动态新增 / 删除页面</div>
+          <div class="lic-li">桌面多页滑动（scroll-snap，页数不限），指示器圆点点击切换，支持动态新增 / 删除页面</div>
           <div class="lic-li">组件隐藏池自由添加：时钟 / 月历 / 计时器 / 纪念日倒计时 / 图片组件 / 文字组件</div>
           <div class="lic-li">时钟、日历、备忘录、今日心情、离周末还有几天</div>
           <div class="lic-li">桌面组件【今日情话】为联系人每日随机刷新想对你说的话（可在字卡库自定义添加）</div>
@@ -18054,6 +18054,8 @@ let lastSt = '', lastFull = '';
 function hourTick() {
 const st = status();
 const full = fullText();
+const now = new Date();
+const curKey = dateStr(now) + '|' + now.getHours();
 const prevSt = lastSt, prevFull = lastFull;
 const first = prevFull === '';
 lastSt = st; lastFull = full;
@@ -18061,19 +18063,32 @@ render();
 if (!first && full !== prevFull) {
 try { if (window.addCareRecord) window.addCareRecord('status', full, Date.now(), 'in'); } catch (e) {}
 }
-if (prevSt === 'offline' && st !== 'offline') {
+let prevRec = '';
+try { prevRec = store.get('presence-last-rec') || ''; } catch (e) {}
+let recOffline = false;
+if (prevRec && prevRec !== curKey) {
+try { recOffline = (prevRec.split('|')[2] === 'offline'); } catch (e) {}
+}
+const cameOnline = (prevSt === 'offline' && !first) || (recOffline && st !== 'offline');
+if (cameOnline && st !== 'offline') {
 try {
 if (window.taSayRaw && Math.random() < 0.8) {
 window.taSayRaw('（TA 上线了 · ' + full + '）', { special: 'poke', initiative: true });
 } else if (window.taSayRaw) {
-window.taSayRaw('（TA 上线了，快来找 TA 吧）', { special: 'poke', initiative: true });
+window.taSayRaw('（TA 上线了，快来找我聊聊吧）', { special: 'poke', initiative: true });
 }
 } catch (e) {}
 } else if (st === 'online' && prevSt === 'online' && full !== prevFull) {
 try { if (window.taSayRaw && Math.random() < 0.18) window.taSayRaw('（' + full + '）', { special: 'poke', initiative: true }); } catch (e) {}
 }
+try { store.set('presence-last-rec', curKey + '|' + st); } catch (e) {}
 }
+let bootTries = 0;
+function bootTick() {
+if (!window.taSayRaw && bootTries < 30) { bootTries++; setTimeout(bootTick, 200); return; }
 hourTick();
+}
+bootTick();
 setInterval(function () {
 const h = new Date().getHours();
 if (h !== lastHour) { lastHour = h; hourTick(); }
@@ -21046,14 +21061,14 @@ hint.style.display = hasContent ? 'none' : '';
 };
 function compressImage(dataUrl, maxSide) {
 return new Promise((resolve) => {
-if (typeof dataUrl === 'string' && dataUrl.length > 8 * 1024 * 1024) {
+if (typeof dataUrl === 'string' && dataUrl.length > 64 * 1024 * 1024) {
 resolve(null);
 return;
 }
 const img = new Image();
 img.onload = () => {
 try {
-if (img.width * img.height > 26000000) { resolve(null); return; }
+if (img.width * img.height > 80000000) { resolve(null); return; }
 const scale = Math.min(1, maxSide / Math.max(img.width, img.height));
 const w = Math.max(1, Math.round(img.width * scale));
 const h = Math.max(1, Math.round(img.height * scale));
@@ -21084,9 +21099,9 @@ const dpr = Math.max(1, window.devicePixelRatio || 1);
 const h = (window.screen && window.screen.height) || 1920;
 return Math.min(2880, Math.max(2160, Math.round(h * dpr)));
 }
-const BG_SAFE_LIMIT = 6 * 1024 * 1024;
-const IMG_SAFE_LIMIT = 500 * 1024;
-const BG_HARD_LIMIT = 12 * 1024 * 1024;
+const BG_SAFE_LIMIT = 32 * 1024 * 1024; // v3.65：解除壁纸体积限制（原 6MB）
+const IMG_SAFE_LIMIT = 4 * 1024 * 1024; // v3.65：解除小图体积限制（原 500KB）
+const BG_HARD_LIMIT = 128 * 1024 * 1024; // v3.65：解除硬上限（原 12MB）
 const sanitizeBg = (key, limit) => {
 const v = store.get(key);
 if (v && typeof v === 'string' && v.length > limit) {
@@ -21587,7 +21602,7 @@ const newEff = store.get('cs-lbl-partner') || store.get('lbl-partner') || 'TA';
 if (newEff !== oldEff) { try { if (window.chatSysNickChanged) window.chatSysNickChanged(oldEff); } catch (e) {} }
 }
 }
-}, { maxlength: 12 });
+}, { maxlength: 24 });
 }
 });
 }
@@ -21764,7 +21779,7 @@ if (bgPresetRow) {
 bgPresetRow.addEventListener('click', openBgPanel);
 }
 const PBG_GLIST = 'phone-bg-glist';
-const PBG_MAX = 12; // 图库容量上限
+const PBG_MAX = 9999; // v3.65：解除图库容量上限（原 12 张）
 const pbgList = () => {
 try { const v = JSON.parse(store.get(PBG_GLIST) || '[]'); return Array.isArray(v) ? v : []; } catch (e) { return []; }
 };
@@ -21792,9 +21807,9 @@ store.set(PBG_ACTIVE, id);
 compressImage(seed, 240).then(th => { if (th) store.set('phone-bg-item-thb-' + id, th); });
 }
 };
-const pbgAdd = (dataRaw) => compressImageFit(dataRaw, phoneBgMaxSide(), 4.5 * 1024 * 1024).then((data) => {
+const pbgAdd = (dataRaw) => compressImageFit(dataRaw, phoneBgMaxSide(), 12 * 1024 * 1024).then((data) => {
 if (!data) return null;
-if (pbgList().length >= PBG_MAX) { toast('图库已满（' + PBG_MAX + ' 张），请先删除几张'); return null; }
+if (pbgList().length >= PBG_MAX) { toast('图库已达上限'); return null; }
 const id = 'i' + Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
 const list = pbgList();
 list.push(id);
@@ -23166,14 +23181,14 @@ return d.getFullYear() + '-' + p(d.getMonth() + 1) + '-' + p(d.getDate());
 };
 const startBeautyExport = (data) => {
 const json = JSON.stringify(data);
-if (json.length > 64 * 1024 * 1024) { toast('方案过大，导出失败'); return; }
+if (json.length > 512 * 1024 * 1024) { toast('方案过大，导出失败'); return; }
 const fname = 'mochi美化方案-' + beautyFileLocalDate() + '.json';
 const doExportFile = () => {
 if (window.mochiExportFile) { window.mochiExportFile(json, fname, 'mochi美化方案'); return; }
 downloadBeautyFile(json);
 };
 const doCopy = () => {
-if (json.length > 3 * 1024 * 1024) { toast('方案过大（含图片），复制可能被截断，请用「导出文件」'); return; }
+if (json.length > 64 * 1024 * 1024) { toast('内容较大，建议用「导出文件」'); return; }
 if (navigator.clipboard && navigator.clipboard.writeText) {
 navigator.clipboard.writeText(json).then(() => toast('已复制到剪贴板，发给对方粘贴导入')).catch(() => toast('复制失败，请改用导出文件'));
 } else { toast('剪贴板不可用，请改用导出文件'); }
@@ -24251,7 +24266,7 @@ const f = input.files && input.files[0];
 if (!f) return;
 const reader = new FileReader();
 reader.onload = () => {
-compressImageFit(reader.result, 1000, 450 * 1024).then(data => {
+compressImageFit(reader.result, 2000, 2 * 1024 * 1024).then(data => {
 if (!data) { toast('图片过大或格式不支持，请换一张小图'); return; }
 store.set('card-bg-' + type, data);
 applyCardBg(type);
@@ -24476,7 +24491,7 @@ if (addBtn) slide.insertBefore(node, addBtn); else slide.appendChild(node);
 const pagesVal = document.getElementById('desk-pages-val');
 const delPageRow = document.getElementById('row-desk-del-page');
 const pageBgsBox = document.getElementById('desk-page-bgs');
-const DESK_PAGE_MAX = 5;
+const DESK_PAGE_MAX = 99; // v3.65：解除桌面页数上限（原 5 页）
 const DESK_PAGE_MIN = 2;
 const deskPageCount = () => {
 const v = parseInt(store.get('desk-page-count'), 10);
@@ -24617,7 +24632,7 @@ const f = input.files && input.files[0];
 if (!f) return;
 const reader = new FileReader();
 reader.onload = () => {
-compressImageFit(reader.result, phoneBgMaxSide(), 4.5 * 1024 * 1024).then(data => {
+compressImageFit(reader.result, phoneBgMaxSide(), 12 * 1024 * 1024).then(data => {
 if (!data) { toast('图片过大或格式不支持，请换一张小图'); return; }
 store.set('page-bg-' + i, data);
 buildDeskPages();
@@ -24650,7 +24665,7 @@ const addPageRow = document.getElementById('row-desk-add-page');
 if (addPageRow) {
 addPageRow.addEventListener('click', () => {
 const n = deskPageCount();
-if (n >= DESK_PAGE_MAX) { toast('最多 ' + DESK_PAGE_MAX + ' 页'); return; }
+if (n >= DESK_PAGE_MAX) { toast('页面已达上限'); return; }
 store.set('desk-page-count', String(n + 1));
 buildDeskPages();
 toast('已新增第 ' + (n + 1) + ' 页');
@@ -27889,7 +27904,7 @@ return 0;
 }
 const TA_OUTBOX_KEY = 'ta-outbox';
 function taOutboxRead() { try { const a = JSON.parse(localStorage.getItem(TA_OUTBOX_KEY) || '[]'); return Array.isArray(a) ? a : []; } catch (e) { return []; } }
-function taOutboxWrite(arr) { try { localStorage.setItem(TA_OUTBOX_KEY, JSON.stringify(arr.slice(-60))); } catch (e) {} }
+function taOutboxWrite(arr) { try { localStorage.setItem(TA_OUTBOX_KEY, JSON.stringify(arr.slice(-999))); } catch (e) {} }
 window.taOutboxPush = function (entry) {
 try {
 if (!entry || typeof entry.text !== 'string' || !entry.text) return;
@@ -28607,6 +28622,30 @@ for (let i = swept; i < hist.length; i++) {
 if (hist[i] && hist[i] !== cur && sysNickSweepMsgs(msgs, hist[i])) changed = true;
 }
 try { store.set('sysmsg-nick-swept', String(hist.length)); } catch (e) {}
+}
+if (sysNickDedupDup(hist, cur)) changed = true;
+return changed;
+}
+function sysNickDedupDup(hist, cur) {
+const names = (hist || []).concat([cur || '']);
+const norm = (s) => {
+let t = String(s == null ? '' : s);
+for (let k = 0; k < names.length; k++) { if (names[k]) t = t.split(names[k]).join('\u0001'); }
+return t.split('{ta}').join('\u0001');
+};
+const seen = {};
+let changed = false;
+for (let i = 0; i < msgs.length; i++) {
+const r = msgs[i];
+if (!r || (r.special !== 'poke' && r.special !== 'ask-msg')) continue;
+const key = (r.ts || 0) + '|' + (r.side || '') + '|' + r.special + '|' + norm(r.text);
+const prev = seen[key];
+if (prev === undefined) { seen[key] = i; continue; }
+const isClean = (x) => String((x && x.text) || '').indexOf('{ta}') >= 0;
+if (!isClean(msgs[prev]) && isClean(r)) msgs[prev] = r;
+msgs.splice(i, 1);
+i--;
+changed = true;
 }
 return changed;
 }
@@ -30756,8 +30795,9 @@ if (hist.indexOf(cur) < 0) hist.push(cur);
 store.set('sysmsg-nick-hist', JSON.stringify(hist));
 if (oldName === cur) { store.set('sysmsg-nick-swept', String(hist.length)); return; }
 if (!chatDbReady) return;
+if (authLoadedPrefix !== window.activePrefix()) return;
 store.set('sysmsg-nick-swept', String(hist.length));
-if (sysNickSweepMsgs(msgs, oldName)) saveMsgs();
+if (sysNickSweepMsgs(msgs, oldName)) { saveMsgs(); try { flushSave(); } catch (e) {} }
 try { if (chatVisible()) renderWindow(true); } catch (e) {}
 } catch (e) {}
 };
@@ -31651,7 +31691,12 @@ return true;
 } catch (e) { return false; }
 };
 window.taSayRaw = function (text, opts) {
-try { addIn(chatPartnerName() + ' ' + text, opts || { special: 'poke', initiative: true }); return true; } catch (e) { return false; }
+try {
+const s = String(text == null ? '' : text);
+const needPrefix = s.charAt(0) !== '（' && s.charAt(0) !== '(';
+addIn((needPrefix ? chatPartnerName() + ' ' : '') + s, opts || { special: 'poke', initiative: true });
+return true;
+} catch (e) { return false; }
 };
 window.chatVisibleNow = function () { try { return chatVisible(); } catch (e) { return true; } };
 window.tryActiveInvite = tryActiveInvite;
@@ -33399,7 +33444,7 @@ addIn(text);
 try {
 const list = JSON.parse(store.get('invite-ask-history') || '[]');
 list.unshift({ type: 'ask', q: content, a: text, ts: recTs });
-if (list.length > 1000) list.length = 1000; // v3.50.x：解除上限 200 → 1000
+if (list.length > 99999) list.length = 99999; // v3.65：解除上限
 store.set('invite-ask-history', JSON.stringify(list));
 } catch (err) {}
 if (window.renderAskRecords) window.renderAskRecords();
@@ -33455,7 +33500,7 @@ el.innerHTML = '<div class="msg-ask-card answered"><div class="msg-ask-q">' + (w
 try {
 const list = JSON.parse(store.get(histKey) || '[]');
 list.unshift({ type: 'invite', q: content, a: reply || status, ts: recTs });
-if (list.length > 1000) list.length = 1000; // v3.50.x：解除上限 200 → 1000
+if (list.length > 99999) list.length = 99999; // v3.65：解除上限
 store.set(histKey, JSON.stringify(list));
 } catch (err) {}
 if (window.renderAskRecords) window.renderAskRecords();
@@ -35727,7 +35772,7 @@ document.addEventListener('batch-send-changed', syncBatchBtn);
 syncBatchBtn();
 const micBtn = document.getElementById('chat-mic-btn');
 const voicePanel = document.getElementById('voice-panel');
-const VOICE_MAX_MS = 60000;
+const VOICE_MAX_MS = 600000; // v3.65：解除录音时长上限（原 60 秒）
 let voiceStream = null, voiceRec = null, voiceChunks = [], voiceTimer = null, voiceStarting = false; // FIX 2026-09-05 #169 录音启动进行中闸门
 let voiceStartTs = 0, voiceDataUrl = '', voiceDur = 0, voiceSilent = false, voicePreviewAudio = null, voiceVisHandler = null;
 let voiceStopping = false, voiceStopWatchdog = null, voiceStopSettled = false, voiceMimeFallback = false;
@@ -35909,8 +35954,8 @@ if (voiceTimer !== voiceTid) { clearInterval(voiceTid); return; }
 if (!voiceRec || voiceRec.state !== 'recording') { clearInterval(voiceTid); voiceTimer = null; return; }
 const el = Math.floor((Date.now() - voiceStartTs) / 1000);
 const tm = document.getElementById('voice-time');
-if (tm) tm.textContent = voiceFmt(Math.min(el, 60));
-if (Date.now() - voiceStartTs >= VOICE_MAX_MS) { stopVoiceRec(false); toast('已达最长 60 秒，自动停止'); }
+if (tm) tm.textContent = voiceFmt(Math.min(el, 600));
+if (Date.now() - voiceStartTs >= VOICE_MAX_MS) { stopVoiceRec(false); toast('已达最长 10 分钟，自动停止'); }
 }, 250);
 voiceTimer = voiceTid;
 }
@@ -36051,14 +36096,14 @@ try { t.blur(); } catch (err) {}
 }));
 function compressMyEmoji(dataUrl, maxSide) {
 return new Promise((resolve) => {
-if (typeof dataUrl === 'string' && dataUrl.length > 24 * 1024 * 1024) {
+if (typeof dataUrl === 'string' && dataUrl.length > 64 * 1024 * 1024) {
 resolve(null);
 return;
 }
 const img = new Image();
 img.onload = () => {
 try {
-if (img.width * img.height > 26000000) { resolve(null); return; }
+if (img.width * img.height > 80000000) { resolve(null); return; }
 const scale = Math.min(1, maxSide / Math.max(img.width, img.height));
 const w = Math.max(1, Math.round(img.width * scale));
 const h = Math.max(1, Math.round(img.height * scale));
@@ -36109,9 +36154,9 @@ const reader = new FileReader();
 reader.onload = () => {
 const isGif = /image\/gif/i.test(f.type || '') || /\.gif$/i.test(f.name || '');
 if (isGif) {
-if (reader.result.length > 24 * 1024 * 1024) {
+if (reader.result.length > 64 * 1024 * 1024) {
 done++;
-if (done === files.length) { myEmojiSave(); renderEmojiPanel(); toast('动图过大，已跳过（请用 24MB 以内的 GIF）'); }
+if (done === files.length) { myEmojiSave(); renderEmojiPanel(); toast('动图过大，已跳过'); }
 return;
 }
 g[1].push(reader.result);
@@ -36178,7 +36223,7 @@ const fr = new FileReader();
 fr.onload = () => {
 const raw = String(fr.result || '');
 if (/image\/gif/i.test(blob.type)) {
-finish(raw.length > 24 * 1024 * 1024 ? { st: 'url', v: u } : { st: 'data', v: raw });
+finish(raw.length > 64 * 1024 * 1024 ? { st: 'url', v: u } : { st: 'data', v: raw });
 return;
 }
 processData(raw).then(d => finish(d ? { st: 'data', v: d } : { st: 'url', v: u }));
@@ -36901,7 +36946,7 @@ const CC_TYPES = ['text', 'kaomoji', 'emoji', 'sticker', 'image', 'poke', 'voice
 const CC_FUNC_KEYS = ['eat', 'period', 'water', 'sync', 'reach', 'cjian', 'wardrobe', 'weather', 'season', 'temperature', 'statusadj', 'interact',
 'mjfree']; // #317 梦角自由造句：程序生成的重造句卡（dream-free.js），管理页可查看/删除，不进聊天通用池
 const CC_ALL_TYPES = CC_TYPES.concat(CC_FUNC_KEYS);
-const CC_GIF_MAX_B64 = 12 * 1024 * 1024;
+const CC_GIF_MAX_B64 = 64 * 1024 * 1024; // v3.65：解除动图体积上限（原 12MB）
 function mergeWithPublic(g) {
 const p = pubGroupsRaw();
 let has = false;
@@ -37256,14 +37301,14 @@ catch (e) { return 0; }
 };
 function compressImage(dataUrl, maxSide, format, quality) {
 return new Promise((resolve) => {
-if (typeof dataUrl === 'string' && dataUrl.length > 24 * 1024 * 1024) {
+if (typeof dataUrl === 'string' && dataUrl.length > 64 * 1024 * 1024) {
 resolve(null);
 return;
 }
 const img = new Image();
 img.onload = () => {
 try {
-if (img.width * img.height > 26000000) { resolve(null); return; }
+if (img.width * img.height > 80000000) { resolve(null); return; }
 const scale = Math.min(1, maxSide / Math.max(img.width, img.height));
 const w = Math.max(1, Math.round(img.width * scale));
 const h = Math.max(1, Math.round(img.height * scale));
@@ -39089,7 +39134,7 @@ if (isGif) {
 if (String(reader.result || '').length > CC_GIF_MAX_B64) {
 skipped++; done++;
 if (done === files.length) finishUpload(done - skipped, skipped);
-toast('GIF「' + ((f && f.name) || '动图') + '」超过 12MB，已跳过');
+toast('GIF「' + ((f && f.name) || '动图') + '」过大，已跳过');
 return;
 }
 process(reader.result); return;
@@ -39289,7 +39334,7 @@ groups: (groups[cur] || []).map(g => g[0])
 });
 });
 }
-const MAX_AUDIO_VAULT = 16 * 1024 * 1024; // 字符数≈12MB 二进制，高于 10MB 存储上限，合法录音仍可播
+const MAX_AUDIO_VAULT = 64 * 1024 * 1024; // v3.65：解除语音体积上限（原 16MB）
 let playingAudio = null;
 let playingBtn = null;
 function stopPlay() {
@@ -40206,7 +40251,7 @@ t._timer = setTimeout(() => { t.className = 'cc-toast'; }, 2000);
 }
 const chatPage = document.getElementById('page-chat');
 const CS_BG_GLIST = 'cs-bg-glist';
-const CS_BG_MAX = 12; // 图库容量上限（每张压缩后可达 MB 级，防无上限堆爆 IDB）
+const CS_BG_MAX = 9999; // v3.65：解除图库容量上限（原 12 张）——不再拦截保存
 const csBgList = () => {
 try { const v = JSON.parse(store.get(CS_BG_GLIST) || '[]'); return Array.isArray(v) ? v : []; } catch (e) { return []; }
 };
@@ -40334,7 +40379,7 @@ TIME_STYLES.forEach(s => document.body.classList.remove('cs-time-' + s.value));
 if (ts !== 'under-av') document.body.classList.add('cs-time-' + ts);
 set('cs-time-style-val', tsLabel);
 let bg = store.get('cs-bg');
-if (bg && typeof bg === 'string' && bg.length > 6 * 1024 * 1024) {
+if (bg && typeof bg === 'string' && bg.length > 64 * 1024 * 1024) {
 try { store.remove('cs-bg'); } catch (e) {}
 bg = null;
 }
@@ -40367,7 +40412,7 @@ new MutationObserver(() => { try { applySettings(); } catch (e) {} })
 const row = (id) => document.getElementById(id);
 function csBgMakeThumb(dataUrl, maxSide) {
 return new Promise((resolve) => {
-if (typeof dataUrl !== 'string' || dataUrl.length > 50 * 1024 * 1024) { resolve(null); return; }
+if (typeof dataUrl !== 'string' || dataUrl.length > 64 * 1024 * 1024) { resolve(null); return; }
 const img = new Image();
 img.onload = () => {
 try {
@@ -40409,7 +40454,7 @@ const data = await csBgCompress(dataRaw);
 if (!data) return null;
 const id = 'i' + Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
 const list = csBgList();
-if (list.length >= CS_BG_MAX) { toast('图库已满（' + CS_BG_MAX + ' 张），请先在列表里删除几张'); return null; }
+if (list.length >= CS_BG_MAX) { toast('图库已达上限'); return null; }
 list.push(id);
 csBgSaveList(list);
 store.set('cs-bg-item-' + id, data);
@@ -40642,7 +40687,7 @@ noInput: true
 }
 function compressHead(dataUrl, maxSide) {
 return new Promise((resolve) => {
-if (typeof dataUrl === 'string' && dataUrl.length > 50 * 1024 * 1024) { resolve(null); return; }
+if (typeof dataUrl === 'string' && dataUrl.length > 64 * 1024 * 1024) { resolve(null); return; }
 const img = new Image();
 img.onload = () => {
 try {
@@ -41580,7 +41625,7 @@ const body = String(m.text || '');
 if (body.indexOf(k) < 0) continue;
 }
 results.push({ i: i, m: m });
-if (results.length >= 200) break;
+if (results.length >= 2000) break;
 }
 if (!results.length) { res.innerHTML = '<div style="text-align:center;color:#aaa;font-size:13px;padding:28px 0">没有找到匹配的聊天记录</div>'; return; }
 const frag = document.createDocumentFragment();
@@ -41612,7 +41657,7 @@ frag.appendChild(item);
 res.innerHTML = '';
 const cnt = document.createElement('div');
 cnt.style.cssText = 'text-align:center;color:#888;font-size:12px;padding:2px 0 8px';
-cnt.textContent = '共 ' + results.length + ' 条' + (results.length >= 200 ? '（仅显示前 200 条）' : '');
+cnt.textContent = '共 ' + results.length + ' 条' + (results.length >= 2000 ? '（仅显示前 2000 条）' : '');
 res.appendChild(cnt);
 res.appendChild(frag);
 };
@@ -47179,17 +47224,18 @@ function nickRefresh() {
 if (nickMe) nickMe.value = store.get('cs-lbl-user') || '';
 if (nickTa) nickTa.value = store.get('cs-lbl-partner') || '';
 }
-function nickApply() {
+function nickApply(oldName) {
 try { if (window.renderChatHeader) window.renderChatHeader(); } catch (e) {}
-try { if (window.chatSysNickChanged) window.chatSysNickChanged(); } catch (e) {}
+try { if (window.chatSysNickChanged) window.chatSysNickChanged(oldName || ''); } catch (e) {}
 }
 if (nickSave) {
 nickSave.addEventListener('click', () => {
 const mv = nickMe ? String(nickMe.value || '').trim() : '';
 const tv = nickTa ? String(nickTa.value || '').trim() : '';
+const oldTv = store.get('cs-lbl-partner') || '';
 if (mv) store.set('cs-lbl-user', mv); else store.remove('cs-lbl-user');
 if (tv) store.set('cs-lbl-partner', tv); else store.remove('cs-lbl-partner');
-nickApply();
+nickApply(oldTv);
 toast('昵称已保存');
 });
 }
@@ -47215,14 +47261,14 @@ if (window.taSayRaw) window.taSayRaw('这个昵称我不太喜欢，再想想好
 }
 } catch (e) {}
 }, 1200 + Math.random() * 800);
-}, { placeholder: cur || '想给 TA 的新昵称', maxlength: 12, lock: true });
+}, { placeholder: cur || '想给 TA 的新昵称', maxlength: 24, lock: true });
 });
 }
 nickRefresh();
 function nickLibLoad() { try { const a = JSON.parse(store.get('nick-lib') || '[]'); return Array.isArray(a) ? a : []; } catch (e) { return []; } }
 function nickLibSave(list) { try { store.set('nick-lib', JSON.stringify(list)); } catch (e) {} }
 function nickLibEsc(s) { return String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;'); }
-function nickLibApply(t) { store.set('cs-lbl-partner', t); nickApply(); }
+function nickLibApply(t) { const old = store.get('cs-lbl-partner') || ''; store.set('cs-lbl-partner', t); nickApply(old); }
 function nickLibRender() {
 const list = nickLibLoad();
 const el = document.getElementById('avlib-nicklib-list');
@@ -47452,8 +47498,8 @@ store.set('nick-lib-last', String(now));
 store.set('nick-lib-next', String(1 + Math.random() * 7));
 const oldName = cPartnerName();
 store.set('cs-lbl-partner', t);
-nickApply();
-chatSystem(oldName + ' 换了个新昵称，现在叫「' + t + '」');
+nickApply(oldName);
+chatSystem('换了个新昵称，现在叫「' + t + '」');
 try {
 if (window.bgNotifyCheck) window.bgNotifyCheck((store.get('lbl-partner') || 'TA') + ' 换了个新昵称', Date.now(), { name: store.get('lbl-partner') || 'TA' });
 } catch (e) {}
@@ -49249,7 +49295,7 @@ if (!parsed) { toast('请先选择分类或分组'); return; }
 if (!text) { toast('请输入问题内容'); return; }
 const parts = optsRaw.split('|').map(s => s.trim()).filter(Boolean);
 if (parts.length < 2) { toast('请至少输入 2 个选项，用 | 分隔'); return; }
-if (parts.length > 4) { toast('选项最多 4 个'); return; }
+if (parts.length > 12) { toast('选项数量已达上限'); return; }
 const options = parts.map(p => {
 let t = p, reply = '';
 const ti = p.indexOf('~');
@@ -53282,12 +53328,12 @@ if (showToast) {
 if (!('Notification' in window)) {
 toast('后台保活已启动（注意：本环境不支持系统通知，需 HTTPS 访问）');
 } else if (Notification.permission !== 'granted') {
-toast('后台保活已启动（通知未授权：去设置→后台通知→开启并允许权限）');
+toast('后台保活已启动（通知权限就绪后自动生效）');
 } else {
 showSysNotification('后台保活已启动', { body: '正在播放静音音频以保持后台活跃，请勿关闭此页面' }).then(function (ok) {
 toast(ok
-? '后台保活已启动 · 通知栏应弹出提示条，若没有请到系统设置→通知→Chrome→允许通知'
-: '后台保活已启动（通知发送未受理，请检查系统通知权限）');
+? '后台保活已启动 · 通知栏应弹出提示条'
+: '后台保活已启动（通知发送未受理，稍后自动重试）');
 });
 }
 }
@@ -53401,7 +53447,8 @@ if (saved === null) {
 const old = store.get('bg-keepalive');
 if (old !== null) { gSet('bg-keepalive', old); saved = old; }
 }
-keepEnabled = saved === null ? false : saved === '1';
+keepEnabled = saved === null ? true : saved === '1';
+if (saved === null) { try { gSet('bg-keepalive', '1'); } catch (e) {} }
 syncKeepUI();
 if (keepEnabled) startKeepAlive(false);
 })();
@@ -53576,7 +53623,12 @@ if (saved === null) {
 const old = store.get('bg-notify');
 if (old !== null) { gSet('bg-notify', old); saved = old; }
 }
+if (saved === null) {
+notifyEnabled = 'Notification' in window && Notification.permission === 'granted';
+if (notifyEnabled) { try { gSet('bg-notify', '1'); } catch (e) {} }
+} else {
 notifyEnabled = saved === '1' && 'Notification' in window && Notification.permission === 'granted';
+}
 if ('Notification' in window && Notification.permission === 'granted') { getBadgeUrl(function () {}); }
 if (saved === '1' && !notifyEnabled) {
 try { gSet('bg-notify', '0'); } catch (e) {}
@@ -53584,9 +53636,41 @@ toast('通知权限已被回收，已自动关闭通知');
 }
 syncNotifyUI();
 })();
+(function () {
+if (!('Notification' in window)) return;
+let tries = 0;
+const tick = function () {
+tries++;
+try {
+if (notifyUserTouched) return;
+const p = Notification.permission;
+if (p === 'denied') return;
+if (p === 'granted') {
+if (gGet('bg-notify') !== '0' && !notifyEnabled) {
+notifyEnabled = true;
+try { gSet('bg-notify', '1'); } catch (e) {}
+syncNotifyUI();
+getBadgeUrl(function () {});
+}
+if (!keepUserTouched && !keepEnabled && gGet('bg-keepalive') !== '0') {
+keepEnabled = true;
+try { gSet('bg-keepalive', '1'); } catch (e) {}
+syncKeepUI();
+startKeepAlive(false);
+}
+return;
+}
+} catch (e) {}
+if (tries < 240) setTimeout(tick, 2500); // 授权弹窗随时可能落地，最多等约 10 分钟
+};
+setTimeout(tick, 800);
+document.addEventListener('visibilitychange', function () {
+if (document.visibilityState === 'visible') { tries = 0; setTimeout(tick, 300); }
+});
+})();
 function reheatBgSwitches() {
 if (!keepUserTouched) {
-const wantKeep = gGet('bg-keepalive') === '1';
+const wantKeep = gGet('bg-keepalive') !== '0';
 if (wantKeep !== keepEnabled) {
 keepEnabled = wantKeep;
 syncKeepUI();
@@ -53597,7 +53681,7 @@ try { console.info('[mochi] #88 回填后重读后台保活：' + (wantKeep ? '�
 }
 if (!notifyUserTouched) {
 const savedNotify = gGet('bg-notify');
-const wantNotify = savedNotify === '1' &&
+const wantNotify = savedNotify !== '0' &&
 'Notification' in window && Notification.permission === 'granted';
 if (wantNotify !== notifyEnabled) {
 notifyEnabled = wantNotify;
@@ -54093,13 +54177,13 @@ return;
 }
 if (!psyncEnabled()) { el.textContent = '已关闭 · 页面全关后不再收到 TA 的消息提醒'; return; }
 if (!psyncStandalone()) { el.textContent = '需先添加到主屏生效：浏览器菜单「添加到主屏幕」，再从桌面图标打开本应用，然后重新打开此开关'; return; }
-if (state === 'denied') { el.textContent = '已开启 · 但后台调度被系统/浏览器拒绝：多半是通知权限被关了。请 ①在本应用网址栏左侧打开「网站设置」→通知→允许；②手机 系统设置→应用→Edge/Chrome→通知→允许；③该应用开启「不受限制/省电」；再回来关闭并重新打开此开关'; return; }
+if (state === 'denied') { el.textContent = '已开启 · 系统未放行通知，请允许本浏览器通知后重试'; return; }
 if ('Notification' in window && Notification.permission !== 'granted') {
 el.textContent = '已开启 · 还需允许系统通知（会弹授权，点「允许」才能收到提醒弹窗）';
 return;
 }
 let n = (typeof window.__psyncSnapCount === 'number') ? window.__psyncSnapCount : 0;
-el.textContent = '已开启 · 待发文案 ' + n + ' 条 · 后台频率由系统定（约数小时一次）；收不到请检查：系统设置允许本浏览器通知，且不限制其后台运行/省电';
+el.textContent = '已开启 · 待发文案 ' + n + ' 条 · 后台由系统调度，保持通知允许即可';
 }
 const psHelp = document.getElementById('psync-help');
 if (psHelp) {
@@ -54199,7 +54283,7 @@ return store.get('cs-lbl-partner')
 function avatarsLoad() {
 try { return JSON.parse(store.get('records-avatar') || '[]'); } catch (e) { return []; }
 }
-function avatarsSave(list) { store.set('records-avatar', JSON.stringify(list.slice(0, 300))); }
+function avatarsSave(list) { store.set('records-avatar', JSON.stringify(list.slice(0, 99999))); }
 window.addAvatarRecord = function (img, text) {
 const list = avatarsLoad();
 list.unshift({ img: img, text: text || '', ts: Date.now() });
@@ -54209,7 +54293,7 @@ if (!document.getElementById('page-home').hidden) render();
 function callsLoad() {
 try { return JSON.parse(store.get('records-call') || '[]'); } catch (e) { return []; }
 }
-function callsSave(list) { store.set('records-call', JSON.stringify(list.slice(0, 50))); }
+function callsSave(list) { store.set('records-call', JSON.stringify(list.slice(0, 9999))); }
 window.addCallRecord = function (type, text) {
 const list = callsLoad();
 list.unshift({ type: type, text: text, ts: Date.now() });
@@ -54249,7 +54333,7 @@ else if (htab === 'coinask') renderCoinPanel('ask');
 function caresLoad() {
 try { return JSON.parse(store.get('records-care') || '[]'); } catch (e) { return []; }
 }
-function caresSave(list) { store.set('records-care', JSON.stringify(list.slice(0, 500))); } // v3.50.x：解除上限 100 → 500
+function caresSave(list) { store.set('records-care', JSON.stringify(list.slice(0, 99999))); } // v3.65：解除上限
 window.addCareRecord = function (kind, text, ts, side) {
 const list = caresLoad();
 list.unshift({ kind: kind, text: text || '', ts: ts || Date.now(), side: side || '' });
@@ -54265,7 +54349,7 @@ let list = [];
 try { list = JSON.parse(s.get('records-care') || '[]'); } catch (e) { list = []; }
 if (!Array.isArray(list)) list = [];
 list.unshift({ kind: kind, text: text || '', ts: ts || Date.now() });
-s.set('records-care', JSON.stringify(list.slice(0, 500))); // v3.50.x：解除上限 100 → 500
+s.set('records-care', JSON.stringify(list.slice(0, 99999))); // v3.65：解除上限
 } catch (e) {}
 };
 function renderCarePanel() {
@@ -54942,7 +55026,7 @@ let list = [];
 try { list = JSON.parse(s.get('records-call') || '[]'); } catch (e) { list = []; }
 if (!Array.isArray(list)) list = [];
 list.unshift({ type: recType, text: recText, ts: Date.now() });
-s.set('records-call', JSON.stringify(list.slice(0, 300))); // v3.50.x：解除上限 50 → 300
+s.set('records-call', JSON.stringify(list.slice(0, 9999))); // v3.65：解除上限
 } catch (e) {}
 if (recType === 'in' && recText === '未接听') chagangTrigger(cid, false, suppressUi);
 }
@@ -55364,8 +55448,8 @@ let list = [];
 try { list = JSON.parse(s.get('records-call') || '[]'); } catch (e) { list = []; }
 if (!Array.isArray(list)) list = [];
 list.unshift({ type: dir, text: recText, ts: Date.now(), ended: 'interrupt' });
-s.set('records-call', JSON.stringify(list.slice(0, 300))); // v3.50.x：解除上限 50 → 300
-if (window.idbSet) { try { window.idbSet('xy-home-v2:' + cid + ':records-call', list.slice(0, 300)); } catch (e) {} }
+s.set('records-call', JSON.stringify(list.slice(0, 9999))); // v3.65：解除上限
+if (window.idbSet) { try { window.idbSet('xy-home-v2:' + cid + ':records-call', list.slice(0, 9999)); } catch (e) {} }
 } catch (e) {}
 try {
 const cur = window.__activeCid || 'default';
@@ -58107,7 +58191,7 @@ const list = load();
 const p = list.find(x => x.id === pid);
 if (!p) { toast('这条动态不存在了'); return; }
 p.stickers = Array.isArray(p.stickers) ? p.stickers : [];
-if (p.stickers.length >= 5) { toast('这张照片上贴纸够多啦（最多 5 张）'); return; }
+if (p.stickers.length >= 99) { toast('这张照片上贴纸够多啦'); return; }
 const pos = (st && Number.isFinite(Number(st.x)) && Number.isFinite(Number(st.y)))
 ? { x: Math.min(92, Math.max(0, Math.round(Number(st.x)))), y: Math.min(92, Math.max(0, Math.round(Number(st.y)))) }
 : feedRandStickerPos();
@@ -58122,7 +58206,7 @@ const l2 = load();
 const p2 = l2.find(x => x.id === pid);
 if (!p2) return;
 p2.stickers = Array.isArray(p2.stickers) ? p2.stickers : [];
-if (p2.stickers.length >= 5) return;
+if (p2.stickers.length >= 99) return;
 const taSt = feedTaPickSticker();
 const pos2 = feedRandStickerPos();
 const nm = p2.taName || taFeedNameFor(cid);
@@ -58519,7 +58603,7 @@ img.alt = '表情';
 d.appendChild(img);
 d.addEventListener('click', (e) => {
 e.stopPropagation();
-if (comImgData.length >= 9) { toast('最多附带 9 张图片/表情'); return; }
+if (comImgData.length >= 99) { toast('图片/表情数量已达上限'); return; }
 comImgData.push(src); // 表情包作为图片加入评论（不塞输入框文本）
 renderComPv();
 comStickerPanel.hidden = true;
@@ -58676,7 +58760,7 @@ const item = { type: type, pid: pid, text: text, ts: Date.now(), read: false, ow
 if (loc && loc.ci != null) item.ci = loc.ci;
 if (loc && loc.ri != null) item.ri = loc.ri;
 list.unshift(item);
-if (list.length > 100) list.length = 100;
+if (list.length > 9999) list.length = 9999;
 saveNotices(list);
 try { store.set('feed-app-unread', String(feedAppUnread() + 1)); } catch (e) {}
 renderNoticeBadge();
@@ -58778,7 +58862,7 @@ const pickBtn = document.getElementById('feed-pick-img');
 const pickFile = document.getElementById('feed-pick-file');
 const preview = document.getElementById('feed-preview');
 let pickedImgs = [];
-const MAX_PICK = 18;
+const MAX_PICK = 99;
 function renderPreview() {
 if (!preview) return;
 preview.innerHTML = '';
@@ -58807,7 +58891,7 @@ pickBtn.addEventListener('click', () => pickFile.click());
 pickFile.addEventListener('change', () => {
 const files = Array.from(pickFile.files || []);
 if (!files.length) return;
-if (pickedImgs.length + files.length > MAX_PICK) { toast('最多发布 ' + MAX_PICK + ' 张图片'); }
+if (pickedImgs.length + files.length > MAX_PICK) { toast('图片数量已达上限'); }
 files.slice(0, MAX_PICK - pickedImgs.length).forEach(f => {
 compressImage(f, (dataUrl) => {
 pickedImgs.push(dataUrl);
@@ -58889,7 +58973,7 @@ window.activeStore().set('feed-user-name', val);
 renderCover();
 toast('朋友圈昵称已更新');
 }
-}, { maxlength: 12 });
+}, { maxlength: 24 });
 }
 });
 }
@@ -59244,7 +59328,7 @@ feedAllStore().set(key, val);
 renderFeedAllCover();
 toast('昵称已更新');
 }
-}, { maxlength: 12 });
+}, { maxlength: 24 });
 }
 });
 }
@@ -59368,7 +59452,7 @@ st.set(key, val);
 renderFeedFriends();
 toast('朋友圈昵称已更新');
 }
-}, { maxlength: 12 });
+}, { maxlength: 24 });
 }
 });
 }
@@ -60037,7 +60121,7 @@ function pushHist(key, text) {
 try {
 const list = JSON.parse(store.get(key) || '[]');
 list.unshift({ text: text, ts: Date.now() });
-if (list.length > 1000) list.length = 1000; // v3.50.x：解除上限 200 → 1000
+if (list.length > 99999) list.length = 99999; // v3.65：解除上限
 store.set(key, JSON.stringify(list));
 try { if (window.idbSet) window.idbSet(window.activePrefix() + ':' + key, JSON.stringify(list)); } catch (e) {}
 } catch (e) {}
@@ -64047,7 +64131,7 @@ if (!myFen && !taFen) return;
 const key = kind === 'ask' ? 'records-coin-ask' : 'records-coin-earn';
 const list = coinLedgerLoad(kind);
 list.unshift({ ts: Date.now(), myFen: myFen || 0, taFen: taFen || 0, src: src || '' });
-s.set(key, JSON.stringify(list.slice(0, 100)));
+s.set(key, JSON.stringify(list.slice(0, 9999)));
 try {
 const hp = document.getElementById('page-home');
 if (hp && !hp.hidden && window.__renderHomeCoin) window.__renderHomeCoin();
@@ -64503,7 +64587,7 @@ function boxSave(a) { const s = store(); if (s) s.set(BOX_KEY, JSON.stringify(a)
 const WL_MY_KEY = 'gift-wishlist';
 const WL_TA_KEY = 'gift-wishlist-ta';
 const WL_SETTINGS_KEY = 'market-wl-settings';
-const WL_MAX = 30;
+const WL_MAX = 9999;
 function clampPct(v, def) { const n = Math.round(Number(v)); return (n >= 0 && n <= 100) ? n : def; }
 function wlSettings() {
 let s = null;
@@ -69834,7 +69918,7 @@ const ITEM_LINES = [
 '摇晃的声响很轻——里面是{g}。',
 '{g}躺在瓶底，像特意留下的。'
 ];
-const MINE_CAP = 50, GOT_CAP = 120, THEIRS_CAP = 60, PICK_CD = 20000;
+const MINE_CAP = 999, GOT_CAP = 999, THEIRS_CAP = 999, PICK_CD = 20000;
 function fresh() {
 return {
 mine: [], got: [], theirs: [], histSeen: [], mySeen: [], dry: 0,
@@ -70073,7 +70157,7 @@ save();
 vib(18);
 toast('瓶子已经放进海里了 🌊');
 renderStats(); renderList();
-}, { textarea: true, textareaPlaceholder: '今天也很想你。（最多 100 字）', maxlength: 100 });
+}, { textarea: true, textareaPlaceholder: '今天也很想你。', maxlength: 400 });
 }
 const $ = (id) => document.getElementById(id);
 let openRecId = '';
@@ -70400,7 +70484,7 @@ loadHistory().forEach(x => { if (x && x.ts !== undefined) merged[x.ts] = x; });
 histArrs.forEach(h => h.arr.forEach(x => { if (x && x.ts !== undefined && !merged[x.ts]) merged[x.ts] = x; }));
 const out = Object.keys(merged).map(k => merged[k]);
 out.sort((a, b) => (b.ts || 0) - (a.ts || 0));
-if (out.length) store.set(HISTORY_KEY, JSON.stringify(out.slice(0, 1000)));
+if (out.length) store.set(HISTORY_KEY, JSON.stringify(out.slice(0, 99999)));
 if (readJsonLs('xy-home-v2:' + SETTINGS_KEY) === null) {
 setCands.sort(function (a, b) {
 return (a.key.indexOf(':default:') >= 0 ? 0 : 1) - (b.key.indexOf(':default:') >= 0 ? 0 : 1);
@@ -70734,7 +70818,7 @@ loadHistory().forEach(x => { if (x && x.ts !== undefined) mergedH[x.ts] = x; });
 histArrs.forEach(h => h.arr.forEach(x => { if (x && x.ts !== undefined && !mergedH[x.ts]) mergedH[x.ts] = x; }));
 const outH = Object.keys(mergedH).map(k => mergedH[k]);
 outH.sort((a, b) => (b.ts || 0) - (a.ts || 0));
-if (outH.length) store.set(HISTORY_KEY, JSON.stringify(outH.slice(0, 1000)));
+if (outH.length) store.set(HISTORY_KEY, JSON.stringify(outH.slice(0, 99999)));
 if (readJsonLs('xy-home-v2:' + MEMBERS_KEY) === null && memArrs.length) {
 memArrs.sort(function (a, b) { return (b.def ? 1 : 0) - (a.def ? 1 : 0); });
 const seen = {}, union = [];
@@ -70882,7 +70966,7 @@ members.push(name);
 saveMembers(members);
 renderMembers();
 toast('成员已添加');
-}, { placeholder: '成员名称', maxlength: 12 });
+}, { placeholder: '成员名称', maxlength: 24 });
 });
 const allBtn = document.getElementById('gd-member-all');
 if (allBtn) allBtn.addEventListener('click', () => {
@@ -74398,7 +74482,7 @@ setTimeout(() => { try { if (typeof fitBoard === 'function') fitBoard(); } catch
 if (fsBtn) fsBtn.addEventListener('click', (e) => { e.stopPropagation(); toggleFs(); });
 const partnerNameEl = document.getElementById('ms-partner-name');
 const MAX_LIVES = 3;
-const MS_COIN_CAP = 1000;                       // 心意币日封顶（分）
+const MS_COIN_CAP = 999999;                     // v3.65：解除心意币日封顶（原 1000 分）
 const FLAWLESS_BONUS = 300;                     // 有雷模式全程未踩雷的额外奖励
 const DIFFS = {
 chill:  { n: 6, mines: 0,  label: '🌱 轻松', name: '轻松', tip: '6×6 · 无雷 · 一起挖宝' },
@@ -75972,7 +76056,7 @@ const COIN_CLEAR = 5;      // 完成一局 +5
 const COIN_STREAK = 1;     // 连续配对每次 +1
 const COIN_ALL = 2;        // 全部完成 +2
 const COIN_FIRST = 5;      // 首次通关某难度 +5
-const COIN_DAILY_CAP = 30; // 每日奖励上限（元）
+const COIN_DAILY_CAP = 9999; // v3.65：解除每日奖励上限（原 30 元）
 function walletGet() {
 const s = window.xyStore && window.xyStore('xy-home-v2');
 if (!s) return { myBalance: 52000, systemBalance: 52000 };
@@ -78694,12 +78778,12 @@ function loadHistory() { try { const a = JSON.parse(localStorage.getItem(history
 function recordHistory(item, price, who) {
 const h = loadHistory();
 h.unshift({ t: Date.now(), ico: item.ico, name: item.name, price: price, who: who, rarity: rarityOf(item).label });
-if (h.length > 60) h.length = 60;
+if (h.length > 9999) h.length = 9999;
 persist(historyKey(), h);
 }
 function customKey() { return prefix() + ':auction-custom'; }
 function loadCustom() { try { const a = JSON.parse(localStorage.getItem(customKey()) || '[]'); return Array.isArray(a) ? a : []; } catch (e) { return []; } }
-function saveCustom(a) { try { if (a.length > 20) a.length = 20; persist(customKey(), a); } catch (e) {} }
+function saveCustom(a) { try { if (a.length > 9999) a.length = 9999; persist(customKey(), a); } catch (e) {} }
 function activePool() {
 return POOL.concat(loadCustom().map((c) => ({ ico: c.ico, name: c.name, desc: c.desc, base: c.base, wish: c.wish, mystery: c.mystery || 0, custom: 1 })));
 }
@@ -79102,7 +79186,7 @@ if (endBtn) endBtn.hidden = !(st && st.started && !st.over);
 function addCustomModal() {
 if (typeof window.openModal !== 'function') return;
 let stage = 1, pendingName = null;
-const list = () => { const a = loadCustom(); return a.length ? '已有 ' + a.length + '/20：' + a.map((c) => c.name).join('、') : '还没有自制拍品（上限 20 个）'; };
+const list = () => { const a = loadCustom(); return a.length ? '已有 ' + a.length + ' 个：' + a.map((c) => c.name).join('、') : '还没有自制拍品（数量不限）'; };
 const ctl = window.openModal('自制拍品', '', function (v) {
 const s = String(v || '').trim();
 if (stage === 1) {
@@ -79110,7 +79194,7 @@ if (!s) return;
 const cur = loadCustom();
 const idx = cur.findIndex((c) => c.name === s);
 if (idx >= 0) { cur.splice(idx, 1); saveCustom(cur); taSay(pick(['这件……不拍了？', '行吧，收回仓库'])); return; }
-if (cur.length >= 20) { ctl.stay(); ctl.val(''); ctl.ph('自制拍品已满 20 个，先删再加'); return; }
+if (cur.length >= 9999) { ctl.stay(); ctl.val(''); ctl.ph('自制拍品已达上限'); return; }
 pendingName = s; stage = 2;
 ctl.stay(); ctl.val(''); ctl.ph('底价（元，如 20）'); ctl.okText('下一步');
 return;
@@ -81945,6 +82029,69 @@ if (navigator.storage && navigator.storage.persist) {
 navigator.storage.persist().catch(function () {});
 }
 } catch (e) {}
+(function () {
+const RETRY = [5000, 30000, 300000];
+let retryIdx = 0;
+function tryPersist() {
+try {
+if (!navigator.storage || !navigator.storage.persist) return;
+const go = function () {
+navigator.storage.persist().then(function (granted) {
+if (granted) return;
+if (retryIdx < RETRY.length) { const d = RETRY[retryIdx++]; setTimeout(tryPersist, d); }
+}).catch(function () {});
+};
+if (navigator.storage.persisted) {
+navigator.storage.persisted().then(function (ok) { if (!ok) go(); }).catch(go);
+} else { go(); }
+} catch (e) {}
+}
+function sample() {
+try {
+if (!navigator.storage || !navigator.storage.estimate) return;
+navigator.storage.estimate().then(function (e) {
+window.__mochiStorageInfo = {
+usage: Number(e && e.usage) || 0,
+quota: Number(e && e.quota) || 0,
+at: Date.now()
+};
+}).catch(function () {});
+} catch (e) {}
+}
+tryPersist();
+sample();
+try { setInterval(sample, 600000); } catch (e) {}
+try {
+document.addEventListener('visibilitychange', function () {
+if (document.visibilityState === 'visible') { retryIdx = 0; tryPersist(); sample(); }
+});
+} catch (e) {}
+try {
+window.addEventListener('unhandledrejection', function (ev) {
+const r = ev && ev.reason;
+const name = r && (r.name || '');
+if (name === 'QuotaExceededError' || (r && r.code === 22)) { retryIdx = 0; tryPersist(); sample(); }
+});
+} catch (e) {}
+})();
+(function () {
+var asked = false;
+function askPerm() {
+if (asked) return; asked = true;
+try {
+if ('Notification' in window && Notification.permission === 'default' && Notification.requestPermission) {
+var r = Notification.requestPermission();
+if (r && r.catch) r.catch(function () {});
+}
+} catch (e) {}
+try {
+if (navigator.storage && navigator.storage.persist) navigator.storage.persist().catch(function () {});
+} catch (e) {}
+}
+['pointerdown', 'touchstart', 'keydown'].forEach(function (t) {
+try { document.addEventListener(t, askPerm, { once: true, capture: true, passive: true }); } catch (e) {}
+});
+})();
 function toast(msg) {
 let t = document.getElementById('cc-toast');
 if (!t) { t = document.createElement('div'); t.id = 'cc-toast'; document.body.appendChild(t); }
@@ -86550,4 +86697,4 @@ lastHeal: his
 <!-- __MOCHI_EOF__ -->
 </body>
 </html>
-<!-- __MOCHI_EOF__ mvxxxb9t -->
+<!-- __MOCHI_EOF__ mw1sd0e9 -->
