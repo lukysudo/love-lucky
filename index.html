@@ -8913,9 +8913,9 @@ animation: ppSpot 1.7s ease-in-out;
       </div>
     </div>
     <div class="splash-footcard">
-      <div class="splash-ver" id="splash-ver" data-build-ts="1793972367562">
+      <div class="splash-ver" id="splash-ver" data-build-ts="1793974849904">
         <span class="sv-app">love lucky <b>v3.50.0</b></span>
-        <span class="sv-deploy">部署于 2026-11-06 21:39<span id="splash-ver-live"></span></span>
+        <span class="sv-deploy">部署于 2026-11-06 22:20<span id="splash-ver-live"></span></span>
       </div>
       <div class="splash-loading" id="splash-loading">正在加载数据…</div>
       <div class="splash-enter-hint" id="splash-enter-hint" hidden>勾选后即可进入</div>
@@ -55743,10 +55743,10 @@ const SAY_OPEN = [
 const SAY_TAP = [
 '打开{x}。',
 '{x}——嗯，点得挺熟练。',
-'这个{x}，你平时也这么点？',
+'{x}——你平时也这么点？',
 '去{x}看看。',
 '先看{x}。',
-'{x}里应该有点东西。',
+'{x}——应该有点东西。',
 '这一页，我上次没看完。',
 '手指别抖，我又没骂你。',
 '你天天点{x}，点开给我看看。',
@@ -55788,7 +55788,15 @@ const SAY_END = [
 ];
 const GLOBAL_SAFE = ['.tabbar .tab'];
 const PAGE_SAFE = ['.app[data-app]', '.ch-back', '.loc-back', '.page-close', '.bk-back', '[id$="-back"]'];
-const DANGER_RE = /(删|清空|清除|退出|解绑|重置|注销|卸载|支付|付款|购买|兑换|发送|投递|移除|取消|断开|格式化|恢复默认)/;
+const CONTENT_SELS = [
+'.feed-post', '.mail-item', '.chat-item', '.card-item',
+'.album-item', '.photo-item', '.mem-item', '.checkin-card', '.quote-card', '.loc-card',
+'.msg-ask', '.msg-center', '.msg-poke', '.msg-rps', '.msg-pong', '.msg-rp',
+'.msg-flower', '.msg-gift', '.msg-quote',
+'.list-item', '.card'
+];
+const DANGER_RE = /(删|清空|清除|退出|解绑|重置|注销|卸载|支付|付款|购买|兑换|发送|投递|移除|取消|断开|格式化|恢复默认|导出|导入|备份|还原|恢复|上传|下载|保存|发布|提交|撤回|打卡|投币|解锁|授权|权限)/;
+const NEVER_SELS = ['.msg-voice-play', '.feed-comment-ico', '.feed-comment-send', 'input', 'textarea', '#pc-close', '.pc-bubble-done'];
 const LOOK_SELS = ['.mini-card', '.glass', '.checkin', '.deco-widget', '.app', '.list-item', '.row', '.card', '.pc-bubble-row'];
 const PAGE_LABEL = {
 'page-phone': '桌面', 'page-chatcard': '字卡', 'page-setting': '设置',
@@ -55920,11 +55928,45 @@ if (r.bottom > window.innerHeight + 1 || r.right > window.innerWidth + 1) return
 return true;
 } catch (x) { return false; }
 }
-function dangerous(e) {
+function headText(n) {
 try {
-const t = (e.textContent || '') + ' ' + (e.getAttribute('title') || '') + ' ' + (e.className || '');
-return DANGER_RE.test(t);
+const q = n.querySelector ? n.querySelector('.ci .n,.chat-title,.mail-item-title,.feed-name,.msg-ask-q,.card-title,.item-name,.row-title,.list-title') : null;
+if (q && q.textContent) {
+const s = String(q.textContent).replace(/\s+/g, ' ').trim();
+if (s) return s;
+}
+} catch (x) {}
+const t = String(n.textContent || '').replace(/\s+/g, ' ').trim();
+return (t && t.length <= 12) ? t : '';
+}
+function dangerText(n) {
+let s = '';
+try {
+s += ' ' + String(n.className || '') + ' ' + String(n.id || '');
+if (n.getAttribute) {
+s += ' ' + (n.getAttribute('title') || '') + ' ' + (n.getAttribute('aria-label') || '');
+s += ' ' + (n.getAttribute('data-act') || '') + ' ' + (n.getAttribute('data-action') || '');
+s += ' ' + (n.getAttribute('data-type') || '') + ' ' + (n.getAttribute('name') || '');
+}
+s += ' ' + headText(n);
+} catch (x) {}
+return s;
+}
+function dangerous(e) {
+if (!e) return true;
+try {
+if (e.matches) { for (let i = 0; i < NEVER_SELS.length; i++) if (e.matches(NEVER_SELS[i])) return true; }
+const near = e.closest ? e.closest('.msg-voice-play,.feed-comment-ico,.feed-comment-send') : null;
+if (near) return true;
+} catch (x) {}
+try {
+let n = e, k = 0;
+while (n && k < 4) {
+if (DANGER_RE.test(dangerText(n))) return true;
+n = n.parentElement; k++;
+}
 } catch (x) { return true; }
+return false;
 }
 function collect(sels, root) {
 const out = [];
@@ -55990,6 +56032,17 @@ if (!vp) return null;
 const cands = collect(LOOK_SELS, vp);
 return cands.length ? pick(cands) : null;
 }
+function pickContent(vp) {
+if (!vp) return null;
+if (vp.id === 'page-feed') {
+const pics = collect(['.feed-imgs img', '.feed-inline-img'], vp);
+if (pics.length && Math.random() < 0.6) return pick(pics);
+}
+const cands = collect(CONTENT_SELS, vp);
+if (cands.length) return pick(cands);
+const imgs = collect(['.feed-post img', '.mail-item img', '.album-item img'], vp);
+return imgs.length ? pick(imgs) : null;
+}
 function labelOf(e) {
 if (!e) return '这里';
 try {
@@ -55999,8 +56052,13 @@ const da = e.getAttribute('data-app');
 if (da) {
 const nameEl = e.querySelector('.app-name');
 if (nameEl && nameEl.textContent) return nameEl.textContent.trim();
-const MAP = { chat: '聊天', home: '主页', mail: '信箱', feed: '朋友圈', calendar: '日历', memory: '纪念', divination: '占卜', note: '收藏', period: '经期' };
+const MAP = { chat: '聊天', home: '主页', mail: '信箱', feed: '朋友圈', calendar: '日历', memory: '纪念', divination: '占卜', note: '收藏', period: '经期', accounting: '记账', stats: '统计', arcade: '游戏' };
 if (MAP[da]) return MAP[da];
+}
+const titleEl = e.querySelector ? e.querySelector('.chat-title,.mail-item-title,.feed-name,.msg-ask-q') : null;
+if (titleEl && titleEl.textContent) {
+const tt = titleEl.textContent.replace(/\s+/g, ' ').trim();
+if (tt) return tt.slice(0, 8);
 }
 const t = (e.textContent || '').replace(/\s+/g, ' ').trim();
 if (t) return t.slice(0, 8);
@@ -56046,27 +56104,39 @@ say(pick(SAY_LOOK), x, y);
 await wait(rnd(1100, 1600));
 }
 async function oneStep() {
+const mc = document.getElementById('modal-cancel');
+if (mc && !mc.hidden && mc.offsetParent) { await tapEl(mc); return; }
+const iv = document.getElementById('img-view-mask');
+if (iv && !iv.hidden && iv.offsetParent) { await tapEl(iv); return; }
 const vp = visiblePage();
 const vpId = vp ? vp.id : '';
 const isTabPage = /^page-(phone|chatcard|setting)$/.test(vpId);
 const r = Math.random();
-if (!isTabPage && r < 0.68) {
+if (!isTabPage) {
+if (r < 0.42) {
+const c = pickContent(vp);
+if (c) { await tapEl(c); return; }
+}
+if (r < 0.78) {
 const back = findBack();
 if (back) { await tapEl(back); return; }
 await escapeToTab();
 return;
 }
-if (r < 0.34) {
+await lookAround(vp);
+return;
+}
+if (r < 0.3) {
 const t = pickTab();
 if (t) { await tapEl(t); return; }
 }
-if (isTabPage && vpId === 'page-phone' && r < 0.7) {
+if (vpId === 'page-phone' && r < 0.72) {
 const a = pickApp(vp);
 if (a) { await tapEl(a); return; }
 }
-if (isTabPage && vpId === 'page-chatcard' && r < 0.45) {
-await lookAround(vp);
-return;
+if (vpId === 'page-chatcard' && r < 0.5) {
+const c = pickContent(vp);
+if (c) { await tapEl(c); return; }
 }
 await lookAround(vp);
 }
@@ -87214,4 +87284,4 @@ lastHeal: his
 <!-- __MOCHI_EOF__ -->
 </body>
 </html>
-<!-- __MOCHI_EOF__ mw50ttxm -->
+<!-- __MOCHI_EOF__ mw52b1bk -->
