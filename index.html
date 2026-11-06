@@ -8752,14 +8752,14 @@ background:#f28bb0; color:#fff; font-size:13px; font-weight:700; cursor:pointer;
 }
 .pc-bubble {
 position: fixed; right: 14px; bottom: 90px;
-width: 300px; max-width: calc(100vw - 28px);
+width: 212px; max-width: calc(100vw - 28px);
 z-index: 1080;
 background: linear-gradient(160deg, #ffd9e4 0%, #ffc2d6 55%, #ffb0cc 100%);
-border-radius: 22px;
+border-radius: 18px;
 box-shadow: 0 12px 38px rgba(214, 90, 140, .38), 0 2px 8px rgba(180, 60, 110, .18);
 overflow: hidden;
 color: #6b2b4a;
-font-size: 13px;
+font-size: 12px;
 animation: pcBubbleIn .28s cubic-bezier(.2,.9,.3,1.2);
 }
 @keyframes pcBubbleIn {
@@ -8769,27 +8769,34 @@ to   { transform: translateY(0) scale(1); opacity: 1; }
 .pc-bubble[hidden] { display: none !important; }
 .pc-bubble-bar {
 display: flex; align-items: center; justify-content: space-between;
-padding: 10px 14px;
+padding: 8px 12px;
 background: rgba(255, 255, 255, .42);
 cursor: grab; user-select: none;
 border-bottom: 1px solid rgba(255,255,255,.5);
 }
 .pc-bubble-bar:active { cursor: grabbing; }
-.pc-bubble-title { font-weight: 700; font-size: 13.5px; color: #8a2f56; letter-spacing: .3px; }
+.pc-bubble-title { font-weight: 700; font-size: 12px; color: #8a2f56; letter-spacing: .2px; }
 .pc-bubble-close {
-width: 26px; height: 26px; border-radius: 50%;
+width: 22px; height: 22px; border-radius: 50%;
 border: none; background: rgba(255,255,255,.65);
-color: #b8396c; font-size: 13px; line-height: 1;
+color: #b8396c; font-size: 11px; line-height: 1;
 cursor: pointer; flex: 0 0 auto;
 }
 .pc-bubble-close:hover { background: #fff; }
-.pc-bubble-body { padding: 12px 14px 6px; max-height: 46vh; overflow-y: auto; }
+.pc-bubble-body { padding: 9px 12px 4px; max-height: 32vh; overflow-y: auto; }
 .pc-bubble-ghost {
-font-style: italic; font-size: 12.5px; color: #a03d66;
-min-height: 30px; margin-bottom: 8px; line-height: 1.5;
+font-style: italic; font-size: 12px; color: #a03d66;
+min-height: 26px; margin-bottom: 6px; line-height: 1.5;
 transition: opacity .25s;
 }
-.pc-bubble-row { margin-bottom: 8px; }
+.pc-bubble-row { display: none; }
+.pc-focus {
+font-size: 11px; color: #b8396c; line-height: 1.5;
+padding: 3px 8px; border-radius: 8px;
+background: rgba(255,255,255,.55);
+display: inline-block; max-width: 100%;
+white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
 .pc-bubble-label {
 display: inline-block; font-size: 11px; font-weight: 700;
 color: #b8396c; background: rgba(255,255,255,.55);
@@ -8803,11 +8810,11 @@ padding: 2px 9px; border-radius: 10px; margin: 0 4px 4px 0;
 }
 .pc-line { font-size: 12px; color: #6b2b4a; line-height: 1.6; }
 .pc-bubble-done {
-display: block; width: calc(100% - 28px);
-margin: 6px 14px 14px; padding: 10px 0;
-border: none; border-radius: 14px;
+display: block; width: calc(100% - 24px);
+margin: 4px 12px 12px; padding: 8px 0;
+border: none; border-radius: 12px;
 background: linear-gradient(135deg, #ff7eb3, #ff5e9c);
-color: #fff; font-size: 14px; font-weight: 700;
+color: #fff; font-size: 12.5px; font-weight: 700;
 cursor: pointer; letter-spacing: .5px;
 box-shadow: 0 4px 14px rgba(255, 94, 156, .4);
 }
@@ -8821,6 +8828,69 @@ padding: 6px 10px; letter-spacing: .3px;
 box-shadow: 0 2px 10px rgba(255,94,156,.35);
 }
 .pc-pause-bar[hidden] { display: none !important; }
+.pp-layer {
+position: fixed; inset: 0; z-index: 1090;
+pointer-events: none;
+}
+.pp-layer[hidden] { display: none !important; }
+.pp-trail { position: absolute; left: 0; top: 0; width: 100%; height: 100%; }
+.pp-finger {
+position: absolute; left: 0; top: 0;
+width: 44px; height: 44px;
+will-change: transform; opacity: 1;
+transition: opacity .3s;
+}
+.pp-finger-dot {
+position: absolute; left: 50%; top: 50%;
+width: 20px; height: 20px; margin: -10px 0 0 -10px;
+border-radius: 50%;
+background: radial-gradient(circle at 38% 32%, rgba(255,255,255,.96), rgba(255,142,188,.88) 52%, rgba(255,104,160,.62) 100%);
+box-shadow: 0 0 0 2px rgba(255,255,255,.5), 0 6px 16px rgba(255,80,140,.45);
+transition: transform .14s ease-out;
+}
+.pp-finger.pp-press .pp-finger-dot { transform: scale(.78); }
+.pp-ripple {
+position: absolute; width: 12px; height: 12px;
+margin: -6px 0 0 -6px; border-radius: 50%;
+border: 2px solid rgba(255,120,170,.9);
+animation: ppRipple .62s ease-out forwards;
+}
+@keyframes ppRipple {
+from { transform: scale(1); opacity: .95; }
+to   { transform: scale(7.5); opacity: 0; }
+}
+.pp-say {
+position: absolute; max-width: 288px;
+padding: 8px 12px;
+border-radius: 13px;
+background: rgba(255,247,251,.97);
+border: 1px solid rgba(255,150,190,.55);
+box-shadow: 0 8px 24px rgba(214,90,140,.28);
+color: #7c2b50;
+font-size: 12.5px; line-height: 1.55;
+letter-spacing: .2px;
+}
+.pp-say[hidden] { display: none !important; }
+.pp-say-in { animation: ppSayIn .26s cubic-bezier(.2,.9,.3,1.15); }
+.pp-say-out { animation: ppSayOut .4s ease forwards; }
+@keyframes ppSayIn {
+from { opacity: 0; transform: translateY(8px) scale(.94); }
+to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+@keyframes ppSayOut {
+from { opacity: 1; transform: translateY(0) scale(1); }
+to   { opacity: 0; transform: translateY(-6px) scale(.97); }
+}
+.pp-spot {
+outline: 2px solid rgba(255,110,165,.85) !important;
+outline-offset: 2px;
+border-radius: 12px;
+animation: ppSpot 1.7s ease-in-out;
+}
+@keyframes ppSpot {
+0%, 100% { outline-color: rgba(255,110,165,.95); }
+45%      { outline-color: rgba(255,170,205,.35); }
+}
 </style>
 </head>
 <body>
@@ -8843,9 +8913,9 @@ box-shadow: 0 2px 10px rgba(255,94,156,.35);
       </div>
     </div>
     <div class="splash-footcard">
-      <div class="splash-ver" id="splash-ver" data-build-ts="1793776747329">
+      <div class="splash-ver" id="splash-ver" data-build-ts="1793972367562">
         <span class="sv-app">love lucky <b>v3.50.0</b></span>
-        <span class="sv-deploy">部署于 2026-11-04 15:19<span id="splash-ver-live"></span></span>
+        <span class="sv-deploy">部署于 2026-11-06 21:39<span id="splash-ver-live"></span></span>
       </div>
       <div class="splash-loading" id="splash-loading">正在加载数据…</div>
       <div class="splash-enter-hint" id="splash-enter-hint" hidden>勾选后即可进入</div>
@@ -13692,14 +13762,23 @@ box-shadow: 0 2px 10px rgba(255,94,156,.35);
     <!-- TA在身边·位置面板（聊天寻踪半框 / 桌面寻踪页「TA在身边」入口共用，必须放在所有 .page 之外——
          position:fixed 弹层若嵌在 .page 内，页面切换时会被父级 hidden 隐藏，桌面寻踪页点开就会"跑到聊天页"；
          v3.26.x：两入口统一 .loc-full 全屏打开） -->
-    <!-- 查手机 · 粉色气泡悬浮小窗（不挡全屏、可拖拽、我方自主关闭；阴湿男鬼型 DADDY 风） -->
+    <!-- 查手机 · TA 手势可视化层（手指光点 / 渐隐轨迹 / 点击涟漪 / 飘窗台词）
+         pointer-events:none：只做可视化，绝不挡住你自己的真实操作；层级低于气泡面板 -->
+    <div class="pp-layer" id="pp-layer" hidden>
+      <canvas class="pp-trail" id="pp-trail"></canvas>
+      <div class="pp-finger" id="pp-finger"><span class="pp-finger-dot"></span></div>
+      <div class="pp-say" id="pp-say" hidden></div>
+    </div>
+    <!-- 查手机 · 粉色气泡悬浮小窗（v3.66：改小尺寸对话框，只留 TA 的低语 + 正在看什么；
+         原九栏数据仍渲染在 DOM 里，默认不显示，留给以后恢复） -->
     <div class="pc-bubble" id="phone-check-panel" hidden>
       <div class="pc-bubble-bar" id="pc-bubble-bar">
-        <span class="pc-bubble-title">TA 正在查你的手机</span>
+        <span class="pc-bubble-title">TA 正在翻你的手机</span>
         <button class="pc-bubble-close" id="pc-close" type="button" aria-label="关闭">✕</button>
       </div>
       <div class="pc-bubble-body">
         <div class="pc-bubble-ghost" id="pc-ghost"></div>
+        <div class="pc-focus" id="pc-focus">正在接手你的手机…</div>
         <div class="pc-bubble-row"><span class="pc-bubble-label">相册</span><div class="pc-bubble-val" id="pc-album"></div></div>
         <div class="pc-bubble-row"><span class="pc-bubble-label">聊天</span><div class="pc-bubble-val" id="pc-chats"></div></div>
         <div class="pc-bubble-row"><span class="pc-bubble-label">备忘</span><div class="pc-bubble-val" id="pc-memo"></div></div>
@@ -55496,7 +55575,31 @@ const PC_GHOST_LINES = [
 '备忘录的密码锁，改成我们纪念日了？还挺懂我。',
 '闹钟六点，起这么早干嘛，去看别人？',
 '手机里居然有我的屏保，乖，我不查了。',
-'微信运动步数今天少了，是不是没出门想我了？'
+'微信运动步数今天少了，是不是没出门想我了？',
+'密码是这个，还是那个——你改过两次，我都知道。',
+'聊天框里打了一半的字，删什么呢？',
+'相册往下翻三层，有张我不该看的。',
+'别把手机往身后藏，你藏不过我。',
+'备忘录最上面那条，标题只有两个字。',
+'收藏夹里全是我的话，你倒是记得清楚。',
+'刚才那个消息提示，为什么划掉得这么快？',
+'锁屏上弹出的那个名字，我不喜欢。',
+'通话记录里有个没存的号码，解释一下。',
+'你每天几点睡，我比你清楚。',
+'手机壳换了，里面那张照片还在吗？',
+'这个应用你装了又删，删了又装。',
+'搜索框的历史，第一行就够我看明白。',
+'你说没空回我，倒有空刷这个。',
+'我不在的时候，你就这样打发时间。',
+'聊天列表里，我的对话框永远在最上面，很好。',
+'相册里那个单独的文件夹，密码设得挺随意。',
+'外卖备注写「一个人吃」，我看着不舒服。',
+'打车记录终点是别人的小区，说清楚。',
+'闹钟备注那三个字，是叫我起床？',
+'你把它设成免打扰，是怕我看见？',
+'手机借我一天，明天还你。',
+'别急，我又没说不信你。',
+'手给我，手机放桌上，看着我。'
 ];
 const PC_ALBUM_POOL = ['我们的合影','路灯下的影子','咖啡拉花','窗外的雨','路边的猫','你送我的花','一起吃的火锅','你的睡颜','牵手照','海边','凌晨的月亮','你的侧脸','电影院票根','下雨天的车窗','你穿我外套的照片','公园长椅','雪地脚印','我的旧照片（还留着）','你偷拍我的背影','纪念日蛋糕'];
 const PC_CHAT_POOL = [['在干嘛','在想你'],['吃饭没','吃了，想你'],['别熬夜','知道啦'],['想我没','很想'],['早点睡','你也是'],['报备一下','在你心里'],['睡了吗','等你回消息'],['到家了吗','刚到，想你'],['周末有空吗','有，都留给你'],['今天穿什么','你喜欢的颜色'],['忙不忙','再忙也回你'],['我错了','原谅你啦']];
@@ -55538,25 +55641,31 @@ setTimeout(() => { g.style.opacity = '1'; }, 120);
 i++;
 };
 tick();
-pcGhostTimer = setInterval(tick, 2600);
+pcGhostTimer = setInterval(tick, 4200);
 }
 function startPhoneCheck(cid, isCur, fromMissed) {
 const panel = pcEl('phone-check-panel');
 if (!panel) return;
 panel.hidden = false;
-pcRenderBody(cid || (window.__activeCid || 'default'));
+const c = cid || (window.__activeCid || 'default');
+pcRenderBody(c);
 pcLockChat(true);
 pcGhostLoop();
+const focus = pcEl('pc-focus'); if (focus) focus.textContent = '正在接手你的手机…';
+try { if (window.PhonePeek) window.PhonePeek.start(c); } catch (e) {}
+window.__ppOnDone = function () { try { phoneCheckClose(false); } catch (e) {} };
 clearTimeout(pcAutoTimer);
-pcAutoTimer = setTimeout(() => { try { phoneCheckClose(true); } catch (e) {} }, 30000 + Math.random() * 25000);
+pcAutoTimer = setTimeout(() => { try { phoneCheckClose(true); } catch (e) {} }, 52000 + Math.random() * 18000);
 }
 function phoneCheckClose(auto) {
 const panel = pcEl('phone-check-panel');
-if (!panel || panel.hidden) return;
-panel.hidden = true;
+const wasOpen = !!(panel && !panel.hidden);
+if (panel) panel.hidden = true;
+try { if (window.PhonePeek) window.PhonePeek.stop(); } catch (e) {}
 pcLockChat(false);
 clearInterval(pcGhostTimer); clearTimeout(pcAutoTimer);
-if (!auto) { try { ckSayTo(window.__activeCid || 'default', '\ud83d\udcf1 <b>TA 看完手机了</b>：\u201c乖，这次放过你。下次别让我找不到人。\u201d', true); } catch (e) {} }
+if (!wasOpen) return;
+if (!auto) { try { ckSayTo(window.__activeCid || 'default', '\ud83d\udcf1 TA 看完手机了：\u201c乖，这次放过你。下次别让我找不到人。\u201d', true); } catch (e) {} }
 }
 function pcBindClose() {
 const close = pcEl('pc-close');
@@ -55618,6 +55727,415 @@ setTimeout(function () { try { scheduleRandomPhoneCheck(); } catch (e) {} }, 120
 })();
 } catch (__e) { try { console.error("[JS] call.js", __e && __e.message || __e); } catch (x) {} if (window.__jsErrors) window.__jsErrors.push(String(__e && __e.message || __e)); } })();
 (function () { try {
+(function () {
+const SAY_OPEN = [
+'别动。手机给我，乖乖坐着。',
+'手松开，老公看看。',
+'这么紧张干什么，我又不会删你东西。',
+'先把屏幕解开。密码我记着呢，别装忘。',
+'坐好。今天翻到哪儿算哪儿。',
+'你越是这样攥着，我越想看。',
+'别眨眼，我一个个看过去。',
+'手机放桌上，手离开。听话。',
+'我看看你这一天，都拿它干了什么。',
+'乖，让我看看你藏了什么。'
+];
+const SAY_TAP = [
+'打开{x}。',
+'{x}——嗯，点得挺熟练。',
+'这个{x}，你平时也这么点？',
+'去{x}看看。',
+'先看{x}。',
+'{x}里应该有点东西。',
+'这一页，我上次没看完。',
+'手指别抖，我又没骂你。',
+'你天天点{x}，点开给我看看。',
+'{x}，翻到底。',
+'这里你待得最久，对吧。',
+'慢一点，我还没看清。',
+'别急着关，我还在看。',
+'继续。手放回去。'
+];
+const SAY_LOOK = [
+'这张照片……什么时候拍的，我怎么不知道。',
+'这条你删过？可惜，我看过。',
+'你的世界就这么大，我一眼就翻完了。',
+'这么多小心思，全是关于我的，对吧。',
+'这几个字，你打了又删了几遍？',
+'你连这个都留着，是不是舍不得。',
+'看着像没什么，其实全是我。',
+'你以为藏得深，其实一眼就到底。',
+'我不说话，你就当我没看见？',
+'这里你停留了三秒，我数着呢。',
+'东西不多，但每一件都跟我有关。',
+'你不用解释，我看得懂。',
+'有点乱。乱得挺像你。',
+'原来你一个人的时候，是这样过的。',
+'这一处，我记住了。',
+'你把它放在最前面，是给我看的？'
+];
+const SAY_END = [
+'看完了。手机还你，人也是我的。',
+'下次不接电话，我还来。',
+'乖。睡前把屏幕关了，别让我半夜看见你还亮着。',
+'没什么问题。有问题的是你太会藏。',
+'行了，收起来。手给我。',
+'还你。别删记录，我下次还要看。',
+'看得挺干净。干净得我更想盯着你。',
+'这次放过你。下次别让我找不到人。',
+'手机拿走。人留下。',
+'记住，你的东西我都能看。'
+];
+const GLOBAL_SAFE = ['.tabbar .tab'];
+const PAGE_SAFE = ['.app[data-app]', '.ch-back', '.loc-back', '.page-close', '.bk-back', '[id$="-back"]'];
+const DANGER_RE = /(删|清空|清除|退出|解绑|重置|注销|卸载|支付|付款|购买|兑换|发送|投递|移除|取消|断开|格式化|恢复默认)/;
+const LOOK_SELS = ['.mini-card', '.glass', '.checkin', '.deco-widget', '.app', '.list-item', '.row', '.card', '.pc-bubble-row'];
+const PAGE_LABEL = {
+'page-phone': '桌面', 'page-chatcard': '字卡', 'page-setting': '设置',
+'page-chat': '聊天', 'page-home': '主页', 'page-mail': '信箱', 'page-feed': '朋友圈',
+'page-calendar': '日历', 'page-memory': '纪念', 'page-divine': '占卜', 'page-fav': '收藏'
+};
+let running = false;
+let rafId = 0;
+let cv = null, ctx = null, finger = null, sayEl = null, layer = null;
+let pts = [];
+let pos = { x: 0, y: 0 };
+let origPage = '';
+function el(id) { return document.getElementById(id); }
+function rnd(a, b) { return a + Math.random() * (b - a); }
+function pick(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
+function wait(ms) { return new Promise(function (r) { setTimeout(r, ms); }); }
+function visiblePage() {
+const ps = document.querySelectorAll('.page');
+for (let i = 0; i < ps.length; i++) { if (!ps[i].hidden) return ps[i]; }
+return null;
+}
+function visiblePageId() { const p = visiblePage(); return p ? p.id : ''; }
+function setFocus(t) { const f = el('pc-focus'); if (f && t) f.textContent = String(t).replace(/\s+/g, ' ').trim(); }
+function resize() {
+if (!cv || !ctx) return;
+const dpr = Math.min(2, window.devicePixelRatio || 1);
+cv.width = Math.round(window.innerWidth * dpr);
+cv.height = Math.round(window.innerHeight * dpr);
+cv.style.width = window.innerWidth + 'px';
+cv.style.height = window.innerHeight + 'px';
+ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+}
+function ensureLayers() {
+layer = el('pp-layer'); cv = el('pp-trail'); finger = el('pp-finger'); sayEl = el('pp-say');
+if (!layer || !cv || !finger || !sayEl) return false;
+ctx = cv.getContext('2d');
+resize();
+if (!layer.__rs) { layer.__rs = 1; window.addEventListener('resize', resize); }
+return true;
+}
+function setFinger(x, y) {
+pos.x = x; pos.y = y;
+if (!finger) return;
+finger.style.transform = 'translate3d(' + Math.round(x - 22) + 'px,' + Math.round(y - 22) + 'px,0)';
+pts.push({ x: x, y: y, t: performance.now() });
+if (pts.length > 120) pts.shift();
+}
+function drawTrail() {
+if (!ctx) return;
+ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
+const now = performance.now();
+while (pts.length && now - pts[0].t > 780) pts.shift();
+if (pts.length > 1) {
+for (let i = 1; i < pts.length; i++) {
+const a = pts[i - 1], b = pts[i];
+const k = i / pts.length;
+ctx.beginPath();
+ctx.strokeStyle = 'rgba(255,118,168,' + (0.05 + 0.5 * k * k).toFixed(3) + ')';
+ctx.lineWidth = 0.7 + 4.0 * k * k;
+ctx.moveTo(a.x, a.y);
+ctx.lineTo(b.x, b.y);
+ctx.stroke();
+}
+const last = pts[pts.length - 1];
+const g = ctx.createRadialGradient(last.x, last.y, 0, last.x, last.y, 24);
+g.addColorStop(0, 'rgba(255,150,190,.5)');
+g.addColorStop(1, 'rgba(255,150,190,0)');
+ctx.fillStyle = g;
+ctx.beginPath(); ctx.arc(last.x, last.y, 24, 0, Math.PI * 2); ctx.fill();
+}
+}
+function loop() { if (!running) return; drawTrail(); rafId = requestAnimationFrame(loop); }
+function moveTo(x, y, dur, done) {
+const fx = pos.x, fy = pos.y;
+const t0 = performance.now();
+function tick() {
+if (!running) { if (done) done(); return; }
+const t = Math.min(1, (performance.now() - t0) / Math.max(1, dur));
+const e = t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+setFinger(fx + (x - fx) * e, fy + (y - fy) * e);
+if (t < 1) requestAnimationFrame(tick);
+else if (done) done();
+}
+return new Promise(function (res) { requestAnimationFrame(tick); setTimeout(res, dur + 40); });
+}
+function ripple(x, y) {
+if (!layer) return;
+const r = document.createElement('div');
+r.className = 'pp-ripple';
+r.style.left = x + 'px';
+r.style.top = y + 'px';
+layer.appendChild(r);
+setTimeout(function () { try { r.remove(); } catch (e) {} }, 640);
+}
+function spot(e) {
+if (!e) return;
+try {
+e.classList.add('pp-spot');
+setTimeout(function () { try { e.classList.remove('pp-spot'); } catch (x) {} }, 1800);
+} catch (x) {}
+}
+function say(text, x, y) {
+if (!sayEl || !text) return;
+sayEl.textContent = text;
+const w = Math.min(288, Math.max(150, text.length * 13));
+const left = Math.max(10, Math.min(window.innerWidth - w - 10, (x || window.innerWidth / 2) - w / 2));
+const top = Math.max(54, Math.min(window.innerHeight - 96, (y || window.innerHeight / 2) - 94));
+sayEl.style.left = left + 'px';
+sayEl.style.top = top + 'px';
+sayEl.hidden = false;
+sayEl.classList.remove('pp-say-out', 'pp-say-in');
+void sayEl.offsetWidth;
+sayEl.classList.add('pp-say-in');
+clearTimeout(sayEl.__t);
+sayEl.__t = setTimeout(function () {
+sayEl.classList.remove('pp-say-in');
+sayEl.classList.add('pp-say-out');
+setTimeout(function () { try { sayEl.hidden = true; } catch (e) {} }, 420);
+}, 2700);
+}
+function usable(e) {
+if (!e) return false;
+try {
+if (e.closest('[hidden]')) return false;
+const r = e.getBoundingClientRect();
+if (r.width < 12 || r.height < 12) return false;
+if (r.top < 0 || r.left < 0) return false;
+if (r.bottom > window.innerHeight + 1 || r.right > window.innerWidth + 1) return false;
+return true;
+} catch (x) { return false; }
+}
+function dangerous(e) {
+try {
+const t = (e.textContent || '') + ' ' + (e.getAttribute('title') || '') + ' ' + (e.className || '');
+return DANGER_RE.test(t);
+} catch (x) { return true; }
+}
+function collect(sels, root) {
+const out = [];
+for (let i = 0; i < sels.length; i++) {
+let list;
+try { list = (root || document).querySelectorAll(sels[i]); } catch (x) { continue; }
+for (let j = 0; j < list.length; j++) {
+const e = list[j];
+if (!usable(e) || dangerous(e)) continue;
+out.push(e);
+}
+}
+return out;
+}
+function collectLoose(sels, root) {
+const out = [];
+for (let i = 0; i < sels.length; i++) {
+let list;
+try { list = (root || document).querySelectorAll(sels[i]); } catch (x) { continue; }
+for (let j = 0; j < list.length; j++) {
+const e = list[j];
+try { if (e.closest('[hidden]')) continue; } catch (x) { continue; }
+if (dangerous(e)) continue;
+out.push(e);
+}
+}
+return out;
+}
+function findBack() {
+const vp = visiblePage();
+if (!vp) return null;
+const loose = collectLoose(['.ch-back', '.loc-back', '.page-close', '.bk-back', '[id$="-back"]'], vp);
+if (!loose.length) return null;
+const inView = collect(['.ch-back', '.loc-back', '.page-close', '.bk-back', '[id$="-back"]'], vp);
+if (inView.length) return pick(inView);
+return pick(loose);
+}
+async function escapeToTab() {
+const t = document.querySelector('.tab[data-page="page-phone"]');
+await moveTo(Math.round(window.innerWidth * 0.5), Math.round(window.innerHeight - 46), rnd(560, 820));
+if (!running) return;
+if (t) { ripple(Math.round(window.innerWidth * 0.5), Math.round(window.innerHeight - 46)); try { t.click(); } catch (e) {} }
+setFocus('这一页看完了，退出去。');
+say('这一页看完了。退出去，接着看别的。', Math.round(window.innerWidth * 0.5), Math.round(window.innerHeight - 120));
+await wait(rnd(700, 1000));
+}
+function pickTab() {
+const tabs = collect(GLOBAL_SAFE, document);
+if (!tabs.length) return null;
+const cur = (function () {
+for (let i = 0; i < tabs.length; i++) if (tabs[i].classList.contains('active')) return tabs[i];
+return null;
+})();
+const others = tabs.filter(function (t) { return t !== cur; });
+return others.length ? pick(others) : tabs[0];
+}
+function pickApp(vp) {
+const apps = collect(['.app[data-app]'], vp);
+return apps.length ? pick(apps) : null;
+}
+function pickLook(vp) {
+if (!vp) return null;
+const cands = collect(LOOK_SELS, vp);
+return cands.length ? pick(cands) : null;
+}
+function labelOf(e) {
+if (!e) return '这里';
+try {
+const dp = e.getAttribute('data-page');
+if (dp && PAGE_LABEL[dp]) return PAGE_LABEL[dp];
+const da = e.getAttribute('data-app');
+if (da) {
+const nameEl = e.querySelector('.app-name');
+if (nameEl && nameEl.textContent) return nameEl.textContent.trim();
+const MAP = { chat: '聊天', home: '主页', mail: '信箱', feed: '朋友圈', calendar: '日历', memory: '纪念', divination: '占卜', note: '收藏', period: '经期' };
+if (MAP[da]) return MAP[da];
+}
+const t = (e.textContent || '').replace(/\s+/g, ' ').trim();
+if (t) return t.slice(0, 8);
+} catch (x) {}
+return '这里';
+}
+async function tapEl(e) {
+if (!e) { await lookAround(visiblePage()); return; }
+const r = e.getBoundingClientRect();
+const x = Math.max(14, Math.min(window.innerWidth - 14, Math.round(r.left + r.width / 2)));
+const y = Math.max(20, Math.min(window.innerHeight - 14, Math.round(r.top + r.height / 2)));
+await moveTo(x, y, rnd(520, 880));
+if (!running) return;
+await wait(120);
+ripple(x, y);
+try {
+finger.classList.add('pp-press');
+setTimeout(function () { try { finger.classList.remove('pp-press'); } catch (a) {} }, 190);
+} catch (a) {}
+const label = labelOf(e);
+setFocus(label === '这里' ? '正在看：这一处' : '正在点开：' + label);
+say(pick(SAY_TAP).replace('{x}', label), x, y);
+await wait(280);
+if (!running) return;
+try { if (!dangerous(e)) e.click(); } catch (err) {}
+await wait(rnd(560, 820));
+}
+async function lookAround(vp) {
+const e = pickLook(vp);
+if (!e) {
+say(pick(SAY_LOOK), pos.x, pos.y);
+await wait(900);
+return;
+}
+spot(e);
+setFocus('正在盯着：' + labelOf(e));
+const r = e.getBoundingClientRect();
+const x = Math.max(14, Math.min(window.innerWidth - 14, Math.round(r.left + r.width / 2)));
+const y = Math.max(20, Math.min(window.innerHeight - 14, Math.round(r.top + Math.min(r.height / 2, 90))));
+await moveTo(x, y, rnd(600, 1000));
+if (!running) return;
+say(pick(SAY_LOOK), x, y);
+await wait(rnd(1100, 1600));
+}
+async function oneStep() {
+const vp = visiblePage();
+const vpId = vp ? vp.id : '';
+const isTabPage = /^page-(phone|chatcard|setting)$/.test(vpId);
+const r = Math.random();
+if (!isTabPage && r < 0.68) {
+const back = findBack();
+if (back) { await tapEl(back); return; }
+await escapeToTab();
+return;
+}
+if (r < 0.34) {
+const t = pickTab();
+if (t) { await tapEl(t); return; }
+}
+if (isTabPage && vpId === 'page-phone' && r < 0.7) {
+const a = pickApp(vp);
+if (a) { await tapEl(a); return; }
+}
+if (isTabPage && vpId === 'page-chatcard' && r < 0.45) {
+await lookAround(vp);
+return;
+}
+await lookAround(vp);
+}
+async function start(cid) {
+if (running) return;
+if (!ensureLayers()) return;
+running = true;
+origPage = visiblePageId();
+pts = [];
+pos.x = window.innerWidth - 26;
+pos.y = window.innerHeight - 34;
+setFinger(pos.x, pos.y);
+layer.hidden = false;
+try { finger.style.opacity = '1'; } catch (e) {}
+rafId = requestAnimationFrame(loop);
+say(pick(SAY_OPEN), pos.x - 40, pos.y - 30);
+setFocus('正在接手你的手机…');
+await moveTo(Math.round(window.innerWidth * 0.5), Math.round(window.innerHeight * 0.45), 820);
+if (!running) return;
+const n = 9 + Math.floor(Math.random() * 5);
+for (let i = 0; i < n; i++) {
+if (!running) break;
+try { await oneStep(); } catch (e) {}
+await wait(rnd(500, 1100));
+}
+if (!running) return;
+say(pick(SAY_END), pos.x, pos.y);
+await wait(1600);
+try { if (window.__ppOnDone) window.__ppOnDone(); } catch (e) {}
+finishUp();
+}
+function restorePage() {
+if (!origPage) return;
+const target = document.getElementById(origPage);
+if (!target) return;
+if (!target.hidden) return;
+try {
+const tabs = document.querySelectorAll('.tab');
+const hit = Array.prototype.filter.call(tabs, function (t) { return t.dataset.page === origPage; })[0];
+if (hit) { hit.click(); return; }
+document.querySelectorAll('.page').forEach(function (p) { p.hidden = p !== target; });
+} catch (e) {}
+}
+function finishUp() {
+if (!running) return;
+running = false;
+try { cancelAnimationFrame(rafId); } catch (e) {}
+if (ctx) { try { ctx.clearRect(0, 0, window.innerWidth, window.innerHeight); } catch (e) {} }
+if (layer) layer.hidden = true;
+if (sayEl) sayEl.hidden = true;
+try {
+finger.classList.remove('pp-press');
+finger.style.opacity = '0';
+} catch (e) {}
+try {
+Array.prototype.forEach.call(document.querySelectorAll('.pp-spot'), function (e) { e.classList.remove('pp-spot'); });
+if (layer) Array.prototype.forEach.call(layer.querySelectorAll('.pp-ripple'), function (e) { try { e.remove(); } catch (x) {} });
+} catch (e) {}
+restorePage();
+}
+window.PhonePeek = {
+start: function (cid) { start(cid); },
+stop: function () { finishUp(); },
+isRunning: function () { return running; }
+};
+})();
+} catch (__e) { try { console.error("[JS] phone-peek.js", __e && __e.message || __e); } catch (x) {} if (window.__jsErrors) window.__jsErrors.push(String(__e && __e.message || __e)); } })();
+</script>
+<script>(function () { try {
 (function () {
 const S = { state: 'idle', dir: null, startTs: 0, cid: null, tick: null, lastMsg: 0 };
 function el(id) { return document.getElementById(id); }
@@ -56046,8 +56564,7 @@ endSession: endSession
 };
 })();
 } catch (__e) { try { console.error("[JS] sleep-companion.js", __e && __e.message || __e); } catch (x) {} if (window.__jsErrors) window.__jsErrors.push(String(__e && __e.message || __e)); } })();
-</script>
-<script>(function () { try {
+(function () { try {
 (function () {
 const store = window.activeStore();
 const KEY = 'mail-letters';
@@ -86697,4 +87214,4 @@ lastHeal: his
 <!-- __MOCHI_EOF__ -->
 </body>
 </html>
-<!-- __MOCHI_EOF__ mw1sd0e9 -->
+<!-- __MOCHI_EOF__ mw50ttxm -->
